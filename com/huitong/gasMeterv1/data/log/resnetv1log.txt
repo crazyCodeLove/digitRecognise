@@ -1,0 +1,511 @@
+2017-08-12 23:45:13 peizhi
+hps:HParams(batch_nums=64, num_classes=10, deep_net_fkn=30, img_depth=3, deepk=[2, 2, 2], carriage_block_num=[2, 2, 2])
+gps:GParams(peizhi_filename='peizhi.xml', saveVariableDirnameList=['data', 'digitRecognise', 'temp'], saveVariableFilename='temp.ckpy', logDirnameList=['data', 'log'], logFilename='resnetv1log.txt')
+ deepk and descrate can be fractional, descrate=0.6  use Relu,
+2017-08-12 23:45:19 trainstep:    0  loss:1.462775e+01  train acc:0.10547
+2017-08-12 23:46:29 trainstep:  100  loss:1.471465e+00  train acc:0.13672
+2017-08-12 23:47:39 trainstep:  200  loss:1.521607e+00  train acc:0.13672
+2017-08-12 23:48:48 trainstep:  300  loss:1.222865e+00  train acc:0.13672
+2017-08-12 23:49:57 trainstep:  400  loss:1.146728e+00  train acc:0.11328
+2017-08-12 23:51:07 trainstep:  500  loss:9.084806e-01  train acc:0.11328
+2017-08-12 23:52:16 trainstep:  600  loss:7.713066e-01  train acc:0.16406
+2017-08-12 23:53:25 trainstep:  700  loss:8.555720e-01  train acc:0.10938
+2017-08-12 23:54:34 trainstep:  800  loss:8.514999e-01  train acc:0.16016
+2017-08-12 23:55:43 trainstep:  900  loss:7.176439e-01  train acc:0.17188
+2017-08-12 23:56:52 trainstep: 1000  loss:6.414817e-01  train acc:0.16406
+2017-08-12 23:58:01 trainstep: 1100  loss:6.063946e-01  train acc:0.19141
+2017-08-12 23:59:10 trainstep: 1200  loss:5.646515e-01  train acc:0.18359
+2017-08-13 00:00:19 trainstep: 1300  loss:6.218952e-01  train acc:0.20703
+2017-08-13 00:01:29 trainstep: 1400  loss:5.064197e-01  train acc:0.23047
+2017-08-13 00:02:39 trainstep: 1500  loss:5.378599e-01  train acc:0.23047
+2017-08-13 00:03:48 trainstep: 1600  loss:5.289109e-01  train acc:0.26953
+2017-08-13 00:04:58 trainstep: 1700  loss:4.733706e-01  train acc:0.29297
+2017-08-13 00:06:07 trainstep: 1800  loss:5.415878e-01  train acc:0.29688
+2017-08-13 00:07:17 trainstep: 1900  loss:4.020894e-01  train acc:0.33984
+2017-08-13 00:08:26 trainstep: 2000  loss:3.548042e-01  train acc:0.35156
+2017-08-13 00:09:36 trainstep: 2100  loss:3.507956e-01  train acc:0.37109
+2017-08-13 00:10:45 trainstep: 2200  loss:3.401724e-01  train acc:0.39062
+2017-08-13 00:11:54 trainstep: 2300  loss:2.856040e-01  train acc:0.40625
+2017-08-13 00:13:04 trainstep: 2400  loss:2.449783e-01  train acc:0.44531
+2017-08-13 00:14:13 trainstep: 2500  loss:2.872263e-01  train acc:0.43750
+2017-08-13 00:15:22 trainstep: 2600  loss:2.718899e-01  train acc:0.49609
+2017-08-13 00:16:32 trainstep: 2700  loss:2.666116e-01  train acc:0.48047
+2017-08-13 00:17:41 trainstep: 2800  loss:2.539783e-01  train acc:0.51562
+2017-08-13 00:18:50 trainstep: 2900  loss:2.216260e-01  train acc:0.55078
+2017-08-13 00:19:59 trainstep: 3000  loss:2.753549e-01  train acc:0.56250
+2017-08-13 00:21:09 trainstep: 3100  loss:2.479353e-01  train acc:0.50391
+2017-08-13 00:22:18 trainstep: 3200  loss:2.371537e-01  train acc:0.55078
+2017-08-13 00:23:28 trainstep: 3300  loss:1.993762e-01  train acc:0.61719
+2017-08-13 00:24:37 trainstep: 3400  loss:2.273299e-01  train acc:0.57031
+2017-08-13 00:25:46 trainstep: 3500  loss:2.333005e-01  train acc:0.53906
+2017-08-13 00:26:55 trainstep: 3600  loss:2.425548e-01  train acc:0.56250
+2017-08-13 00:28:04 trainstep: 3700  loss:1.776306e-01  train acc:0.67969
+2017-08-13 00:29:14 trainstep: 3800  loss:1.849537e-01  train acc:0.66016
+2017-08-13 00:30:23 trainstep: 3900  loss:1.491969e-01  train acc:0.72656
+2017-08-13 00:31:32 trainstep: 4000  loss:1.724825e-01  train acc:0.67969
+2017-08-13 00:32:41 trainstep: 4100  loss:1.832956e-01  train acc:0.65234
+2017-08-13 00:33:50 trainstep: 4200  loss:1.815709e-01  train acc:0.69531
+2017-08-13 00:34:59 trainstep: 4300  loss:1.657755e-01  train acc:0.67188
+2017-08-13 00:36:08 trainstep: 4400  loss:1.453727e-01  train acc:0.73047
+2017-08-13 00:37:17 trainstep: 4500  loss:1.516807e-01  train acc:0.72266
+2017-08-13 00:38:26 trainstep: 4600  loss:1.295504e-01  train acc:0.76562
+2017-08-13 00:39:41 trainstep: 4700  loss:1.300749e-01  train acc:0.76562
+2017-08-13 00:40:50 trainstep: 4800  loss:1.440578e-01  train acc:0.78125
+2017-08-13 00:41:59 trainstep: 4900  loss:1.440667e-01  train acc:0.77734
+2017-08-13 00:43:08 trainstep: 5000  loss:1.857806e-01  train acc:0.66406
+2017-08-13 00:44:17 trainstep: 5100  loss:9.511473e-02  train acc:0.83594
+2017-08-13 00:45:26 trainstep: 5200  loss:1.348984e-01  train acc:0.77344
+2017-08-13 00:46:34 trainstep: 5300  loss:1.058633e-01  train acc:0.81641
+2017-08-13 00:47:43 trainstep: 5400  loss:1.196129e-01  train acc:0.80469
+2017-08-13 00:48:51 trainstep: 5500  loss:1.112675e-01  train acc:0.82031
+2017-08-13 00:50:00 trainstep: 5600  loss:1.187548e-01  train acc:0.81250
+2017-08-13 00:51:08 trainstep: 5700  loss:1.498046e-01  train acc:0.74609
+2017-08-13 00:52:17 trainstep: 5800  loss:1.309731e-01  train acc:0.79297
+2017-08-13 00:53:26 trainstep: 5900  loss:1.263085e-01  train acc:0.79688
+2017-08-13 00:54:35 trainstep: 6000  loss:1.083138e-01  train acc:0.81641
+2017-08-13 00:55:44 trainstep: 6100  loss:9.492473e-02  train acc:0.85156
+2017-08-13 00:56:53 trainstep: 6200  loss:1.074163e-01  train acc:0.82031
+2017-08-13 00:58:02 trainstep: 6300  loss:1.088750e-01  train acc:0.82031
+2017-08-13 00:59:11 trainstep: 6400  loss:9.919491e-02  train acc:0.84766
+2017-08-13 01:00:20 trainstep: 6500  loss:1.074232e-01  train acc:0.84766
+2017-08-13 01:01:28 trainstep: 6600  loss:1.009386e-01  train acc:0.86719
+2017-08-13 01:02:37 trainstep: 6700  loss:1.072469e-01  train acc:0.78906
+2017-08-13 01:03:46 trainstep: 6800  loss:8.838583e-02  train acc:0.87891
+2017-08-13 01:04:55 trainstep: 6900  loss:8.538446e-02  train acc:0.87109
+2017-08-13 01:06:04 trainstep: 7000  loss:8.601575e-02  train acc:0.85938
+2017-08-13 01:07:12 trainstep: 7100  loss:9.453805e-02  train acc:0.83203
+2017-08-13 01:08:21 trainstep: 7200  loss:1.030249e-01  train acc:0.82422
+2017-08-13 01:09:30 trainstep: 7300  loss:8.997070e-02  train acc:0.87109
+2017-08-13 01:10:39 trainstep: 7400  loss:9.581155e-02  train acc:0.85156
+2017-08-13 01:11:48 trainstep: 7500  loss:8.644649e-02  train acc:0.85156
+2017-08-13 01:12:57 trainstep: 7600  loss:1.010913e-01  train acc:0.83594
+2017-08-13 01:14:05 trainstep: 7700  loss:9.824223e-02  train acc:0.82812
+2017-08-13 01:15:14 trainstep: 7800  loss:7.629274e-02  train acc:0.89453
+2017-08-13 01:16:23 trainstep: 7900  loss:8.255594e-02  train acc:0.88281
+2017-08-13 01:17:32 trainstep: 8000  loss:8.194055e-02  train acc:0.88672
+2017-08-13 01:18:41 trainstep: 8100  loss:7.719621e-02  train acc:0.87891
+2017-08-13 01:19:50 trainstep: 8200  loss:8.517434e-02  train acc:0.83984
+2017-08-13 01:20:59 trainstep: 8300  loss:6.526051e-02  train acc:0.89062
+2017-08-13 01:22:08 trainstep: 8400  loss:9.977572e-02  train acc:0.84375
+2017-08-13 01:23:17 trainstep: 8500  loss:6.694312e-02  train acc:0.89453
+2017-08-13 01:24:25 trainstep: 8600  loss:9.265409e-02  train acc:0.84766
+2017-08-13 01:25:34 trainstep: 8700  loss:8.606564e-02  train acc:0.89062
+2017-08-13 01:26:43 trainstep: 8800  loss:7.634548e-02  train acc:0.88281
+2017-08-13 01:27:52 trainstep: 8900  loss:6.586909e-02  train acc:0.90234
+2017-08-13 01:29:00 trainstep: 9000  loss:6.426951e-02  train acc:0.90234
+2017-08-13 01:30:09 trainstep: 9100  loss:6.740098e-02  train acc:0.88672
+2017-08-13 01:31:18 trainstep: 9200  loss:5.731616e-02  train acc:0.92578
+2017-08-13 01:32:27 trainstep: 9300  loss:6.751520e-02  train acc:0.89844
+2017-08-13 01:33:42 trainstep: 9400  loss:8.017904e-02  train acc:0.87891
+2017-08-13 01:34:51 trainstep: 9500  loss:5.884505e-02  train acc:0.89453
+2017-08-13 01:35:59 trainstep: 9600  loss:7.488602e-02  train acc:0.86719
+2017-08-13 01:37:08 trainstep: 9700  loss:5.994523e-02  train acc:0.93359
+2017-08-13 01:38:16 trainstep: 9800  loss:7.312597e-02  train acc:0.89844
+2017-08-13 01:39:25 trainstep: 9900  loss:7.191247e-02  train acc:0.87500
+2017-08-13 01:40:33 trainstep:10000  loss:6.023064e-02  train acc:0.89844
+2017-08-13 01:41:42 trainstep:10100  loss:6.131157e-02  train acc:0.91406
+2017-08-13 01:42:50 trainstep:10200  loss:8.602034e-02  train acc:0.87500
+2017-08-13 01:43:58 trainstep:10300  loss:5.776576e-02  train acc:0.90625
+2017-08-13 01:45:07 trainstep:10400  loss:4.608234e-02  train acc:0.95312
+2017-08-13 01:46:16 trainstep:10500  loss:6.611173e-02  train acc:0.90625
+2017-08-13 01:47:25 trainstep:10600  loss:6.731160e-02  train acc:0.89844
+2017-08-13 01:48:34 trainstep:10700  loss:6.461450e-02  train acc:0.90234
+2017-08-13 01:49:43 trainstep:10800  loss:5.541047e-02  train acc:0.90625
+2017-08-13 01:50:51 trainstep:10900  loss:8.587552e-02  train acc:0.86328
+2017-08-13 01:52:00 trainstep:11000  loss:6.484449e-02  train acc:0.92578
+2017-08-13 01:53:09 trainstep:11100  loss:6.914812e-02  train acc:0.91406
+2017-08-13 01:54:18 trainstep:11200  loss:6.261272e-02  train acc:0.90625
+2017-08-13 01:55:27 trainstep:11300  loss:4.637321e-02  train acc:0.94922
+2017-08-13 01:56:36 trainstep:11400  loss:4.733685e-02  train acc:0.94141
+2017-08-13 01:57:45 trainstep:11500  loss:4.779424e-02  train acc:0.92578
+2017-08-13 01:58:54 trainstep:11600  loss:3.812424e-02  train acc:0.96094
+2017-08-13 02:00:03 trainstep:11700  loss:6.247353e-02  train acc:0.91016
+2017-08-13 02:01:12 trainstep:11800  loss:5.882248e-02  train acc:0.92578
+2017-08-13 02:02:21 trainstep:11900  loss:4.977500e-02  train acc:0.91797
+2017-08-13 02:03:30 trainstep:12000  loss:7.646953e-02  train acc:0.87891
+2017-08-13 02:04:39 trainstep:12100  loss:7.010905e-02  train acc:0.87891
+2017-08-13 02:05:48 trainstep:12200  loss:3.610749e-02  train acc:0.94922
+2017-08-13 02:06:56 trainstep:12300  loss:3.911820e-02  train acc:0.94922
+2017-08-13 02:08:05 trainstep:12400  loss:4.570249e-02  train acc:0.92188
+2017-08-13 02:09:15 trainstep:12500  loss:4.429701e-02  train acc:0.93750
+2017-08-13 02:10:24 trainstep:12600  loss:5.997851e-02  train acc:0.89453
+2017-08-13 02:11:33 trainstep:12700  loss:7.217441e-02  train acc:0.88672
+2017-08-13 02:12:42 trainstep:12800  loss:4.623951e-02  train acc:0.92969
+2017-08-13 02:13:50 trainstep:12900  loss:3.118340e-02  train acc:0.96875
+2017-08-13 02:14:59 trainstep:13000  loss:4.653406e-02  train acc:0.91406
+2017-08-13 02:16:08 trainstep:13100  loss:4.622921e-02  train acc:0.94531
+2017-08-13 02:17:17 trainstep:13200  loss:5.901982e-02  train acc:0.92578
+2017-08-13 02:18:26 trainstep:13300  loss:4.471674e-02  train acc:0.93359
+2017-08-13 02:19:35 trainstep:13400  loss:3.505702e-02  train acc:0.96875
+2017-08-13 02:20:44 trainstep:13500  loss:5.635283e-02  train acc:0.92578
+2017-08-13 02:21:53 trainstep:13600  loss:6.490286e-02  train acc:0.91016
+2017-08-13 02:23:02 trainstep:13700  loss:6.784039e-02  train acc:0.90234
+2017-08-13 02:24:11 trainstep:13800  loss:4.642290e-02  train acc:0.93359
+2017-08-13 02:25:20 trainstep:13900  loss:4.243725e-02  train acc:0.94531
+2017-08-13 02:26:29 trainstep:14000  loss:3.657391e-02  train acc:0.94531
+2017-08-13 02:27:44 trainstep:14100  loss:4.427224e-02  train acc:0.94141
+2017-08-13 02:28:53 trainstep:14200  loss:4.734480e-02  train acc:0.92188
+2017-08-13 02:30:02 trainstep:14300  loss:5.210239e-02  train acc:0.92188
+2017-08-13 02:31:11 trainstep:14400  loss:2.249305e-02  train acc:0.96875
+2017-08-13 02:32:19 trainstep:14500  loss:4.983222e-02  train acc:0.92188
+2017-08-13 02:33:28 trainstep:14600  loss:4.642577e-02  train acc:0.94141
+2017-08-13 02:34:37 trainstep:14700  loss:4.770730e-02  train acc:0.93359
+2017-08-13 02:35:45 trainstep:14800  loss:5.282211e-02  train acc:0.91406
+2017-08-13 02:36:54 trainstep:14900  loss:3.779209e-02  train acc:0.94531
+2017-08-13 02:38:02 trainstep:15000  loss:3.272183e-02  train acc:0.96094
+2017-08-13 02:39:11 trainstep:15100  loss:5.252398e-02  train acc:0.91797
+2017-08-13 02:40:20 trainstep:15200  loss:4.552133e-02  train acc:0.94141
+2017-08-13 02:41:29 trainstep:15300  loss:3.633045e-02  train acc:0.93750
+2017-08-13 02:42:38 trainstep:15400  loss:5.882962e-02  train acc:0.92188
+2017-08-13 02:43:47 trainstep:15500  loss:4.221913e-02  train acc:0.94922
+2017-08-13 02:44:56 trainstep:15600  loss:7.524244e-02  train acc:0.92188
+2017-08-13 02:46:05 trainstep:15700  loss:3.972521e-02  train acc:0.95703
+2017-08-13 02:47:14 trainstep:15800  loss:3.535329e-02  train acc:0.96484
+2017-08-13 02:48:23 trainstep:15900  loss:3.265054e-02  train acc:0.94531
+2017-08-13 02:49:32 trainstep:16000  loss:4.728871e-02  train acc:0.94141
+2017-08-13 02:50:41 trainstep:16100  loss:8.696773e-02  train acc:0.87500
+2017-08-13 02:51:50 trainstep:16200  loss:4.011542e-02  train acc:0.94531
+2017-08-13 02:52:59 trainstep:16300  loss:4.234475e-02  train acc:0.94531
+2017-08-13 02:54:08 trainstep:16400  loss:4.168446e-02  train acc:0.92188
+2017-08-13 02:55:17 trainstep:16500  loss:4.630512e-02  train acc:0.94531
+2017-08-13 02:56:26 trainstep:16600  loss:4.578874e-02  train acc:0.93750
+2017-08-13 02:57:35 trainstep:16700  loss:4.427523e-02  train acc:0.94531
+2017-08-13 02:58:44 trainstep:16800  loss:2.881239e-02  train acc:0.97656
+2017-08-13 02:59:53 trainstep:16900  loss:3.875098e-02  train acc:0.93750
+2017-08-13 03:01:02 trainstep:17000  loss:4.180085e-02  train acc:0.93750
+2017-08-13 03:02:11 trainstep:17100  loss:3.346690e-02  train acc:0.96875
+2017-08-13 03:03:20 trainstep:17200  loss:5.652554e-02  train acc:0.92188
+2017-08-13 03:04:29 trainstep:17300  loss:3.997589e-02  train acc:0.93359
+2017-08-13 03:05:38 trainstep:17400  loss:3.322435e-02  train acc:0.97656
+2017-08-13 03:06:47 trainstep:17500  loss:3.787724e-02  train acc:0.95703
+2017-08-13 03:07:56 trainstep:17600  loss:2.226197e-02  train acc:0.98047
+2017-08-13 03:09:05 trainstep:17700  loss:2.901469e-02  train acc:0.94531
+2017-08-13 03:10:14 trainstep:17800  loss:3.711605e-02  train acc:0.94922
+2017-08-13 03:11:23 trainstep:17900  loss:2.919523e-02  train acc:0.94922
+2017-08-13 03:12:32 trainstep:18000  loss:2.662954e-02  train acc:0.97266
+2017-08-13 03:13:41 trainstep:18100  loss:2.252524e-02  train acc:0.96484
+2017-08-13 03:14:50 trainstep:18200  loss:3.455144e-02  train acc:0.95312
+2017-08-13 03:15:59 trainstep:18300  loss:4.126325e-02  train acc:0.94141
+2017-08-13 03:17:08 trainstep:18400  loss:3.394359e-02  train acc:0.95312
+2017-08-13 03:18:17 trainstep:18500  loss:5.698105e-02  train acc:0.92969
+2017-08-13 03:19:26 trainstep:18600  loss:5.137019e-02  train acc:0.93750
+2017-08-13 03:20:35 trainstep:18700  loss:2.563293e-02  train acc:0.97266
+2017-08-13 03:21:50 trainstep:18800  loss:3.504471e-02  train acc:0.94922
+2017-08-13 03:22:59 trainstep:18900  loss:3.997357e-02  train acc:0.94922
+2017-08-13 03:24:08 trainstep:19000  loss:5.028737e-02  train acc:0.93750
+2017-08-13 03:25:16 trainstep:19100  loss:4.317302e-02  train acc:0.94531
+2017-08-13 03:26:25 trainstep:19200  loss:3.398489e-02  train acc:0.94922
+2017-08-13 03:27:33 trainstep:19300  loss:2.806785e-02  train acc:0.96094
+2017-08-13 03:28:42 trainstep:19400  loss:2.910247e-02  train acc:0.95312
+2017-08-13 03:29:50 trainstep:19500  loss:4.387761e-02  train acc:0.94922
+2017-08-13 03:30:59 trainstep:19600  loss:3.871011e-02  train acc:0.94141
+2017-08-13 03:32:07 trainstep:19700  loss:2.277465e-02  train acc:0.97656
+2017-08-13 03:33:15 trainstep:19800  loss:3.120379e-02  train acc:0.95312
+2017-08-13 03:34:24 trainstep:19900  loss:4.117943e-02  train acc:0.94141
+2017-08-13 03:35:33 trainstep:20000  loss:3.054338e-02  train acc:0.94922
+2017-08-13 03:36:42 trainstep:20100  loss:2.597900e-02  train acc:0.95312
+2017-08-13 03:37:50 trainstep:20200  loss:2.424205e-02  train acc:0.98438
+2017-08-13 03:38:59 trainstep:20300  loss:1.847594e-02  train acc:0.98438
+2017-08-13 03:40:07 trainstep:20400  loss:2.436431e-02  train acc:0.96094
+2017-08-13 03:41:15 trainstep:20500  loss:3.798676e-02  train acc:0.94141
+2017-08-13 03:42:24 trainstep:20600  loss:3.438887e-02  train acc:0.95312
+2017-08-13 03:43:32 trainstep:20700  loss:2.930541e-02  train acc:0.96094
+2017-08-13 03:44:40 trainstep:20800  loss:3.731369e-02  train acc:0.94531
+2017-08-13 03:45:49 trainstep:20900  loss:1.655620e-02  train acc:0.97656
+2017-08-13 03:46:58 trainstep:21000  loss:2.857704e-02  train acc:0.96484
+2017-08-13 03:48:07 trainstep:21100  loss:2.849539e-02  train acc:0.96875
+2017-08-13 03:49:16 trainstep:21200  loss:2.763593e-02  train acc:0.95312
+2017-08-13 03:50:24 trainstep:21300  loss:2.409219e-02  train acc:0.97656
+2017-08-13 03:51:33 trainstep:21400  loss:2.231680e-02  train acc:0.98438
+2017-08-13 03:52:42 trainstep:21500  loss:4.906835e-02  train acc:0.93750
+2017-08-13 03:53:51 trainstep:21600  loss:3.455121e-02  train acc:0.96094
+2017-08-13 03:55:00 trainstep:21700  loss:3.308112e-02  train acc:0.94922
+2017-08-13 03:56:09 trainstep:21800  loss:1.619004e-02  train acc:0.97266
+2017-08-13 03:57:18 trainstep:21900  loss:2.356790e-02  train acc:0.95703
+2017-08-13 03:58:27 trainstep:22000  loss:2.488583e-02  train acc:0.95703
+2017-08-13 03:59:35 trainstep:22100  loss:4.112076e-02  train acc:0.94531
+2017-08-13 04:00:44 trainstep:22200  loss:2.687341e-02  train acc:0.97266
+2017-08-13 04:01:53 trainstep:22300  loss:2.717724e-02  train acc:0.96484
+2017-08-13 04:03:02 trainstep:22400  loss:3.964171e-02  train acc:0.94531
+2017-08-13 04:04:11 trainstep:22500  loss:2.739345e-02  train acc:0.96484
+2017-08-13 04:05:19 trainstep:22600  loss:2.780668e-02  train acc:0.96875
+2017-08-13 04:06:28 trainstep:22700  loss:3.002194e-02  train acc:0.95312
+2017-08-13 04:07:37 trainstep:22800  loss:4.133867e-02  train acc:0.94531
+2017-08-13 04:08:46 trainstep:22900  loss:1.726138e-02  train acc:0.98828
+2017-08-13 04:09:55 trainstep:23000  loss:2.512225e-02  train acc:0.96484
+2017-08-13 04:11:04 trainstep:23100  loss:4.416052e-02  train acc:0.92969
+2017-08-13 04:12:12 trainstep:23200  loss:2.674157e-02  train acc:0.96094
+2017-08-13 04:13:21 trainstep:23300  loss:2.879937e-02  train acc:0.96484
+2017-08-13 04:14:30 trainstep:23400  loss:3.058315e-02  train acc:0.96484
+2017-08-13 04:15:45 trainstep:23500  loss:1.760956e-02  train acc:0.98047
+2017-08-13 04:16:54 trainstep:23600  loss:2.325937e-02  train acc:0.96875
+2017-08-13 04:18:02 trainstep:23700  loss:1.978827e-02  train acc:0.98047
+2017-08-13 04:19:11 trainstep:23800  loss:3.233388e-02  train acc:0.95312
+2017-08-13 04:20:19 trainstep:23900  loss:3.173743e-02  train acc:0.96094
+2017-08-13 04:21:27 trainstep:24000  loss:3.301644e-02  train acc:0.96875
+2017-08-13 04:22:36 trainstep:24100  loss:3.556385e-02  train acc:0.94531
+2017-08-13 04:23:44 trainstep:24200  loss:1.863133e-02  train acc:0.96875
+2017-08-13 04:24:52 trainstep:24300  loss:1.785160e-02  train acc:0.97656
+2017-08-13 04:26:01 trainstep:24400  loss:2.346137e-02  train acc:0.96484
+2017-08-13 04:27:09 trainstep:24500  loss:1.587826e-02  train acc:0.98047
+2017-08-13 04:28:17 trainstep:24600  loss:2.342206e-02  train acc:0.96484
+2017-08-13 04:29:26 trainstep:24700  loss:3.562557e-02  train acc:0.94922
+2017-08-13 04:30:35 trainstep:24800  loss:3.290286e-02  train acc:0.95703
+2017-08-13 04:31:44 trainstep:24900  loss:2.762778e-02  train acc:0.96484
+2017-08-13 04:32:53 trainstep:25000  loss:2.420404e-02  train acc:0.97266
+2017-08-13 04:34:02 trainstep:25100  loss:2.980776e-02  train acc:0.96484
+2017-08-13 04:35:11 trainstep:25200  loss:2.620354e-02  train acc:0.96484
+2017-08-13 04:36:20 trainstep:25300  loss:3.612223e-02  train acc:0.96094
+2017-08-13 04:37:28 trainstep:25400  loss:2.697645e-02  train acc:0.97266
+2017-08-13 04:38:37 trainstep:25500  loss:2.147169e-02  train acc:0.97266
+2017-08-13 04:39:46 trainstep:25600  loss:2.504187e-02  train acc:0.97266
+2017-08-13 04:40:55 trainstep:25700  loss:2.531735e-02  train acc:0.96875
+2017-08-13 04:42:04 trainstep:25800  loss:2.394932e-02  train acc:0.97266
+2017-08-13 04:43:12 trainstep:25900  loss:2.598900e-02  train acc:0.96875
+2017-08-13 04:44:21 trainstep:26000  loss:2.561209e-02  train acc:0.96875
+2017-08-13 04:45:30 trainstep:26100  loss:1.470159e-02  train acc:0.98438
+2017-08-13 04:46:38 trainstep:26200  loss:3.642967e-02  train acc:0.95312
+2017-08-13 04:47:46 trainstep:26300  loss:2.249994e-02  train acc:0.96484
+2017-08-13 04:48:54 trainstep:26400  loss:3.009702e-02  train acc:0.94922
+2017-08-13 04:50:03 trainstep:26500  loss:2.074167e-02  train acc:0.96484
+2017-08-13 04:51:11 trainstep:26600  loss:3.067596e-02  train acc:0.95312
+2017-08-13 04:52:19 trainstep:26700  loss:2.234219e-02  train acc:0.96875
+2017-08-13 04:53:28 trainstep:26800  loss:2.438806e-02  train acc:0.97266
+2017-08-13 04:54:37 trainstep:26900  loss:2.043653e-02  train acc:0.97656
+2017-08-13 04:55:46 trainstep:27000  loss:1.329767e-02  train acc:0.98047
+2017-08-13 04:56:55 trainstep:27100  loss:2.172627e-02  train acc:0.97266
+2017-08-13 04:58:03 trainstep:27200  loss:2.390124e-02  train acc:0.97656
+2017-08-13 04:59:12 trainstep:27300  loss:3.159700e-02  train acc:0.95312
+2017-08-13 05:00:20 trainstep:27400  loss:2.584062e-02  train acc:0.94922
+2017-08-13 05:01:29 trainstep:27500  loss:2.523538e-02  train acc:0.96484
+2017-08-13 05:02:38 trainstep:27600  loss:1.814752e-02  train acc:0.98438
+2017-08-13 05:03:47 trainstep:27700  loss:1.880613e-02  train acc:0.98438
+2017-08-13 05:04:56 trainstep:27800  loss:2.595123e-02  train acc:0.97266
+2017-08-13 05:06:05 trainstep:27900  loss:1.949369e-02  train acc:0.98047
+2017-08-13 05:07:13 trainstep:28000  loss:3.588788e-02  train acc:0.93359
+2017-08-13 05:08:22 trainstep:28100  loss:2.350215e-02  train acc:0.96875
+2017-08-13 05:09:38 trainstep:28200  loss:2.906199e-02  train acc:0.94141
+2017-08-13 05:10:47 trainstep:28300  loss:2.823563e-02  train acc:0.95703
+2017-08-13 05:11:56 trainstep:28400  loss:2.135209e-02  train acc:0.97656
+2017-08-13 05:13:04 trainstep:28500  loss:2.791855e-02  train acc:0.96094
+2017-08-13 05:14:13 trainstep:28600  loss:2.513117e-02  train acc:0.96094
+2017-08-13 05:15:22 trainstep:28700  loss:2.282401e-02  train acc:0.96875
+2017-08-13 05:16:30 trainstep:28800  loss:1.410754e-02  train acc:0.98828
+2017-08-13 05:17:39 trainstep:28900  loss:2.409573e-02  train acc:0.96094
+2017-08-13 05:18:48 trainstep:29000  loss:1.129409e-02  train acc:0.99609
+2017-08-13 05:19:56 trainstep:29100  loss:2.179107e-02  train acc:0.97266
+2017-08-13 05:21:04 trainstep:29200  loss:2.141793e-02  train acc:0.96875
+2017-08-13 05:22:13 trainstep:29300  loss:1.616711e-02  train acc:0.98438
+2017-08-13 05:23:22 trainstep:29400  loss:1.221945e-02  train acc:0.98828
+2017-08-13 05:24:31 trainstep:29500  loss:2.413849e-02  train acc:0.97266
+2017-08-13 05:25:40 trainstep:29600  loss:2.599508e-02  train acc:0.97266
+2017-08-13 05:26:49 trainstep:29700  loss:1.661723e-02  train acc:0.97656
+2017-08-13 05:27:58 trainstep:29800  loss:2.256479e-02  train acc:0.97266
+2017-08-13 05:29:07 trainstep:29900  loss:2.089185e-02  train acc:0.97266
+2017-08-13 05:30:16 trainstep:30000  loss:7.479244e-03  train acc:0.99609
+2017-08-13 05:31:25 trainstep:30100  loss:2.591372e-02  train acc:0.96484
+2017-08-13 05:32:34 trainstep:30200  loss:2.885879e-02  train acc:0.96094
+2017-08-13 05:33:42 trainstep:30300  loss:2.200617e-02  train acc:0.97656
+2017-08-13 05:34:50 trainstep:30400  loss:1.938798e-02  train acc:0.98047
+2017-08-13 05:35:59 trainstep:30500  loss:3.580549e-02  train acc:0.93359
+2017-08-13 05:37:07 trainstep:30600  loss:3.611596e-02  train acc:0.95312
+2017-08-13 05:38:15 trainstep:30700  loss:1.363660e-02  train acc:0.98828
+2017-08-13 05:39:24 trainstep:30800  loss:1.817152e-02  train acc:0.96875
+2017-08-13 05:40:33 trainstep:30900  loss:1.777747e-02  train acc:0.98438
+2017-08-13 05:41:41 trainstep:31000  loss:2.840439e-02  train acc:0.96484
+2017-08-13 05:42:50 trainstep:31100  loss:1.905372e-02  train acc:0.97266
+2017-08-13 05:43:59 trainstep:31200  loss:3.272408e-02  train acc:0.97266
+2017-08-13 05:45:08 trainstep:31300  loss:2.154063e-02  train acc:0.97266
+2017-08-13 05:46:17 trainstep:31400  loss:2.895275e-02  train acc:0.96484
+2017-08-13 05:47:26 trainstep:31500  loss:2.658754e-02  train acc:0.96484
+2017-08-13 05:48:35 trainstep:31600  loss:1.039270e-02  train acc:0.99219
+2017-08-13 05:49:44 trainstep:31700  loss:1.808761e-02  train acc:0.98828
+2017-08-13 05:50:52 trainstep:31800  loss:3.060395e-02  train acc:0.96094
+2017-08-13 05:52:01 trainstep:31900  loss:1.962171e-02  train acc:0.97656
+2017-08-13 05:53:10 trainstep:32000  loss:1.577338e-02  train acc:0.98438
+2017-08-13 05:54:19 trainstep:32100  loss:1.546891e-02  train acc:0.98047
+2017-08-13 05:55:28 trainstep:32200  loss:1.536133e-02  train acc:0.98047
+2017-08-13 05:56:37 trainstep:32300  loss:3.161995e-02  train acc:0.96094
+2017-08-13 05:57:45 trainstep:32400  loss:1.536725e-02  train acc:0.97266
+2017-08-13 05:58:54 trainstep:32500  loss:2.302756e-02  train acc:0.98438
+2017-08-13 06:00:03 trainstep:32600  loss:1.793131e-02  train acc:0.97656
+2017-08-13 06:01:12 trainstep:32700  loss:1.516147e-02  train acc:0.98438
+2017-08-13 06:02:21 trainstep:32800  loss:2.094453e-02  train acc:0.97266
+2017-08-13 06:03:36 trainstep:32900  loss:1.040809e-02  train acc:0.98828
+2017-08-13 06:04:45 trainstep:33000  loss:2.851481e-02  train acc:0.96484
+2017-08-13 06:05:54 trainstep:33100  loss:2.126999e-02  train acc:0.98438
+2017-08-13 06:07:03 trainstep:33200  loss:1.991577e-02  train acc:0.97656
+2017-08-13 06:08:11 trainstep:33300  loss:2.375294e-02  train acc:0.97266
+2017-08-13 06:09:20 trainstep:33400  loss:1.991602e-02  train acc:0.99219
+2017-08-13 06:10:29 trainstep:33500  loss:2.558761e-02  train acc:0.97266
+2017-08-13 06:11:37 trainstep:33600  loss:1.447793e-02  train acc:0.98047
+2017-08-13 06:12:46 trainstep:33700  loss:2.329685e-02  train acc:0.96875
+2017-08-13 06:13:54 trainstep:33800  loss:1.821434e-02  train acc:0.98438
+2017-08-13 06:15:03 trainstep:33900  loss:1.534419e-02  train acc:0.98047
+2017-08-13 06:16:12 trainstep:34000  loss:2.446749e-02  train acc:0.96484
+2017-08-13 06:17:21 trainstep:34100  loss:1.885509e-02  train acc:0.97656
+2017-08-13 06:18:30 trainstep:34200  loss:3.506609e-02  train acc:0.95312
+2017-08-13 06:19:38 trainstep:34300  loss:2.454008e-02  train acc:0.95703
+2017-08-13 06:20:47 trainstep:34400  loss:2.740870e-02  train acc:0.96484
+2017-08-13 06:21:56 trainstep:34500  loss:1.482909e-02  train acc:0.99219
+2017-08-13 06:23:05 trainstep:34600  loss:2.854870e-02  train acc:0.95703
+2017-08-13 06:24:14 trainstep:34700  loss:1.735081e-02  train acc:0.98047
+2017-08-13 06:25:23 trainstep:34800  loss:2.137318e-02  train acc:0.96875
+2017-08-13 06:26:32 trainstep:34900  loss:1.889363e-02  train acc:0.97656
+2017-08-13 06:27:41 trainstep:35000  loss:1.720196e-02  train acc:0.98438
+2017-08-13 06:28:50 trainstep:35100  loss:1.928623e-02  train acc:0.97266
+2017-08-13 06:29:59 trainstep:35200  loss:2.075350e-02  train acc:0.96484
+2017-08-13 06:31:07 trainstep:35300  loss:1.882905e-02  train acc:0.97266
+2017-08-13 06:32:16 trainstep:35400  loss:2.315167e-02  train acc:0.96875
+2017-08-13 06:33:25 trainstep:35500  loss:1.972999e-02  train acc:0.98438
+2017-08-13 06:34:34 trainstep:35600  loss:1.950339e-02  train acc:0.98438
+2017-08-13 06:35:43 trainstep:35700  loss:1.914310e-02  train acc:0.97266
+2017-08-13 06:36:51 trainstep:35800  loss:2.138080e-02  train acc:0.96875
+2017-08-13 06:38:00 trainstep:35900  loss:1.762060e-02  train acc:0.96484
+2017-08-13 06:39:09 trainstep:36000  loss:1.699056e-02  train acc:0.96875
+2017-08-13 06:40:18 trainstep:36100  loss:2.612667e-02  train acc:0.96875
+2017-08-13 06:41:27 trainstep:36200  loss:1.216712e-02  train acc:0.98047
+2017-08-13 06:42:36 trainstep:36300  loss:1.352130e-02  train acc:0.98438
+2017-08-13 06:43:45 trainstep:36400  loss:2.198928e-02  train acc:0.96875
+2017-08-13 06:44:54 trainstep:36500  loss:1.512894e-02  train acc:0.98047
+2017-08-13 06:46:03 trainstep:36600  loss:1.221716e-02  train acc:0.97656
+2017-08-13 06:47:12 trainstep:36700  loss:2.093169e-02  train acc:0.97656
+2017-08-13 06:48:20 trainstep:36800  loss:2.568332e-02  train acc:0.96484
+2017-08-13 06:49:29 trainstep:36900  loss:6.811880e-03  train acc:0.99219
+2017-08-13 06:50:38 trainstep:37000  loss:1.440298e-02  train acc:0.98828
+2017-08-13 06:51:47 trainstep:37100  loss:1.695916e-02  train acc:0.98828
+2017-08-13 06:52:56 trainstep:37200  loss:1.281771e-02  train acc:0.99219
+2017-08-13 06:54:05 trainstep:37300  loss:1.461338e-02  train acc:0.98828
+2017-08-13 06:55:13 trainstep:37400  loss:1.067808e-02  train acc:0.99219
+2017-08-13 06:56:22 trainstep:37500  loss:1.465800e-02  train acc:0.98438
+2017-08-13 06:57:38 trainstep:37600  loss:1.580105e-02  train acc:0.98047
+2017-08-13 06:58:46 trainstep:37700  loss:1.903542e-02  train acc:0.98047
+2017-08-13 06:59:55 trainstep:37800  loss:2.627273e-02  train acc:0.96484
+2017-08-13 07:01:03 trainstep:37900  loss:2.086980e-02  train acc:0.96875
+2017-08-13 07:02:12 trainstep:38000  loss:1.348305e-02  train acc:0.98828
+2017-08-13 07:03:20 trainstep:38100  loss:3.009889e-02  train acc:0.96094
+2017-08-13 07:04:28 trainstep:38200  loss:1.916785e-02  train acc:0.98047
+2017-08-13 07:05:37 trainstep:38300  loss:1.393678e-02  train acc:0.98047
+2017-08-13 07:06:45 trainstep:38400  loss:2.374888e-02  train acc:0.97266
+2017-08-13 07:07:53 trainstep:38500  loss:7.952363e-03  train acc:0.99219
+2017-08-13 07:09:01 trainstep:38600  loss:2.639864e-02  train acc:0.96484
+2017-08-13 07:10:10 trainstep:38700  loss:1.454033e-02  train acc:0.97656
+2017-08-13 07:11:18 trainstep:38800  loss:2.804432e-02  train acc:0.96484
+2017-08-13 07:12:27 trainstep:38900  loss:1.533875e-02  train acc:0.98047
+2017-08-13 07:13:35 trainstep:39000  loss:1.351019e-02  train acc:0.98047
+2017-08-13 07:14:43 trainstep:39100  loss:1.587762e-02  train acc:0.99219
+2017-08-13 07:15:51 trainstep:39200  loss:1.358240e-02  train acc:0.98828
+2017-08-13 07:17:00 trainstep:39300  loss:1.034623e-02  train acc:0.98047
+2017-08-13 07:18:08 trainstep:39400  loss:2.102226e-02  train acc:0.98828
+2017-08-13 07:19:17 trainstep:39500  loss:2.543372e-02  train acc:0.97266
+2017-08-13 07:20:26 trainstep:39600  loss:1.901314e-02  train acc:0.96875
+2017-08-13 07:21:35 trainstep:39700  loss:1.598824e-02  train acc:0.97656
+2017-08-13 07:22:43 trainstep:39800  loss:1.327968e-02  train acc:0.99609
+2017-08-13 07:23:52 trainstep:39900  loss:1.472713e-02  train acc:0.98438
+2017-08-13 07:25:01 trainstep:40000  loss:1.479258e-02  train acc:0.98828
+2017-08-13 07:26:10 trainstep:40100  loss:1.738046e-02  train acc:0.97656
+2017-08-13 07:27:18 trainstep:40200  loss:1.533143e-02  train acc:0.98047
+2017-08-13 07:28:27 trainstep:40300  loss:1.261263e-02  train acc:0.99219
+2017-08-13 07:29:36 trainstep:40400  loss:1.243760e-02  train acc:0.98438
+2017-08-13 07:30:45 trainstep:40500  loss:1.305969e-02  train acc:0.97656
+2017-08-13 07:31:53 trainstep:40600  loss:1.296818e-02  train acc:0.98438
+2017-08-13 07:33:02 trainstep:40700  loss:2.099893e-02  train acc:0.97656
+2017-08-13 07:34:11 trainstep:40800  loss:1.532394e-02  train acc:0.97656
+2017-08-13 07:35:20 trainstep:40900  loss:1.316685e-02  train acc:0.98828
+2017-08-13 07:36:29 trainstep:41000  loss:1.918953e-02  train acc:0.98438
+2017-08-13 07:37:37 trainstep:41100  loss:2.185304e-02  train acc:0.97656
+2017-08-13 07:38:46 trainstep:41200  loss:3.181816e-02  train acc:0.95703
+2017-08-13 07:39:55 trainstep:41300  loss:1.931048e-02  train acc:0.98047
+2017-08-13 07:41:03 trainstep:41400  loss:1.288994e-02  train acc:0.99219
+2017-08-13 07:42:12 trainstep:41500  loss:2.421403e-02  train acc:0.96875
+2017-08-13 07:43:21 trainstep:41600  loss:9.538843e-03  train acc:0.99609
+2017-08-13 07:44:30 trainstep:41700  loss:9.187794e-03  train acc:0.98828
+2017-08-13 07:45:38 trainstep:41800  loss:2.351983e-02  train acc:0.97266
+2017-08-13 07:46:47 trainstep:41900  loss:1.543417e-02  train acc:0.98047
+2017-08-13 07:47:56 trainstep:42000  loss:1.936407e-02  train acc:0.97266
+2017-08-13 07:49:05 trainstep:42100  loss:1.469574e-02  train acc:0.98438
+2017-08-13 07:50:20 trainstep:42200  loss:8.127735e-03  train acc:0.99219
+2017-08-13 07:51:29 trainstep:42300  loss:2.552291e-02  train acc:0.97266
+2017-08-13 07:52:38 trainstep:42400  loss:1.293644e-02  train acc:0.98047
+2017-08-13 07:53:46 trainstep:42500  loss:1.525297e-02  train acc:0.99219
+2017-08-13 07:54:55 trainstep:42600  loss:1.007490e-02  train acc:0.98828
+2017-08-13 07:56:03 trainstep:42700  loss:2.056104e-02  train acc:0.97656
+2017-08-13 07:57:12 trainstep:42800  loss:1.420192e-02  train acc:0.98828
+2017-08-13 07:58:20 trainstep:42900  loss:1.006275e-02  train acc:0.99609
+2017-08-13 07:59:29 trainstep:43000  loss:1.484083e-02  train acc:0.98438
+2017-08-13 08:00:37 trainstep:43100  loss:1.233560e-02  train acc:0.98828
+2017-08-13 08:01:45 trainstep:43200  loss:9.354241e-03  train acc:0.99219
+2017-08-13 08:02:54 trainstep:43300  loss:1.938744e-02  train acc:0.98047
+2017-08-13 08:04:02 trainstep:43400  loss:8.626123e-03  train acc:0.99609
+2017-08-13 08:05:11 trainstep:43500  loss:2.065576e-02  train acc:0.97266
+2017-08-13 08:06:20 trainstep:43600  loss:1.639485e-02  train acc:0.98047
+2017-08-13 08:07:29 trainstep:43700  loss:1.696487e-02  train acc:0.98438
+2017-08-13 08:08:37 trainstep:43800  loss:1.228840e-02  train acc:0.98438
+2017-08-13 08:09:46 trainstep:43900  loss:1.759949e-02  train acc:0.98438
+2017-08-13 08:10:55 trainstep:44000  loss:8.621959e-03  train acc:0.99219
+2017-08-13 08:12:04 trainstep:44100  loss:7.486647e-03  train acc:0.99219
+2017-08-13 08:13:12 trainstep:44200  loss:9.961835e-03  train acc:0.99219
+2017-08-13 08:14:21 trainstep:44300  loss:2.853991e-02  train acc:0.95703
+2017-08-13 08:15:30 trainstep:44400  loss:9.732204e-03  train acc:0.99609
+2017-08-13 08:16:39 trainstep:44500  loss:2.079933e-02  train acc:0.97266
+2017-08-13 08:17:48 trainstep:44600  loss:1.144446e-02  train acc:0.98047
+2017-08-13 08:18:56 trainstep:44700  loss:2.817446e-02  train acc:0.94531
+2017-08-13 08:20:05 trainstep:44800  loss:1.054397e-02  train acc:0.99609
+2017-08-13 08:21:14 trainstep:44900  loss:8.434379e-03  train acc:0.99609
+2017-08-13 08:22:23 trainstep:45000  loss:1.061181e-02  train acc:0.99219
+2017-08-13 08:23:31 trainstep:45100  loss:1.318299e-02  train acc:0.98828
+2017-08-13 08:24:40 trainstep:45200  loss:1.297174e-02  train acc:0.99219
+2017-08-13 08:25:49 trainstep:45300  loss:1.516556e-02  train acc:0.98047
+2017-08-13 08:26:58 trainstep:45400  loss:2.126219e-02  train acc:0.98438
+2017-08-13 08:28:06 trainstep:45500  loss:1.985203e-02  train acc:0.97656
+2017-08-13 08:29:15 trainstep:45600  loss:2.174812e-02  train acc:0.96875
+2017-08-13 08:30:24 trainstep:45700  loss:8.670267e-03  train acc:0.98828
+2017-08-13 08:31:32 trainstep:45800  loss:7.727022e-03  train acc:0.99609
+2017-08-13 08:32:41 trainstep:45900  loss:1.606236e-02  train acc:0.98047
+2017-08-13 08:33:50 trainstep:46000  loss:2.037569e-02  train acc:0.98047
+2017-08-13 08:34:59 trainstep:46100  loss:4.223244e-03  train acc:1.00000
+2017-08-13 08:36:07 trainstep:46200  loss:1.658127e-02  train acc:0.96875
+2017-08-13 08:37:16 trainstep:46300  loss:1.427394e-02  train acc:0.98438
+2017-08-13 08:38:25 trainstep:46400  loss:1.164418e-02  train acc:0.98828
+2017-08-13 08:39:34 trainstep:46500  loss:1.392489e-02  train acc:0.98438
+2017-08-13 08:40:42 trainstep:46600  loss:2.113565e-02  train acc:0.97266
+2017-08-13 08:41:51 trainstep:46700  loss:1.283135e-02  train acc:0.99219
+2017-08-13 08:42:59 trainstep:46800  loss:1.518006e-02  train acc:0.98047
+2017-08-13 08:44:14 trainstep:46900  loss:1.181235e-02  train acc:0.99219
+2017-08-13 08:45:23 trainstep:47000  loss:8.579848e-03  train acc:0.99219
+2017-08-13 08:46:32 trainstep:47100  loss:7.293636e-03  train acc:0.99219
+2017-08-13 08:47:41 trainstep:47200  loss:7.625829e-03  train acc:0.98828
+2017-08-13 08:48:49 trainstep:47300  loss:6.029426e-03  train acc:0.99609
+2017-08-13 08:49:58 trainstep:47400  loss:1.551411e-02  train acc:0.97656
+2017-08-13 08:51:06 trainstep:47500  loss:1.158890e-02  train acc:0.98828
+2017-08-13 08:52:15 trainstep:47600  loss:1.061207e-02  train acc:0.98828
+2017-08-13 08:53:23 trainstep:47700  loss:1.107012e-02  train acc:0.98828
+2017-08-13 08:54:32 trainstep:47800  loss:1.330338e-02  train acc:0.98438
+2017-08-13 08:55:40 trainstep:47900  loss:9.047679e-03  train acc:0.98438
+2017-08-13 08:56:48 trainstep:48000  loss:1.233950e-02  train acc:0.98047
+2017-08-13 08:57:57 trainstep:48100  loss:1.182198e-02  train acc:0.98828
+2017-08-13 08:59:06 trainstep:48200  loss:8.668754e-03  train acc:0.99609
+2017-08-13 09:00:15 trainstep:48300  loss:1.047333e-02  train acc:0.98828
+2017-08-13 09:01:24 trainstep:48400  loss:9.030738e-03  train acc:0.98828
+2017-08-13 09:02:33 trainstep:48500  loss:1.347516e-02  train acc:0.98047
+2017-08-13 09:03:42 trainstep:48600  loss:1.685878e-02  train acc:0.97266
+2017-08-13 09:04:50 trainstep:48700  loss:8.233042e-03  train acc:0.99219
+2017-08-13 09:05:59 trainstep:48800  loss:2.011213e-02  train acc:0.97266
+2017-08-13 09:07:07 trainstep:48900  loss:2.207872e-02  train acc:0.96094
+2017-08-13 09:08:16 trainstep:49000  loss:8.507335e-03  train acc:0.98828
+2017-08-13 09:09:24 trainstep:49100  loss:1.005704e-02  train acc:0.99219
+2017-08-13 09:10:32 trainstep:49200  loss:8.680343e-03  train acc:0.99609
+2017-08-13 09:11:41 trainstep:49300  loss:5.717325e-03  train acc:0.99609
+2017-08-13 09:12:50 trainstep:49400  loss:8.286258e-03  train acc:0.98828
+2017-08-13 09:13:59 trainstep:49500  loss:1.741873e-02  train acc:0.97656
+2017-08-13 09:15:08 trainstep:49600  loss:1.605650e-02  train acc:0.98047
+2017-08-13 09:16:17 trainstep:49700  loss:1.014914e-02  train acc:0.98828
+2017-08-13 09:17:26 trainstep:49800  loss:1.628510e-02  train acc:0.97656
+2017-08-13 09:18:35 trainstep:49900  loss:6.168961e-03  train acc:0.99609
+2017-08-13 09:19:44 trainstep:50000  loss:6.847840e-03  train acc:0.98828
+2017-08-13 09:20:53 trainstep:50100  loss:1.339914e-02  train acc:0.98828
+2017-08-13 09:22:01 trainstep:50200  loss:1.580580e-02  train acc:0.97266
+2017-08-13 09:23:10 trainstep:50300  loss:1.707242e-02  train acc:0.97656
+2017-08-13 09:24:19 trainstep:50400  loss:1.931767e-02  train acc:0.97656
+2017-08-13 09:25:27 trainstep:50500  loss:6.184830e-03  train acc:0.99219
+2017-08-13 09:26:36 trainstep:50600  loss:1.529411e-02  train acc:0.97266
