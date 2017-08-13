@@ -4,8 +4,8 @@
 """
 @author ZHAOPENGCHENG on 2017/8/9.
 """
-from com.huitong.digitRecognisev1.genCaptcha import gen_captcha_text_and_image
-from com.huitong.digitRecognisev1.genCaptcha import number
+from com.huitong.captchaRecognisev1.genCaptcha import gen_captcha_text_and_image
+from com.huitong.captchaRecognisev1.genCaptcha import number
 
 
 import numpy as np
