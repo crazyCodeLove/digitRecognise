@@ -282,10 +282,16 @@ class ImageTool():
         return cropImg
 
 
+def testShowGasmeterArea():
+    imgdirname = ["data","img"]
+    imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),imgdirname)
+    pattern = r'.*\.jpg$'
+    filelist = FileNameUtil.getPathFilenameList(imgdirname,pattern)
+    for each in filelist:
+        ImageTool.showGasmeterArea(each)
 
 
-
-def test():
+def testCaptchaGenerate():
     # 验证码一般都无视大小写；验证码长度4个字符
     captchaCharacterLength = 4
     captchaBoxWidth = 128
@@ -302,6 +308,9 @@ def test():
 
         plt.show()
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+
+def test():
+    testShowGasmeterArea()
 
 if __name__ == '__main__':
     test()
