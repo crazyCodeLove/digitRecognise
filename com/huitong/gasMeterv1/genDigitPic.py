@@ -70,6 +70,12 @@ class GenDigitPicture():
             text.append(c)
         return text
 
+    def get_gasmeter_test_and_image(self):
+        """
+        生成12
+        :return:
+        """
+
     def get_text_and_image(self):
         """ 生成字符序列和对应的图片数据 """
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
@@ -83,6 +89,7 @@ class GenDigitPicture():
         captcha_image = Image.open(captcha)
         captcha_image = np.array(captcha_image)
         return captcha_text, captcha_image
+
 
 
     def get_next_batch(self, batchsize = None):
@@ -290,10 +297,23 @@ def testShowGasmeterArea():
     for each in filelist:
         ImageTool.showGasmeterArea(each)
 
+def testgetGasmeterAreaData():
+    imgdirname = ["data", "img"]
+    imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
+    pattern = r'.*\.jpg$'
+    filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
+    for each in filelist:
+        img = ImageTool.getGasmeterAreaData(each)
+        data = np.array(img)
+        print(data.shape)
+        plt.figure()
+        plt.title("gasmeter area")
+        plt.imshow(img)
+        plt.show()
 
 def testCaptchaGenerate():
     # 验证码一般都无视大小写；验证码长度4个字符
-    captchaCharacterLength = 4
+    captchaCharacterLength = 5
     captchaBoxWidth = 128
     captchaBoxHeight = 64
     gen = GenDigitPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight)
@@ -310,7 +330,9 @@ def testCaptchaGenerate():
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 def test():
-    testShowGasmeterArea()
+    # testShowGasmeterArea()
+    testCaptchaGenerate()
+    # testgetGasmeterAreaData()
 
 if __name__ == '__main__':
     test()

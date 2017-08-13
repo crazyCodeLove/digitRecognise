@@ -21,7 +21,7 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 DATA_DIR = os.path.join(DATA_DIR, 'fonts')
 
 DEFAULT_FONTS = [os.path.join(DATA_DIR, font) for font in os.listdir(DATA_DIR) ]
-DEFAULT_FOUNT_SIZES = [i for i in range(28, 36, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(42, 47, 2)]
 
 __all__ = ['ImageCaptcha']
 
@@ -132,7 +132,7 @@ class ImageCaptcha(_Captcha):
 
             # rotate
             im = im.crop(im.getbbox())
-            im = im.rotate(random.uniform(-20, 20), Image.BILINEAR, expand=1)
+            im = im.rotate(random.uniform(-15, 15), Image.BILINEAR, expand=1)
 
             return im
 
