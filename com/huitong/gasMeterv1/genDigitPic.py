@@ -70,11 +70,78 @@ class GenDigitPicture():
             text.append(c)
         return text
 
-    def get_gasmeter_test_and_image(self):
+    def get_compose_gasmeter_text_and_image(self, gasmeterFilename):
         """
-        生成12
+        根据原始燃气表图片名，生成一张合成图片和对应的数字字符串
+        返回数字字符串和图片数据
+        :param gasmeterFilename: 燃气表文件名
+        """
+        image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
+                             backgroundColor=self._backgroundColor, fontColor=self._fontColor)
+        #随机选出字符串
+        captcha_text = self._random_text()
+        captcha_text = ''.join(captcha_text)
+
+        #由字符串生成验证码
+        captcha = image.generate(captcha_text)
+        captcha_image = Image.open(captcha)
+
+        # 获取表头数字区域
+        boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(gasmeterFilename)
+        box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
+        digitAreaWidth = ImageTool.getBoxWidth(box)
+        digitAreaWidth = int(digitAreaWidth*5/8) + 20
+        digitAreaHeight = ImageTool.getBoxHeight(box)
+        # 如果截取的 #（5,8）表头宽度比验证码宽度长，则验证码 resize 到 #(5,8)表头大小
+        # #（5,8）表示燃气表数字有 8 位，其中5 位是要识别的黑底白字
+        if digitAreaWidth > self._picBoxWidth:
+            captcha_image = captcha_image.resize((digitAreaWidth,digitAreaHeight))
+            box = (box[0],box[1],box[0] + digitAreaWidth, box[1] + digitAreaHeight)
+        else:
+            box = (box[0],box[1],box[0] + captcha_image.width, box[1] + captcha_image.height)
+
+
+        # 读取原图片，预处理，以便黏贴验证码
+        oriImg = cv2.imread(gasmeterFilename)
+        oriImg = ImageTool.preProcessImage(oriImg)
+        oriImg = cv2.cvtColor(oriImg, cv2.COLOR_BGR2RGB)
+        data = np.array(oriImg)
+        oriImg = Image.fromarray(data)
+
+        oriImg.paste(captcha_image,box)
+        composeGasmeterImg = np.array(oriImg)
+        return captcha_text, composeGasmeterImg
+
+    def get_compose_gasmeter_next_batch(self, gasmeterFilename, batchsize = None):
+        """
+        :TODO
+
+        根据燃气表图片文件名获得一批训练数据
+        1 合成燃气表图片
+        2 对合成图片进行处理，获得数字区域数据
+        3 对数字区域数据进行大小调整，默认调整到 64 * 128
+        4 重复 1/2/3步骤，生成一个批次
+        :param gasmeterFilename:
+        :param batchsize:
         :return:
         """
+        if batchsize is None:
+            batchsize = 64
+        batch_x = np.zeros([batchsize, self._picBoxHeight * self._picBoxWidth * 3])
+        CHAR_SET_LEN = len(self._charset) + 1
+        batch_y = np.zeros([batchsize, self._picCharacterLength * CHAR_SET_LEN])
+
+        def wrap_gen_text_and_image():
+            test,image = self.get_compose_gasmeter_text_and_image(gasmeterFilename)
+
+
+
+
+
+
+
+
+
 
     def get_text_and_image(self):
         """ 生成字符序列和对应的图片数据 """
@@ -89,8 +156,6 @@ class GenDigitPicture():
         captcha_image = Image.open(captcha)
         captcha_image = np.array(captcha_image)
         return captcha_text, captcha_image
-
-
 
     def get_next_batch(self, batchsize = None):
         """
@@ -174,7 +239,7 @@ class ImageTool():
     def preProcessImage(img, width=None):
         """
         将输入图片缩放到指定大小，默认是800*800。裁剪所得图片中间80%，并恢复到指定大小
-        :param img: 输入图片
+        :param img: 输入图片数据，cv2读取的 object 对象
         :param width: 指定图片的大小
         """
         if width is None:
@@ -189,6 +254,7 @@ class ImageTool():
         img = cv2.resize(img, (width, width), interpolation=cv2.INTER_LINEAR)
         return img
 
+
     @staticmethod
     def showGasmeterArea(filename):
         """
@@ -199,7 +265,7 @@ class ImageTool():
         if not FileNameUtil.fileExisted(filename):
             raise ValueError("%s 文件不存在"%filename)
 
-        box = ImageTool.getGasmeterRectBox(filename)
+        box = ImageTool.getGasmeterRectBoxCornerPoint(filename)
         img = cv2.imread(filename)
         img = ImageTool.preProcessImage(img)
         cv2.drawContours(img, [box], 0, (0, 255, 0), 2)
@@ -218,16 +284,34 @@ class ImageTool():
         if not FileNameUtil.fileExisted(filename):
             raise ValueError("%s 文件不存在" % filename)
 
-        box = ImageTool.getGasmeterRectBox(filename)
+        box = ImageTool.getGasmeterRectBoxCornerPoint(filename)
         img = cv2.imread(filename)
         img = ImageTool.preProcessImage(img)
         return ImageTool._getCropImage(img, box)
 
+    @staticmethod
+    def getGasmeterCompositePicture(filename, captcha):
+        """
+        将 captcha Image对象合成到燃气表的数字区域，返回合成的图片
+        :param filename:燃气表图片文件名
+        :param captcha:要向燃气表数字区黏贴的图片，类型是PIL.Image对象
+        :return:
+        """
+        boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(filename)
+        box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
+        box = (box[0],box[1],box[0] + captcha.width,box[1] + captcha.height)
+        img = cv2.imread(filename)
+        img = ImageTool.preProcessImage(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        data = np.array(img)
+        img = Image.fromarray(data)
 
+        img.paste(captcha, box)
+        return img
 
 
     @staticmethod
-    def getGasmeterRectBox(filename):
+    def getGasmeterRectBoxCornerPoint(filename):
         """
         获得燃气表数字区域，返回的是区域的四个顶点
         :param filename:
@@ -266,26 +350,49 @@ class ImageTool():
         # compute the rotated bounding box of the largest contour
         rect = cv2.minAreaRect(c)
         # box里保存的是绿色矩形区域四个顶点的坐标。
-        box = np.int0(cv2.boxPoints(rect))
-        return box
+        boxCornerPoint = np.int0(cv2.boxPoints(rect))
+        return boxCornerPoint
 
     @staticmethod
-    def _getCropImage(image, box):
+    def getBoxFromBoxCorner(boxCornerPoint):
+        """
+        根据 box 四个角的坐标获得 left, upper, right, and lower pixel coordinate tuple
+        原点(0,0)在 left upper corner，x 轴向下，y 轴向右
+        :param boxCorner:
+        """
+        Xs = [i[0] for i in boxCornerPoint]
+        Ys = [i[1] for i in boxCornerPoint]
+        x1 = min(Xs)
+        x2 = max(Xs)
+        y1 = min(Ys)
+        y2 = max(Ys)
+        return (x1,y1,x2,y2)
+
+    @staticmethod
+    def getBoxWidth(box):
+        return box[2]-box[0]
+
+    @staticmethod
+    def getBoxHeight(box):
+        return box[3]-box[1]
+
+
+
+
+    @staticmethod
+    def _getCropImage(image, boxCornerPoint):
         """
         获取裁剪图片
         image 是cv2读进来的图片
         :param box: 要裁剪的矩形四个顶角坐标
         """
-        Xs = [i[0] for i in box]
-        Ys = [i[1] for i in box]
-        x1 = min(Xs)
-        x2 = max(Xs)
-        y1 = min(Ys)
-        y2 = max(Ys)
-        hight = y2 - y1
-        width = x2 - x1
+        box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
+        hight = ImageTool.getBoxHeight(box)
+        width = ImageTool.getBoxWidth(box)
+        left = box[0]
+        upper = box[1]
 
-        cropImg = image[y1:y1 + hight, x1:x1 + width]
+        cropImg = image[upper:upper + hight, left:left + width]
         return cropImg
 
 
@@ -311,6 +418,30 @@ def testgetGasmeterAreaData():
         plt.imshow(img)
         plt.show()
 
+def testGasmeterComposite():
+    captchaCharacterLength = 5
+    captchaBoxWidth = 128
+    captchaBoxHeight = 64
+    gen = GenDigitPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
+                          backgroundColor=(1,1,1),fontColor=(200,200,200))
+
+    imgdirname = ["data", "img"]
+    imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
+    pattern = r'.*\.jpg$'
+    filename = FileNameUtil.getPathFilenameList(imgdirname, pattern)[0]
+    while (1):
+        text, image = gen.get_compose_gasmeter_text_and_image(filename)
+        print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
+        f = plt.figure()
+        ax = f.add_subplot(111)
+        ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
+        plt.imshow(image)
+
+        plt.show()
+        print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+
+
+
 def testCaptchaGenerate():
     # 验证码一般都无视大小写；验证码长度4个字符
     captchaCharacterLength = 5
@@ -331,8 +462,9 @@ def testCaptchaGenerate():
 
 def test():
     # testShowGasmeterArea()
-    testCaptchaGenerate()
+    # testCaptchaGenerate()
     # testgetGasmeterAreaData()
+    testGasmeterComposite()
 
 if __name__ == '__main__':
     test()

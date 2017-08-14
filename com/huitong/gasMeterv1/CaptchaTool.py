@@ -146,14 +146,14 @@ class ImageCaptcha(_Captcha):
         image = image.resize((width, self._height))
 
         average = int(text_width / len(chars))
-        rand = int(0.25 * average)
+        rand = int(0.05 * average)
         offset = int(average * 0.1)
 
         for im in images:
             w, h = im.size
             mask = im.convert('L').point(table)
             image.paste(im, (offset, int((self._height - h) / 2)), mask)
-            offset = offset + w + random.randint(-rand, 0)
+            offset = offset + w + random.randint(0,rand)
 
         if width > self._width:
             image = image.resize((self._width, self._height))

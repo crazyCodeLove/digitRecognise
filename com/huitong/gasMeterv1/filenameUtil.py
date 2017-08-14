@@ -35,6 +35,10 @@ class FileNameUtil(object):
         return path
 
     @staticmethod
+    def getPathJoin(dirname, filename):
+        return os.path.join(dirname, filename)
+
+    @staticmethod
     def getFilename(basedirname, filename):
         """
         根据基目录和文件名，返回该系统表示的文件绝对路径名
@@ -42,6 +46,11 @@ class FileNameUtil(object):
         :param filename: 文件名
         """
         return os.path.join(basedirname, filename)
+
+    @staticmethod
+    def removeFile(filename):
+        if os.path.exists(filename):
+            os.remove(filename)
 
     @staticmethod
     def emptyDir(dirname):
