@@ -70,11 +70,11 @@ class GenDigitPicture():
             text.append(c)
         return text
 
-    def get_compose_gasmeter_text_and_image(self, gasmeterFilename):
+    def get_compose_gasmeter_text_and_image(self, gasmeterImg):
         """
-        根据原始燃气表图片名，生成一张合成图片和对应的数字字符串
+        根据原始燃气表图片对象，生成一张合成图片和对应的数字字符串
         返回数字字符串和图片数据
-        :param gasmeterFilename: 燃气表文件名
+        :param gasmeterImg: cv2读进来的燃气表图片对象
         """
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
                              backgroundColor=self._backgroundColor, fontColor=self._fontColor)
@@ -87,7 +87,10 @@ class GenDigitPicture():
         captcha_image = Image.open(captcha)
 
         # 获取表头数字区域
-        boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(gasmeterFilename)
+        # gasmeterImg = cv2.imread(gasmeterFilename)
+        imgTemp = gasmeterImg.copy()
+        imgTemp = ImageTool.convertCv2ColorImg2Gray(imgTemp)
+        boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
         box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
         digitAreaWidth = ImageTool.getBoxWidth(box)
         digitAreaWidth = int(digitAreaWidth*5/8) + 20
@@ -102,7 +105,7 @@ class GenDigitPicture():
 
 
         # 读取原图片，预处理，以便黏贴验证码
-        oriImg = cv2.imread(gasmeterFilename)
+        oriImg = gasmeterImg.copy()
         oriImg = ImageTool.preProcessImage(oriImg)
         oriImg = cv2.cvtColor(oriImg, cv2.COLOR_BGR2RGB)
         data = np.array(oriImg)
@@ -112,7 +115,7 @@ class GenDigitPicture():
         composeGasmeterImg = np.array(oriImg)
         return captcha_text, composeGasmeterImg
 
-    def get_compose_gasmeter_next_batch(self, gasmeterFilename, batchsize = None):
+    def get_compose_gasmeter_next_batch(self, gasmeterImgObj, batchsize = None):
         """
         :TODO
 
@@ -121,7 +124,7 @@ class GenDigitPicture():
         2 对合成图片进行处理，获得数字区域数据
         3 对数字区域数据进行大小调整，默认调整到 64 * 128
         4 重复 1/2/3步骤，生成一个批次
-        :param gasmeterFilename:
+        :param gasmeterImgObj:cv2 读取的燃气表图片对象
         :param batchsize:
         :return:
         """
@@ -131,16 +134,33 @@ class GenDigitPicture():
         CHAR_SET_LEN = len(self._charset) + 1
         batch_y = np.zeros([batchsize, self._picCharacterLength * CHAR_SET_LEN])
 
-        def wrap_gen_text_and_image():
-            test,image = self.get_compose_gasmeter_text_and_image(gasmeterFilename)
+        def wrap_gen_text_and_image(gasmeterImgObj):
+            """
+            将合成图片进行处理，只保留取得的表头数字区域数据，并调整大小到 self._picBoxHeight * self._picBoxWidth
+            将文本和表头数字区图片数据返回
+            :param gasmeterImgObj:
+            """
+            text,image = self.get_compose_gasmeter_text_and_image(gasmeterImgObj)
+            image = cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
+            image = ImageTool.getGasmeterAreaData(image)
+            image = cv2.resize(image,(self._picBoxWidth,self._picBoxHeight))
+            image = np.array(image)
 
+            # 显示截取的燃气表数字区的图片和文字
+            # plt.figure()
+            # plt.title(text)
+            # plt.imshow(image)
+            # plt.show()
+            return text,image
 
+        for i in range(batchsize):
+            text, image = wrap_gen_text_and_image(gasmeterImgObj)
 
+            batch_x[i, :] = image.flatten()
+            batch_y[i, :] = self._text2vec(text)
 
-
-
-
-
+        # 返回该训练批次
+        return batch_x, batch_y
 
 
     def get_text_and_image(self):
@@ -236,6 +256,14 @@ class ImageTool():
     """
 
     @staticmethod
+    def convertCv2ColorImg2Gray(bgrimg):
+        """
+        将cv2 读进来的图像转换成灰度图像对象并返回
+        :param bgrimg:
+        """
+        return cv2.cvtColor(bgrimg,cv2.COLOR_BGR2GRAY)
+
+    @staticmethod
     def preProcessImage(img, width=None):
         """
         将输入图片缩放到指定大小，默认是800*800。裁剪所得图片中间80%，并恢复到指定大小
@@ -268,9 +296,10 @@ class ImageTool():
         imgTemp = cv2.cvtColor(imgTemp,cv2.COLOR_BGR2GRAY)
 
         box = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
-        imgobj = ImageTool.preProcessImage(imgobj)
-        cv2.drawContours(imgobj, [box], 0, (0, 255, 0), 2)
-        cv2.imshow("box area, %s"%FileNameUtil.getFilenameFromFullFilepathname(filename), imgobj)
+        cimgobj = imgobj.copy()
+        cimgobj = ImageTool.preProcessImage(cimgobj)
+        cv2.drawContours(cimgobj, [box], 0, (0, 255, 0), 2)
+        cv2.imshow("box area, %s"%FileNameUtil.getFilenameFromFullFilepathname(filename), cimgobj)
 
         k = cv2.waitKey(0)  # 无限期等待输入
         if k == 27:  # 如果输入ESC退出
@@ -286,8 +315,9 @@ class ImageTool():
         imgTemp = cv2.cvtColor(imgTemp, cv2.COLOR_BGR2GRAY)
         box = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
 
-        imgobj = ImageTool.preProcessImage(imgobj)
-        return ImageTool._getCropImage(imgobj, box)
+        cimgobj = imgobj.copy()
+        cimgobj = ImageTool.preProcessImage(cimgobj)
+        return ImageTool._getCropImage(cimgobj, box)
 
     # @staticmethod
     # def getGasmeterCompositePicture(filename, captcha):
@@ -318,6 +348,8 @@ class ImageTool():
         :param grayImg:通过 cv2 读进来的灰度图片对象
         :return:
         """
+        if grayImg is not None:
+            grayImg = grayImg.copy()
         if filename is not None:
             grayImg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
@@ -430,8 +462,9 @@ def testGasmeterComposite():
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
     filename = FileNameUtil.getPathFilenameList(imgdirname, pattern)[0]
+    gasmeterPic = cv2.imread(filename)
     while (1):
-        text, image = gen.get_compose_gasmeter_text_and_image(filename)
+        text, image = gen.get_compose_gasmeter_text_and_image(gasmeterPic)
         print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
         f = plt.figure()
         ax = f.add_subplot(111)
@@ -461,11 +494,31 @@ def testCaptchaGenerate():
         plt.show()
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
 
+def testGet_compose_gasmeter_next_batch():
+    imgdirname = ["data", "img"]
+    imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
+    pattern = r'.*\.jpg$'
+    filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
+
+    captchaCharacterLength = 5
+    captchaBoxWidth = 128
+    captchaBoxHeight = 64
+    gen = GenDigitPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
+                          backgroundColor=(1, 1, 1), fontColor=(200, 200, 200))
+
+    for eachfile in filelist:
+        gen.get_compose_gasmeter_next_batch(cv2.imread(eachfile))
+
+
+
+
+
 def test():
     # testShowGasmeterArea()
     # testCaptchaGenerate()
-    testgetGasmeterAreaData()
+    # testgetGasmeterAreaData()
     # testGasmeterComposite()
+    testGet_compose_gasmeter_next_batch()
 
 if __name__ == '__main__':
     test()
