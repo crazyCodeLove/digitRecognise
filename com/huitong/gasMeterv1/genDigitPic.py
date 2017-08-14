@@ -106,6 +106,8 @@ class GenDigitPicture():
 
 
         # 读取原图片，预处理，以便黏贴验证码
+        # oriImg = gasmeterImg.copy()
+
         oriImg = gasmeterImg.copy()
         oriImg = ImageTool.preProcessImage(oriImg)
         oriImg = cv2.cvtColor(oriImg, cv2.COLOR_BGR2RGB)
@@ -522,11 +524,11 @@ def testGet_compose_gasmeter_next_batch():
 
 
 def test():
-    # testShowGasmeterArea()
+    testShowGasmeterArea()
     # testCaptchaGenerate()
     # testgetGasmeterAreaData()
     # testGasmeterComposite()
-    testGet_compose_gasmeter_next_batch()
+    # testGet_compose_gasmeter_next_batch()
 
 if __name__ == '__main__':
     test()

@@ -22,12 +22,12 @@ import cv2
 
 
 
-captchaCharacterLength = 7
+captchaCharacterLength = 5
 captchaBoxWidth = 128
-captchaBoxHeight = 32
+captchaBoxHeight = 64
 
 gen = GenDigitPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
-                      backgroundColor=(10, 10, 10), fontColor=(200, 200, 200))
+                      backgroundColor=(20, 20, 20), fontColor=(200, 200, 200))
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
 
 HParams = namedtuple('HParams',
@@ -86,11 +86,14 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
             saver.restore(sess, save_file_name)
 
         base_step = peizhi['train_step']
-        end_step = int(base_step + 50000*trainepochnums / hps.batch_nums +1)
+        end_step = int(base_step + 5000*trainepochnums / hps.batch_nums +1)
+        tpic = random.choice(gasmeterPictureFilenameList)
+        img = cv2.imread(tpic)
+
         for itstep in range(base_step,end_step):
             # images,labels = gen.get_next_batch(hps.batch_nums)
-            tpic = random.choice(gasmeterPictureFilenameList)
-            images, labels = gen.get_compose_gasmeter_next_batch(cv2.imread(tpic),batchsize=64)
+
+            images, labels = gen.get_compose_gasmeter_next_batch(img, batchsize=64)
 
             feed_dict = {
                 xp:images,
