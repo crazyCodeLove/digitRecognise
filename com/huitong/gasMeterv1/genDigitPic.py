@@ -256,73 +256,76 @@ class ImageTool():
 
 
     @staticmethod
-    def showGasmeterArea(filename):
+    def showGasmeterArea(imgobj,filename = None):
         """
         显示获得的图片区域，自己对原始图片进行了处理，看到的图片大小跟原始图片不一样
+        :param imgobj:通过cv2 读进来的图像对象
         :param filename: 要处理的原始图片
-        :return:
-        """
-        if not FileNameUtil.fileExisted(filename):
-            raise ValueError("%s 文件不存在"%filename)
 
-        box = ImageTool.getGasmeterRectBoxCornerPoint(filename)
-        img = cv2.imread(filename)
-        img = ImageTool.preProcessImage(img)
-        cv2.drawContours(img, [box], 0, (0, 255, 0), 2)
-        cv2.imshow("box area, %s"%FileNameUtil.getFilenameFromFullFilepathname(filename), img)
+        """
+
+        imgTemp = imgobj.copy()
+        imgTemp = cv2.cvtColor(imgTemp,cv2.COLOR_BGR2GRAY)
+
+        box = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
+        imgobj = ImageTool.preProcessImage(imgobj)
+        cv2.drawContours(imgobj, [box], 0, (0, 255, 0), 2)
+        cv2.imshow("box area, %s"%FileNameUtil.getFilenameFromFullFilepathname(filename), imgobj)
 
         k = cv2.waitKey(0)  # 无限期等待输入
         if k == 27:  # 如果输入ESC退出
             cv2.destroyAllWindows()
 
     @staticmethod
-    def getGasmeterAreaData(filename):
+    def getGasmeterAreaData(imgobj):
         """
         根据图片文件获得燃气表数字所在区域的图片数据并返回。
-        :param filename: 燃气表图片文件名
+        :param imgobj: 燃气表图片，通过cv2读进来的图片数据对象
         """
-        if not FileNameUtil.fileExisted(filename):
-            raise ValueError("%s 文件不存在" % filename)
+        imgTemp = imgobj.copy()
+        imgTemp = cv2.cvtColor(imgTemp, cv2.COLOR_BGR2GRAY)
+        box = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
 
-        box = ImageTool.getGasmeterRectBoxCornerPoint(filename)
-        img = cv2.imread(filename)
-        img = ImageTool.preProcessImage(img)
-        return ImageTool._getCropImage(img, box)
+        imgobj = ImageTool.preProcessImage(imgobj)
+        return ImageTool._getCropImage(imgobj, box)
+
+    # @staticmethod
+    # def getGasmeterCompositePicture(filename, captcha):
+    #     """
+    #     将 captcha Image对象合成到燃气表的数字区域，返回合成的图片 PIL.Image 对象
+    #     :param filename:燃气表图片文件名
+    #     :param captcha:要向燃气表数字区黏贴的图片，类型是PIL.Image对象
+    #     :return:
+    #     """
+    #     boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(filename)
+    #     box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
+    #     box = (box[0],box[1],box[0] + captcha.width,box[1] + captcha.height)
+    #     img = cv2.imread(filename)
+    #     img = ImageTool.preProcessImage(img)
+    #     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    #     data = np.array(img)
+    #     img = Image.fromarray(data)
+    #
+    #     img.paste(captcha, box)
+    #     return img
+
 
     @staticmethod
-    def getGasmeterCompositePicture(filename, captcha):
+    def getGasmeterRectBoxCornerPoint(filename =None, grayImg = None):
         """
-        将 captcha Image对象合成到燃气表的数字区域，返回合成的图片
-        :param filename:燃气表图片文件名
-        :param captcha:要向燃气表数字区黏贴的图片，类型是PIL.Image对象
+        获得燃气表数字区域，返回的是区域的四个顶点，优先使用filename 文件名
+        :param filename:想要获取表头四角的图片文件名
+        :param grayImg:通过 cv2 读进来的灰度图片对象
         :return:
         """
-        boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(filename)
-        box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
-        box = (box[0],box[1],box[0] + captcha.width,box[1] + captcha.height)
-        img = cv2.imread(filename)
-        img = ImageTool.preProcessImage(img)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        data = np.array(img)
-        img = Image.fromarray(data)
+        if filename is not None:
+            grayImg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
-        img.paste(captcha, box)
-        return img
-
-
-    @staticmethod
-    def getGasmeterRectBoxCornerPoint(filename):
-        """
-        获得燃气表数字区域，返回的是区域的四个顶点
-        :param filename:
-        :return:
-        """
-        img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-        grayimg = ImageTool.preProcessImage(img)
+        grayImg = ImageTool.preProcessImage(grayImg)
         # 高斯滤波，去除背景噪声
-        grayimg = cv2.GaussianBlur(grayimg, (7, 7), 0)
+        grayImg = cv2.GaussianBlur(grayImg, (7, 7), 0)
         # 进行二值化处理
-        _, binImg = cv2.threshold(grayimg, 50, 255, cv2.THRESH_BINARY_INV)
+        _, binImg = cv2.threshold(grayImg, 50, 255, cv2.THRESH_BINARY_INV)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
         closedImg = cv2.morphologyEx(binImg, cv2.MORPH_CLOSE, kernel)
@@ -377,14 +380,12 @@ class ImageTool():
         return box[3]-box[1]
 
 
-
-
     @staticmethod
     def _getCropImage(image, boxCornerPoint):
         """
         获取裁剪图片
-        image 是cv2读进来的图片
-        :param box: 要裁剪的矩形四个顶角坐标
+        :param image 是cv2读进来的图片对象
+        :param boxCornerPoint: 要裁剪的矩形四个顶角坐标
         """
         box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
         hight = ImageTool.getBoxHeight(box)
@@ -402,7 +403,7 @@ def testShowGasmeterArea():
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname,pattern)
     for each in filelist:
-        ImageTool.showGasmeterArea(each)
+        ImageTool.showGasmeterArea(cv2.imread(each),filename=each)
 
 def testgetGasmeterAreaData():
     imgdirname = ["data", "img"]
@@ -410,7 +411,7 @@ def testgetGasmeterAreaData():
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
     for each in filelist:
-        img = ImageTool.getGasmeterAreaData(each)
+        img = ImageTool.getGasmeterAreaData(cv2.imread(each))
         data = np.array(img)
         print(data.shape)
         plt.figure()
@@ -463,8 +464,8 @@ def testCaptchaGenerate():
 def test():
     # testShowGasmeterArea()
     # testCaptchaGenerate()
-    # testgetGasmeterAreaData()
-    testGasmeterComposite()
+    testgetGasmeterAreaData()
+    # testGasmeterComposite()
 
 if __name__ == '__main__':
     test()
