@@ -12,6 +12,7 @@ import random, time
 from com.huitong.gasMeterv1.CaptchaTool import ImageCaptcha
 import cv2
 from com.huitong.gasMeterv1.filenameUtil import FileNameUtil
+import platform
 
 
 class GenDigitPicture():
@@ -130,9 +131,9 @@ class GenDigitPicture():
         """
         if batchsize is None:
             batchsize = 64
-        batch_x = np.zeros([batchsize, self._picBoxHeight * self._picBoxWidth * 3])
+        batch_x = np.zeros([batchsize, self._picBoxHeight * self._picBoxWidth * 3],dtype=np.float32)
         CHAR_SET_LEN = len(self._charset) + 1
-        batch_y = np.zeros([batchsize, self._picCharacterLength * CHAR_SET_LEN])
+        batch_y = np.zeros([batchsize, self._picCharacterLength * CHAR_SET_LEN],dtype=np.float32)
 
         def wrap_gen_text_and_image(gasmeterImgObj):
             """
@@ -144,13 +145,14 @@ class GenDigitPicture():
             image = cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
             image = ImageTool.getGasmeterAreaData(image)
             image = cv2.resize(image,(self._picBoxWidth,self._picBoxHeight))
-            image = np.array(image)
+            image = np.array(image,dtype=np.float32)
 
             # 显示截取的燃气表数字区的图片和文字
             # plt.figure()
             # plt.title(text)
             # plt.imshow(image)
             # plt.show()
+
             return text,image
 
         for i in range(batchsize):
@@ -379,13 +381,19 @@ class ImageTool():
 
         # 找出区域的轮廓。cv2.findContours()函数
         # (cnts, _) = cv2.findContours(erodeImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        (erodeImg, cnts, hierarchy) = cv2.findContours(erodeImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if "Linux" in platform.system():
+            cnts, hierarchy = cv2.findContours(erodeImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            (erodeImg, cnts, hierarchy) = cv2.findContours(erodeImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         c = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
 
         # compute the rotated bounding box of the largest contour
         rect = cv2.minAreaRect(c)
         # box里保存的是绿色矩形区域四个顶点的坐标。
-        boxCornerPoint = np.int0(cv2.boxPoints(rect))
+        if "Linux" in platform.system():
+            boxCornerPoint = np.int0(cv2.cv.BoxPoints(rect))
+        else:
+            boxCornerPoint = np.int0(cv2.boxPoints(rect))
         return boxCornerPoint
 
     @staticmethod
@@ -504,7 +512,7 @@ def testGet_compose_gasmeter_next_batch():
     captchaBoxWidth = 128
     captchaBoxHeight = 64
     gen = GenDigitPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
-                          backgroundColor=(1, 1, 1), fontColor=(200, 200, 200))
+                          backgroundColor=(10, 10, 10), fontColor=(200, 200, 200))
 
     for eachfile in filelist:
         gen.get_compose_gasmeter_next_batch(cv2.imread(eachfile))

@@ -13,16 +13,21 @@ from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.filenameUtil import FileNameUtil
 
 
+
 import tensorflow as tf
 import os
 import pickle
+import random
+import cv2
+
 
 
 captchaCharacterLength = 7
 captchaBoxWidth = 128
 captchaBoxHeight = 32
 
-gen = GenDigitPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight)
+gen = GenDigitPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
+                      backgroundColor=(10, 10, 10), fontColor=(200, 200, 200))
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
 
 HParams = namedtuple('HParams',
@@ -66,6 +71,9 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
     model.create_graph(captchaCharacterLength)
 
+    gasmeterPictureFilenameList = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),["data","img"])
+    gasmeterPictureFilenameList = FileNameUtil.getPathFilenameList(gasmeterPictureFilenameList, r".*\.jpg")
+
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         saver = tf.train.Saver()
         with open(gps.peizhi_filename, mode='rb') as rfobj:
@@ -80,7 +88,9 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
         base_step = peizhi['train_step']
         end_step = int(base_step + 50000*trainepochnums / hps.batch_nums +1)
         for itstep in range(base_step,end_step):
-            images,labels = gen.get_next_batch(hps.batch_nums)
+            # images,labels = gen.get_next_batch(hps.batch_nums)
+            tpic = random.choice(gasmeterPictureFilenameList)
+            images, labels = gen.get_compose_gasmeter_next_batch(cv2.imread(tpic),batchsize=64)
 
             feed_dict = {
                 xp:images,
@@ -119,7 +129,7 @@ def main():
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
-                  deepk=[2,2,2],
+                  deepk=[2,1.8,1.5],
                   carriage_block_num=[2,2,2])
 
 
@@ -129,7 +139,7 @@ def main():
         saveVariableDirnameList=["data","digitRecognise","temp"],
         saveVariableFilename= "temp.ckpy",
         logDirnameList=["data", "log"],
-        logFilename = "resnetv1log2.txt")
+        logFilename = "resnetGasmeterv1log1.txt")
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
 
