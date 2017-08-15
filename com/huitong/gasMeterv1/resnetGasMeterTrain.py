@@ -106,7 +106,7 @@ def startTrain(trainepochnums,
                 [model.labes, model.outputs, model.loss, model.train_op],
                 feed_dict=feed_dict)
 
-            if itstep % 20 == 0:
+            if itstep % 50 == 0:
                 trainacc = ModelUtil.get_str_accurate(outputs,inlabels,captchaCharacterLength,CHAR_SET_LEN)
                 msg = "trainstep:%5d  loss:%e  train acc:%.5f"%(itstep,cost,trainacc)
 
@@ -115,10 +115,10 @@ def startTrain(trainepochnums,
                 else:
                     logger.log_message(msg)
 
-            if itstep % 20 ==0 and itstep > 0:
-                print("before save")
-                saver.save(sess=sess, save_path=save_file_name)
-                print("after save")
+            # if itstep % 20 ==0 and itstep > 0:
+            #     print("before save")
+            #     saver.save(sess=sess, save_path=save_file_name)
+            #     print("after save")
 
         print("before save")
         saver.save(sess=sess,save_path=save_file_name)
@@ -130,7 +130,7 @@ def startTrain(trainepochnums,
 
 def train_main():
     global save_file_name,logger
-    hps = HParams(batch_nums=32,
+    hps = HParams(batch_nums=64,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
