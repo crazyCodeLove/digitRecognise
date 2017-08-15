@@ -88,7 +88,7 @@ def startTrain(trainepochnums,
             saver.restore(sess, save_file_name)
 
         base_step = peizhi['train_step']
-        end_step = int(base_step + 50000*trainepochnums / hps.batch_nums +1)
+        end_step = int(base_step + 10000*trainepochnums / hps.batch_nums +1)
         tpic = random.choice(gasmeterPictureFilenameList)
         img = cv2.imread(tpic)
 
@@ -106,19 +106,19 @@ def startTrain(trainepochnums,
                 [model.labes, model.outputs, model.loss, model.train_op],
                 feed_dict=feed_dict)
 
-            if itstep % 50 == 0:
+            if itstep % 100 == 0:
                 trainacc = ModelUtil.get_str_accurate(outputs,inlabels,captchaCharacterLength,CHAR_SET_LEN)
                 msg = "trainstep:%5d  loss:%e  train acc:%.5f"%(itstep,cost,trainacc)
 
-                if itstep % 200 ==0:
+                if itstep % 400 ==0:
                     logger.showAndLogMsg(msg)
                 else:
                     logger.log_message(msg)
 
-            if itstep % 500 ==0 and itstep > 0:
-                print("before save")
-                saver.save(sess=sess, save_path=save_file_name)
-                print("after save")
+            # if itstep % 500 ==0 and itstep > 0:
+            #     print("before save")
+            #     saver.save(sess=sess, save_path=save_file_name)
+            #     print("after save")
 
         print("before save")
         saver.save(sess=sess,save_path=save_file_name)
