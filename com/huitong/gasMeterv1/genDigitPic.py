@@ -117,7 +117,7 @@ class GenDigitPicture():
         composeGasmeterImg = np.array(oriImg)
         return captcha_text, composeGasmeterImg
 
-    def get_gasmeter_digit_area_from_filename(self,filename):
+    def get_batch_gasmeter_digit_area_from_filename(self,filename, batchsize):
         """
         根据燃气表图片文件名，获得改燃气表数字区域的数据并返回。主要功能用来预测单张图片数据
         :param filename:
@@ -127,7 +127,10 @@ class GenDigitPicture():
         image = cv2.imread(filename)
         image = ImageTool.getGasmeterAreaData(image)
         image = cv2.resize(image, (self._picBoxWidth, self._picBoxHeight))
-        return np.array(image, dtype=np.float32)
+        image = np.array(image, dtype=np.float32).flatten()
+        image = image.reshape((-1,image.shape[0]))
+        batch_x = np.repeat(image,batchsize,0)
+        return batch_x
 
 
 
@@ -243,7 +246,7 @@ class GenDigitPicture():
             vector[idx] = 1
         return vector
 
-    def _vec2text(self,vec):
+    def vec2text(self, vec):
         """
         向量转回文本
         将矢量转换成对应字符串
@@ -262,6 +265,8 @@ class GenDigitPicture():
                 raise ValueError('error')
             text.append(chr(char_code))
         return "".join(text)
+
+
 
 class ImageTool():
     """

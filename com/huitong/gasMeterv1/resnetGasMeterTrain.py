@@ -115,10 +115,10 @@ def startTrain(trainepochnums,
                 else:
                     logger.log_message(msg)
 
-            # if itstep % 20 ==0 and itstep > 0:
-            #     print("before save")
-            #     saver.save(sess=sess, save_path=save_file_name)
-            #     print("after save")
+            if itstep % 500 ==0 and itstep > 0:
+                print("before save")
+                saver.save(sess=sess, save_path=save_file_name)
+                print("after save")
 
         print("before save")
         saver.save(sess=sess,save_path=save_file_name)
@@ -130,7 +130,7 @@ def startTrain(trainepochnums,
 
 def train_main():
     global save_file_name,logger
-    hps = HParams(batch_nums=64,
+    hps = HParams(batch_nums=10,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
