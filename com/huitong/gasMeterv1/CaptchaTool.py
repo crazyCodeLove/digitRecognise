@@ -21,7 +21,7 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 DATA_DIR = os.path.join(DATA_DIR, 'fonts')
 
 DEFAULT_FONTS = [os.path.join(DATA_DIR, font) for font in os.listdir(DATA_DIR) ]
-DEFAULT_FOUNT_SIZES = [i for i in range(42, 47, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(36, 40, 2)]
 
 __all__ = ['ImageCaptcha']
 
@@ -147,12 +147,13 @@ class ImageCaptcha(_Captcha):
 
         average = int(text_width / len(chars))
         rand = int(0.05 * average)
-        offset = int(average * 0.1)
+        offset = int(average * 0.15)
 
         for im in images:
             w, h = im.size
             mask = im.convert('L').point(table)
-            image.paste(im, (offset, int((self._height - h) / 2)), mask)
+            # image.paste(im, (offset, int((self._height - h) / 2)), mask)
+            image.paste(im, (offset, int((self._height - h) / 2)))
             offset = offset + w + random.randint(0,rand)
 
         if width > self._width:

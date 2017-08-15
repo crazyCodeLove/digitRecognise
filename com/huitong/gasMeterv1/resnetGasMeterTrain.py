@@ -67,7 +67,7 @@ def startTrain(trainepochnums,
                mode,
                gps,
                save_file_name):
-    logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
+    # logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
     xp = tf.placeholder(tf.float32, [None, captchaBoxHeight * captchaBoxWidth * gen.ImageDepth])
     yp = tf.placeholder(tf.float32, [None, captchaCharacterLength*CHAR_SET_LEN])
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
@@ -106,16 +106,16 @@ def startTrain(trainepochnums,
                 [model.labes, model.outputs, model.loss, model.train_op],
                 feed_dict=feed_dict)
 
-            if itstep % 100 == 0:
+            if itstep % 200 == 0:
                 trainacc = ModelUtil.get_str_accurate(outputs,inlabels,captchaCharacterLength,CHAR_SET_LEN)
                 msg = "trainstep:%5d  loss:%e  train acc:%.5f"%(itstep,cost,trainacc)
 
-                if itstep % 400 ==0:
+                if itstep % 800 ==0:
                     logger.showAndLogMsg(msg)
                 else:
                     logger.log_message(msg)
 
-            # if itstep % 500 ==0 and itstep > 0:
+            # if itstep % 5000 ==0 and itstep > 0:
             #     print("before save")
             #     saver.save(sess=sess, save_path=save_file_name)
             #     print("after save")
@@ -130,7 +130,7 @@ def startTrain(trainepochnums,
 
 def train_main():
     global save_file_name,logger
-    hps = HParams(batch_nums=10,
+    hps = HParams(batch_nums=5,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
@@ -144,7 +144,7 @@ def train_main():
         saveVariableDirnameList=["data","digitRecognise","temp"],
         saveVariableFilename= "temp.ckpy",
         logDirnameList=["data", "log"],
-        logFilename = "resnetGasmeterv1log1.txt")
+        logFilename = "resnetGasmeterv1log2.txt")
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
 

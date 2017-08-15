@@ -486,18 +486,31 @@ def testGasmeterComposite():
     imgdirname = ["data", "img"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
-    filename = FileNameUtil.getPathFilenameList(imgdirname, pattern)[0]
-    gasmeterPic = cv2.imread(filename)
-    while (1):
-        text, image = gen.get_compose_gasmeter_text_and_image(gasmeterPic)
-        print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
-        f = plt.figure()
-        ax = f.add_subplot(111)
-        ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
-        plt.imshow(image)
 
-        plt.show()
-        print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+    filenames = FileNameUtil.getPathFilenameList(imgdirname, pattern)
+    for filename in filenames:
+        gasmeterPic = cv2.imread(filename)
+        for i in range(5):
+            text, image = gen.get_compose_gasmeter_text_and_image(gasmeterPic)
+            print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
+            f = plt.figure()
+            ax = f.add_subplot(111)
+            ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
+            title = FileNameUtil.getFilenameFromFullFilepathname(filename) + " for composite"
+            plt.title(title)
+            plt.imshow(image)
+
+            plt.show()
+            print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+
+            img = ImageTool.getGasmeterAreaData(cv2.cvtColor(image,cv2.COLOR_BGR2BGRA))
+            plt.figure()
+            title = title + ", found gasmeter area," + text
+            plt.title(title)
+            plt.imshow(img)
+            plt.show()
+
+
 
 
 
@@ -532,6 +545,7 @@ def testGet_compose_gasmeter_next_batch():
                           backgroundColor=(10, 10, 10), fontColor=(200, 200, 200))
 
     for eachfile in filelist:
+
         gen.get_compose_gasmeter_next_batch(cv2.imread(eachfile))
 
 
@@ -539,10 +553,10 @@ def testGet_compose_gasmeter_next_batch():
 
 
 def test():
-    testShowGasmeterArea()
+    # testShowGasmeterArea()
     # testCaptchaGenerate()
     # testgetGasmeterAreaData()
-    # testGasmeterComposite()
+    testGasmeterComposite()
     # testGet_compose_gasmeter_next_batch()
 
 if __name__ == '__main__':

@@ -88,7 +88,7 @@ def getPredict(hps, mode, gasmeter_filename, save_file_name):
     return text
 
 def main(gasmeter_filename):
-    hps = HParams(batch_nums=10,
+    hps = HParams(batch_nums=5,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
@@ -108,7 +108,8 @@ def main(gasmeter_filename):
 
 
 if __name__ == "__main__":
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\8.jpg"
+    # filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\8.jpg"
+    filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/12.jpg"
     predict = main(filename)
 
     print("predict:%s"%predict)
