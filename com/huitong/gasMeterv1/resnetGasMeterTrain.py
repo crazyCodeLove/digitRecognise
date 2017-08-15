@@ -12,8 +12,6 @@ from com.huitong.gasMeterv1 import ModelUtil
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.filenameUtil import FileNameUtil
 
-
-
 import tensorflow as tf
 import os
 import pickle
@@ -64,8 +62,12 @@ def getFilename(filename, baseDirname = None, dirnameList = None):
     return FileNameUtil.getFilename(path, filename)
 
 
-def startTrain(trainepochnums, hps, mode, gps, save_file_name):
-    # images,labels = mnist.train.next_batch(hps.batch_nums)
+def startTrain(trainepochnums,
+               hps,
+               mode,
+               gps,
+               save_file_name):
+    logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
     xp = tf.placeholder(tf.float32, [None, captchaBoxHeight * captchaBoxWidth * gen.ImageDepth])
     yp = tf.placeholder(tf.float32, [None, captchaCharacterLength*CHAR_SET_LEN])
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
@@ -86,14 +88,14 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
             saver.restore(sess, save_file_name)
 
         base_step = peizhi['train_step']
-        end_step = int(base_step + 5000*trainepochnums / hps.batch_nums +1)
+        end_step = int(base_step + 50000*trainepochnums / hps.batch_nums +1)
         tpic = random.choice(gasmeterPictureFilenameList)
         img = cv2.imread(tpic)
 
         for itstep in range(base_step,end_step):
             # images,labels = gen.get_next_batch(hps.batch_nums)
 
-            images, labels = gen.get_compose_gasmeter_next_batch(img, batchsize=64)
+            images, labels = gen.get_compose_gasmeter_next_batch(img, batchsize=hps.batch_nums)
 
             feed_dict = {
                 xp:images,
@@ -104,7 +106,7 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
                 [model.labes, model.outputs, model.loss, model.train_op],
                 feed_dict=feed_dict)
 
-            if itstep % 100 == 0:
+            if itstep % 20 == 0:
                 trainacc = ModelUtil.get_str_accurate(outputs,inlabels,captchaCharacterLength,CHAR_SET_LEN)
                 msg = "trainstep:%5d  loss:%e  train acc:%.5f"%(itstep,cost,trainacc)
 
@@ -113,10 +115,10 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
                 else:
                     logger.log_message(msg)
 
-            # if itstep % 8000 ==0 and itstep > 0:
-            #     print "before save"
-            #     saver.save(sess=sess, save_path=save_file_name)
-            #     print "after save"
+            if itstep % 20 ==0 and itstep > 0:
+                print("before save")
+                saver.save(sess=sess, save_path=save_file_name)
+                print("after save")
 
         print("before save")
         saver.save(sess=sess,save_path=save_file_name)
@@ -126,9 +128,9 @@ def startTrain(trainepochnums, hps, mode, gps, save_file_name):
 
 
 
-def main():
+def train_main():
     global save_file_name,logger
-    hps = HParams(batch_nums=64,
+    hps = HParams(batch_nums=32,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
@@ -183,6 +185,7 @@ def main():
             break
 
 
+
 if __name__ == "__main__":
-    main()
+    train_main()
 

@@ -88,7 +88,6 @@ class GenDigitPicture():
         captcha_image = Image.open(captcha)
 
         # 获取表头数字区域
-        # gasmeterImg = cv2.imread(gasmeterFilename)
         imgTemp = gasmeterImg.copy()
         imgTemp = ImageTool.convertCv2ColorImg2Gray(imgTemp)
         boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
@@ -118,10 +117,22 @@ class GenDigitPicture():
         composeGasmeterImg = np.array(oriImg)
         return captcha_text, composeGasmeterImg
 
+    def get_gasmeter_digit_area_from_filename(self,filename):
+        """
+        根据燃气表图片文件名，获得改燃气表数字区域的数据并返回。主要功能用来预测单张图片数据
+        :param filename:
+        """
+        if not FileNameUtil.fileExisted(filename):
+            raise ValueError("%s 文件不存在")
+        image = cv2.imread(filename)
+        image = ImageTool.getGasmeterAreaData(image)
+        image = cv2.resize(image, (self._picBoxWidth, self._picBoxHeight))
+        return np.array(image, dtype=np.float32)
+
+
+
     def get_compose_gasmeter_next_batch(self, gasmeterImgObj, batchsize = None):
         """
-        :TODO
-
         根据燃气表图片文件名获得一批训练数据
         1 合成燃气表图片
         2 对合成图片进行处理，获得数字区域数据
@@ -129,7 +140,6 @@ class GenDigitPicture():
         4 重复 1/2/3步骤，生成一个批次
         :param gasmeterImgObj:cv2 读取的燃气表图片对象
         :param batchsize:
-        :return:
         """
         if batchsize is None:
             batchsize = 64
