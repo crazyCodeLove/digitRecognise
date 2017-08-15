@@ -113,9 +113,8 @@ class ResNetModel(object):
         outputs_features = (self.hps.num_classes + 1) * MAX_CHARACTER_LENGTH
         self.outputs = ModelUtil.add_fc_layer(fcl1_inputs, fcl1_in_features, outputs_features)
 
-        self.loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.outputs, labels=self.labes))
-
         if self.mode == "train":
+            self.loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.outputs, labels=self.labes))
             self.learning_rate = tf.placeholder(tf.float32)
             self.train_op = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(loss=self.loss)
 
