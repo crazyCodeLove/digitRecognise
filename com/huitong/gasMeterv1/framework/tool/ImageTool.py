@@ -25,6 +25,11 @@ class ImageTool():
         """
         return ((0,0,0),(70,70,70))
 
+    @staticmethod
+    def getRedColorRange():
+        """获得黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组"""
+        return ((0,0,110),(55,55,255))
+
 
 
 
