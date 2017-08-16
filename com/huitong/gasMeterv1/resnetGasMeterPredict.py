@@ -5,14 +5,14 @@
 @author ZHAOPENGCHENG on 2017/8/15.
 """
 
-from com.huitong.gasMeterv1.genDigitPic import GenDigitPicture
 from collections import namedtuple
-from com.huitong.gasMeterv1 import ResNetModel
-from com.huitong.gasMeterv1.filenameUtil import FileNameUtil
 
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
 
+from com.huitong.gasMeterv1 import ResNetModel
+from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
+from com.huitong.gasMeterv1.genDigitPic import GenDigitPicture
 
 captchaCharacterLength = 5
 captchaBoxWidth = 128

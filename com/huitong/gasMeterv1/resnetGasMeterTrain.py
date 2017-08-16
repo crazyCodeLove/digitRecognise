@@ -4,21 +4,19 @@
 """
 @author ZHAOPENGCHENG on 2017/8/12.
 """
-from multiprocessing import Process
-
-from com.huitong.gasMeterv1.genDigitPic import GenDigitPicture
-from collections import namedtuple
-from com.huitong.gasMeterv1 import ModelUtil
-from com.huitong.gasMeterv1 import ResNetModel
-from com.huitong.gasMeterv1.filenameUtil import FileNameUtil
-
-import tensorflow as tf
 import os
 import pickle
 import random
+from collections import namedtuple
+from multiprocessing import Process
+
 import cv2
+import tensorflow as tf
 
-
+from com.huitong.gasMeterv1 import ModelUtil
+from com.huitong.gasMeterv1 import ResNetModel
+from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
+from com.huitong.gasMeterv1.genDigitPic import GenDigitPicture
 
 captchaCharacterLength = 5
 captchaBoxWidth = 128
@@ -136,7 +134,6 @@ def train_main():
                   img_depth=gen.ImageDepth,
                   deepk=[2,1.8,1.5],
                   carriage_block_num=[2,2,2])
-
 
 
     gps = GParams(

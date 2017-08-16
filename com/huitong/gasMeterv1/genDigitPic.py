@@ -4,15 +4,17 @@
 """
 @author ZHAOPENGCHENG on 2017/8/11.
 """
-import random
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-import random, time
-from com.huitong.gasMeterv1.CaptchaTool import ImageCaptcha
-import cv2
-from com.huitong.gasMeterv1.filenameUtil import FileNameUtil
 import platform
+import random
+import time
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
+
+from com.huitong.gasMeterv1.framework.tool.CaptchaTool import ImageCaptcha
+from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 
 
 class GenDigitPicture():
@@ -89,7 +91,7 @@ class GenDigitPicture():
 
         # 获取表头数字区域
         imgTemp = gasmeterImg.copy()
-        imgTemp = ImageTool.convertCv2ColorImg2Gray(imgTemp)
+        imgTemp = ImageTool.convertImgBGR2Gray(imgTemp)
         boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
         box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
         digitAreaWidth = ImageTool.getBoxWidth(box)
@@ -275,7 +277,7 @@ class ImageTool():
     """
 
     @staticmethod
-    def convertCv2ColorImg2Gray(bgrimg):
+    def convertImgBGR2Gray(bgrimg):
         """
         将cv2 读进来的图像转换成灰度图像对象并返回
         :param bgrimg:
@@ -301,6 +303,87 @@ class ImageTool():
         img = cv2.resize(img, (width, width), interpolation=cv2.INTER_LINEAR)
         return img
 
+    @staticmethod
+    def showBoxInImage(image,boxCornerPoint,title=None):
+        """
+        在图片上根据矩形框的四个顶点坐标显示矩形框
+        :param image: 通过cv2 读进来的图像对象
+        :param boxCornerPoint: 矩形框的四个顶点
+        """
+        if title is None:
+            title = "box"
+        cimage = image.copy()
+        cv2.drawContours(cimage,[boxCornerPoint],0,(0,255,0),2)
+        cv2.imshow(title,cimage)
+
+        k = cv2.waitKey(0)  # 无限期等待输入
+        if k == 27:  # 如果输入ESC退出
+            cv2.destroyAllWindows()
+
+    @staticmethod
+    def getInterestBoxCornerPointByColor(image, lower, upper):
+        """
+        获取感兴趣的颜色范围所在矩形框的四个顶点
+        :param image: 通过cv2读进来的图片数据对象
+        :param lower: # 颜色下限,数值按[b,g,r]排布
+        :param upper: # 颜色上限
+        """
+        # 根据阈值提取在区间范围内的数据，在范围内的数据为 255，其他数据置 0
+        mask = cv2.inRange(image, lower, upper)
+        if "Linux" in platform.system():
+            cnts, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            (erodeImg, cnts, hierarchy) = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        c = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
+
+        # compute the rotated bounding box of the largest contour
+        rect = cv2.minAreaRect(c)
+        # box里保存的是绿色矩形区域四个顶点的坐标。
+        if "Linux" in platform.system():
+            boxCornerPoint = np.int0(cv2.cv.BoxPoints(rect))
+        else:
+            boxCornerPoint = np.int0(cv2.boxPoints(rect))
+
+        return boxCornerPoint
+
+    @staticmethod
+    def getBoxFromBoxCorner(boxCornerPoint):
+        """
+        根据 box 四个角的坐标获得 left, upper, right, and lower pixel coordinate tuple
+        原点(0,0)在 left upper corner，x 轴向下，y 轴向右
+        :param boxCorner:
+        """
+        Xs = [i[0] for i in boxCornerPoint]
+        Ys = [i[1] for i in boxCornerPoint]
+        x1 = min(Xs)
+        x2 = max(Xs)
+        y1 = min(Ys)
+        y2 = max(Ys)
+        return (x1, y1, x2, y2)
+
+    @staticmethod
+    def getBoxWidth(box):
+        return box[2] - box[0]
+
+    @staticmethod
+    def getBoxHeight(box):
+        return box[3] - box[1]
+
+    @staticmethod
+    def getCropImage(image, boxCornerPoint):
+        """
+        获取裁剪图片，根据要裁剪的矩形四个顶点
+        :param image 是cv2读进来的图片对象
+        :param boxCornerPoint: 要裁剪的矩形四个顶角坐标
+        """
+        box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
+        hight = ImageTool.getBoxHeight(box)
+        width = ImageTool.getBoxWidth(box)
+        left = box[0]
+        upper = box[1]
+
+        cropImg = image[upper:upper + hight, left:left + width]
+        return cropImg
 
     @staticmethod
     def showGasmeterArea(imgobj,filename = None):
@@ -308,21 +391,15 @@ class ImageTool():
         显示获得的图片区域，自己对原始图片进行了处理，看到的图片大小跟原始图片不一样
         :param imgobj:通过cv2 读进来的图像对象
         :param filename: 要处理的原始图片
-
         """
 
         imgTemp = imgobj.copy()
         imgTemp = cv2.cvtColor(imgTemp,cv2.COLOR_BGR2GRAY)
 
-        box = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
-        cimgobj = imgobj.copy()
-        cimgobj = ImageTool.preProcessImage(cimgobj)
-        cv2.drawContours(cimgobj, [box], 0, (0, 255, 0), 2)
-        cv2.imshow("box area, %s"%FileNameUtil.getFilenameFromFullFilepathname(filename), cimgobj)
-
-        k = cv2.waitKey(0)  # 无限期等待输入
-        if k == 27:  # 如果输入ESC退出
-            cv2.destroyAllWindows()
+        boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(grayImg=imgTemp)
+        title = "box area, %s"%FileNameUtil.getFilenameFromFullFilepathname(filename)
+        imgTemp = ImageTool.preProcessImage(imgobj)
+        ImageTool.showBoxInImage(imgTemp,boxCornerPoint,title)
 
     @staticmethod
     def getGasmeterAreaData(imgobj):
@@ -336,27 +413,7 @@ class ImageTool():
 
         cimgobj = imgobj.copy()
         cimgobj = ImageTool.preProcessImage(cimgobj)
-        return ImageTool._getCropImage(cimgobj, box)
-
-    # @staticmethod
-    # def getGasmeterCompositePicture(filename, captcha):
-    #     """
-    #     将 captcha Image对象合成到燃气表的数字区域，返回合成的图片 PIL.Image 对象
-    #     :param filename:燃气表图片文件名
-    #     :param captcha:要向燃气表数字区黏贴的图片，类型是PIL.Image对象
-    #     :return:
-    #     """
-    #     boxCornerPoint = ImageTool.getGasmeterRectBoxCornerPoint(filename)
-    #     box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
-    #     box = (box[0],box[1],box[0] + captcha.width,box[1] + captcha.height)
-    #     img = cv2.imread(filename)
-    #     img = ImageTool.preProcessImage(img)
-    #     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    #     data = np.array(img)
-    #     img = Image.fromarray(data)
-    #
-    #     img.paste(captcha, box)
-    #     return img
+        return ImageTool.getCropImage(cimgobj, box)
 
 
     @staticmethod
@@ -396,7 +453,7 @@ class ImageTool():
 
         _, erodeImg = cv2.threshold(erodeImg, 200, 255, cv2.THRESH_BINARY)
 
-        # 找出区域的轮廓。cv2.findContours()函数
+        # 找出区域的轮廓。cv2.findContours()函数，注意：该函数接受的图片是二值图
         # (cnts, _) = cv2.findContours(erodeImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if "Linux" in platform.system():
             cnts, hierarchy = cv2.findContours(erodeImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -413,49 +470,11 @@ class ImageTool():
             boxCornerPoint = np.int0(cv2.boxPoints(rect))
         return boxCornerPoint
 
-    @staticmethod
-    def getBoxFromBoxCorner(boxCornerPoint):
-        """
-        根据 box 四个角的坐标获得 left, upper, right, and lower pixel coordinate tuple
-        原点(0,0)在 left upper corner，x 轴向下，y 轴向右
-        :param boxCorner:
-        """
-        Xs = [i[0] for i in boxCornerPoint]
-        Ys = [i[1] for i in boxCornerPoint]
-        x1 = min(Xs)
-        x2 = max(Xs)
-        y1 = min(Ys)
-        y2 = max(Ys)
-        return (x1,y1,x2,y2)
 
-    @staticmethod
-    def getBoxWidth(box):
-        return box[2]-box[0]
-
-    @staticmethod
-    def getBoxHeight(box):
-        return box[3]-box[1]
-
-
-    @staticmethod
-    def _getCropImage(image, boxCornerPoint):
-        """
-        获取裁剪图片
-        :param image 是cv2读进来的图片对象
-        :param boxCornerPoint: 要裁剪的矩形四个顶角坐标
-        """
-        box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
-        hight = ImageTool.getBoxHeight(box)
-        width = ImageTool.getBoxWidth(box)
-        left = box[0]
-        upper = box[1]
-
-        cropImg = image[upper:upper + hight, left:left + width]
-        return cropImg
 
 
 def testShowGasmeterArea():
-    imgdirname = ["data","img"]
+    imgdirname = ["data","img","trainpic"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),imgdirname)
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname,pattern)
@@ -463,7 +482,7 @@ def testShowGasmeterArea():
         ImageTool.showGasmeterArea(cv2.imread(each),filename=each)
 
 def testgetGasmeterAreaData():
-    imgdirname = ["data", "img"]
+    imgdirname = ["data", "img", "trainpic"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
@@ -483,7 +502,7 @@ def testGasmeterComposite():
     gen = GenDigitPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
                           backgroundColor=(1,1,1),fontColor=(200,200,200))
 
-    imgdirname = ["data", "img"]
+    imgdirname = ["data", "img", "trainpic"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
 
@@ -533,7 +552,7 @@ def testCaptchaGenerate():
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 def testGet_compose_gasmeter_next_batch():
-    imgdirname = ["data", "img"]
+    imgdirname = ["data", "img", "trainpic"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
@@ -555,8 +574,8 @@ def testGet_compose_gasmeter_next_batch():
 def test():
     # testShowGasmeterArea()
     # testCaptchaGenerate()
-    # testgetGasmeterAreaData()
-    testGasmeterComposite()
+    testgetGasmeterAreaData()
+    # testGasmeterComposite()
     # testGet_compose_gasmeter_next_batch()
 
 if __name__ == '__main__':
