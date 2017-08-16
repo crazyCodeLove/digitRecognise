@@ -28,7 +28,7 @@ class ImageTool():
     @staticmethod
     def getRedColorRange():
         """获得黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组"""
-        return ((0,0,110),(55,55,255))
+        return ((0,0,100),(60,45,255))
 
 
 
@@ -81,7 +81,7 @@ class ImageTool():
     @staticmethod
     def getInterestBoxCornerPointByColor(image, lower, upper):
         """
-        获取感兴趣的颜色范围所在矩形框的四个顶点
+        获取感兴趣的颜色范围所在矩形框的四个顶点，如果图片中没有像素在范围内返回 None
         :param image: 通过cv2读进来的图片数据对象
         :param lower: # 颜色下限,数值按[b,g,r]排布
         :param upper: # 颜色上限
@@ -92,6 +92,10 @@ class ImageTool():
             cnts, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         else:
             (erodeImg, cnts, hierarchy) = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        if len(cnts) == 0:
+            return None
+
         c = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
 
         # compute the rotated bounding box of the largest contour
@@ -134,13 +138,14 @@ class ImageTool():
         :param image 是cv2读进来的图片对象
         :param boxCornerPoint: 要裁剪的矩形四个顶角坐标
         """
+        cimage = image.copy()
         box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
         height = ImageTool.getBoxHeight(box)
         width = ImageTool.getBoxWidth(box)
         left = box[0]
         upper = box[1]
 
-        cropImg = image[upper:upper + height, left:left + width]
+        cropImg = cimage[upper:upper + height, left:left + width]
         return cropImg
 
     @staticmethod
@@ -163,7 +168,9 @@ class ImageTool():
 
 def testShowInterestAreaBox():
     imgdirname = ["data", "img", "trainpic"]
-    imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
+    # imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
+    imgdirname = FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1", imgdirname)
+
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
     interestColorLower = (0,0,0)
@@ -173,28 +180,66 @@ def testShowInterestAreaBox():
         image = cv2.imread(filename)
         image = ImageTool.preProcessImage(image)
         boxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image,interestColorLower,interestColorUpper)
-        title = "box area, %s" % FileNameUtil.getFilenameFromFullFilepathname(filename)
-        ImageTool.showBoxInImage(image,boxCornerPoint,title)
+
+        if boxCornerPoint:
+            title = "box area, %s" % FileNameUtil.getFilenameFromFullFilepathname(filename)
+            ImageTool.showBoxInImage(image,boxCornerPoint,title)
+        else:
+            print("no color in range" + str(interestColorLower) + str(interestColorUpper))
+
 
 def testShowInterestAreaData():
-    imgdirname = ["data", "img", "trainpic"]
-    imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
+    imgdirname = ["data", "img", "style1"]
+
+    # imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
+    imgdirname =  FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1",imgdirname)
+
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
-    interestColorLower = (0, 0, 0)
-    interestColorUpper = (70, 70, 70)
+    bkgLower,bkgUpper = ImageTool.getBlackColorRange()
+    redLower,redUpper = ImageTool.getRedColorRange()
 
     for filename in filelist:
+
+        print filename
+
         image = cv2.imread(filename)
         image = ImageTool.preProcessImage(image)
-        boxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image, interestColorLower, interestColorUpper)
-        title = "box area, %s" % FileNameUtil.getFilenameFromFullFilepathname(filename)
-        digitImage = ImageTool.getCropImageByBoxCornerPoint(image, boxCornerPoint)
-        digitImage = cv2.cvtColor(digitImage,cv2.COLOR_BGR2RGB)
+        blackBackgroundBoxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image, bkgLower, bkgUpper)
+
+        if blackBackgroundBoxCornerPoint is None:
+            raise ValueError("no color is black")
+
+        bkgBox = ImageTool.getBoxFromBoxCorner(blackBackgroundBoxCornerPoint)
+
+        bkgimage = ImageTool.getCropImageByBoxCornerPoint(image, blackBackgroundBoxCornerPoint)
+
+        redBoxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(bkgimage, redLower, redUpper)
+
+        if redBoxCornerPoint is not None:
+            redBox = ImageTool.getBoxFromBoxCorner(redBoxCornerPoint)
+
+            box = (0,0,redBox[0],bkgBox[3]-bkgBox[1])
+            interestImage = ImageTool.getCropImageByBox(bkgimage,box)
+        else:
+            interestImage = bkgimage
+
+
+        title = "box area, %s, background" % FileNameUtil.getFilenameFromFullFilepathname(filename)
+        bkgimage = cv2.cvtColor(bkgimage,cv2.COLOR_BGR2RGB)
 
         plt.figure()
         plt.title(title)
-        plt.imshow(digitImage)
+        plt.imshow(bkgimage)
+        plt.show()
+
+        title = "box area, %s, digit area" % FileNameUtil.getFilenameFromFullFilepathname(filename)
+        interestImage = cv2.cvtColor(interestImage, cv2.COLOR_BGR2RGB)
+
+
+        plt.figure()
+        plt.title(title)
+        plt.imshow(interestImage)
         plt.show()
 
 
