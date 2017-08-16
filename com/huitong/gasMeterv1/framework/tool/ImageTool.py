@@ -162,6 +162,21 @@ class ImageTool():
         cropImg = image[upper:upper + height, left:left + width]
         return cropImg
 
+    @staticmethod
+    def removeRightArea(image,startIndex):
+        """
+        移除图像右边部分，从 startIndex 开始的
+        :param image: 是cv2读进来的图片对象
+        :param startIndex: 要移除的图像水平轴开始边界
+        rows, cols, depth = image.shape
+        """
+        shape = image.shape
+        box = (0,0,startIndex,shape[0])
+        cropImg = ImageTool.getCropImageByBox(image,box)
+        return cropImg
+
+
+
 
 
 
