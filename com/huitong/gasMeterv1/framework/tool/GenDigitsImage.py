@@ -23,7 +23,7 @@ class GenDigitsPicture():
 
 
     def __init__(self, captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
-                 charset = None, backgroundColor = None, fontColor = None):
+                 charset = None):
 
         self._picCharacterLength = captchaCharacterLength
         self._picBoxWidth = captchaBoxWidth
@@ -33,15 +33,6 @@ class GenDigitsPicture():
             self._charset = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         else:
             self._charset = charset
-
-        self._backgroundColor = backgroundColor
-        self._fontColor = fontColor
-
-    def setBackgroundColor(self, bkgColor):
-        self._backgroundColor = bkgColor
-
-    def setFontColor(self, fontColor):
-        self._fontColor = fontColor
 
 
 
@@ -75,11 +66,11 @@ class GenDigitsPicture():
             text.append(c)
         return text
 
-    def get_text_and_image(self):
+    def get_text_and_image(self,backgroundColor = None, fontColor = None):
         """ 生成字符序列和对应的图片数据 """
 
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
-                             backgroundColor=self._backgroundColor, fontColor=self._fontColor)
+                             backgroundColor=backgroundColor, fontColor=fontColor)
 
         captcha_text = self._random_text()
         captcha_text = ''.join(captcha_text)
@@ -174,10 +165,9 @@ def testGenDigitsPicture():
         text, image = gen.get_text_and_image()
 
         print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
-        f = plt.figure()
-        ax = f.add_subplot(111)
-        ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
+        plt.figure()
         plt.imshow(image)
+        plt.title(text)
 
         plt.show()
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))

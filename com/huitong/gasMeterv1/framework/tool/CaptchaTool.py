@@ -31,7 +31,7 @@ def getFounts():
 
 
 DEFAULT_FONTS = getFounts()
-DEFAULT_FOUNT_SIZES = [i for i in range(36, 40, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(30, 38, 2)]
 
 __all__ = ['ImageCaptcha']
 
@@ -192,17 +192,19 @@ class ImageCaptcha(_Captcha):
         if self._backgroundColor:
             background = self._backgroundColor
         else:
-            background = random_color(238, 255)
+            # background = random_color(0, 60)
+            background = random_bkg_color(0,65)
 
         if self._fontColor:
             color = self._fontColor
         else:
-            color = random_color(0, 200, random.randint(220, 255))
+            color = random_color(160, 230, random.randint(220, 255))
+
         #####***************************
 
         im = self.create_captcha_image(chars, color, background)
-        self.create_noise_dots(im, color)
-        self.create_noise_curve(im, color)
+        self.create_noise_dots(im, random_noise_color())
+        self.create_noise_curve(im, random_noise_color())
         im = im.filter(ImageFilter.SMOOTH)
         return im
 
@@ -214,6 +216,24 @@ def random_color(start, end, opacity=None):
     if opacity is None:
         return (red, green, blue)
     return (red, green, blue, opacity)
+
+def random_bkg_color(start, end, opacity=None):
+    red = random.randint(start,end)
+    green = red + random.randint(0,15)
+    blue = red + random.randint(0,15)
+    if opacity is None:
+        return (red,green,blue)
+    return (red, green, blue, opacity)
+
+def random_noise_color():
+    start = 10
+    end = 250
+    red = random.randint(start, end)
+    green = random.randint(start, end)
+    blue = random.randint(start, end)
+    opacity = random.randint(start,end)
+
+    return (red,green,blue,opacity)
 
 
 

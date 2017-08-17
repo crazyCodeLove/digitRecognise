@@ -56,7 +56,9 @@ class GasmeterStyle0(BaseGasmeterModel):
 
 def test():
     style = GasmeterStyle0()
+
     filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\8.jpg"
+    filename = r'/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/8.jpg'
     image = cv2.imread(filename)
     style.setImage(image)
 
