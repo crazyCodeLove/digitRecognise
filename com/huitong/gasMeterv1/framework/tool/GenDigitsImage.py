@@ -37,6 +37,12 @@ class GenDigitsPicture():
         self._backgroundColor = backgroundColor
         self._fontColor = fontColor
 
+    def setBackgroundColor(self, bkgColor):
+        self._backgroundColor = bkgColor
+
+    def setFontColor(self, fontColor):
+        self._fontColor = fontColor
+
 
 
     @property
@@ -71,6 +77,7 @@ class GenDigitsPicture():
 
     def get_text_and_image(self):
         """ 生成字符序列和对应的图片数据 """
+
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
                              backgroundColor=self._backgroundColor, fontColor=self._fontColor)
 
