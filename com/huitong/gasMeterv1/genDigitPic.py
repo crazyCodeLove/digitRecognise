@@ -573,8 +573,8 @@ def testGet_compose_gasmeter_next_batch():
 
 def test():
     # testShowGasmeterArea()
-    # testCaptchaGenerate()
-    testgetGasmeterAreaData()
+    testCaptchaGenerate()
+    # testgetGasmeterAreaData()
     # testGasmeterComposite()
     # testGet_compose_gasmeter_next_batch()
 

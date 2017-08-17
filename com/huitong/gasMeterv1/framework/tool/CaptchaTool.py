@@ -109,7 +109,20 @@ class ImageCaptcha(_Captcha):
         return self._truefonts
 
     @staticmethod
-    def create_noise_dots(image, color, width=3, number=30):
+    def create_noise_curve(image, color):
+        w, h = image.size
+        x1 = random.randint(0, int(w / 5))
+        x2 = random.randint(w - int(w / 5), w)
+        y1 = random.randint(int(h / 5), h - int(h / 5))
+        y2 = random.randint(y1, h - int(h / 5))
+        points = [x1, y1, x2, y2]
+        end = random.randint(160, 200)
+        start = random.randint(0, 20)
+        Draw(image).arc(points, start, end, fill=color)
+        return image
+
+    @staticmethod
+    def create_noise_dots(image, color, width=2, number=20):
         draw = Draw(image)
         w, h = image.size
         while number:
@@ -189,6 +202,7 @@ class ImageCaptcha(_Captcha):
 
         im = self.create_captcha_image(chars, color, background)
         self.create_noise_dots(im, color)
+        self.create_noise_curve(im, color)
         im = im.filter(ImageFilter.SMOOTH)
         return im
 

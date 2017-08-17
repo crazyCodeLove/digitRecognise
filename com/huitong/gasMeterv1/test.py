@@ -10,10 +10,11 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import os
 
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
-
+from captcha.image import ImageCaptcha
 
 def fun1():
     a = None
@@ -109,6 +110,13 @@ def fun5():
     image = cv2.imread(filename)
     ImageTool.showImageCv2(image)
 
+def fun6():
+    path = os.path.dirname(__file__)
+    print(path)
+    path = os.path.dirname(path)
+    print(path)
+    path = os.path.dirname(path)
+    print(path)
 
 
 
@@ -119,7 +127,7 @@ def fun5():
 
 
 def test():
-    fun5()
+    fun6()
 
 if __name__ == "__main__":
     test()

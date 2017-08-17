@@ -37,6 +37,8 @@ class GenDigitsPicture():
         self._backgroundColor = backgroundColor
         self._fontColor = fontColor
 
+
+
     @property
     def ImageHeight(self):
         return self._picBoxHeight
@@ -152,3 +154,26 @@ class GenDigitsPicture():
                 raise ValueError('error')
             text.append(chr(char_code))
         return "".join(text)
+
+def testGenDigitsPicture():
+    import time
+    import matplotlib.pyplot as plt
+
+    captchaCharacterLength = 5
+    captchaBoxWidth = 128
+    captchaBoxHeight = 64
+    gen = GenDigitsPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight)
+    while (1):
+        text, image = gen.get_text_and_image()
+
+        print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
+        f = plt.figure()
+        ax = f.add_subplot(111)
+        ax.text(0.1, 0.9, text, ha='center', va='center', transform=ax.transAxes)
+        plt.imshow(image)
+
+        plt.show()
+        print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+
+if __name__ == "__main__":
+    testGenDigitsPicture()
