@@ -49,19 +49,25 @@ class GasmeterStyle0(BaseGasmeterModel):
             rollerBlackArea = blackImage
 
         rollerBlackArea = ImageTool.imageResize(rollerBlackArea, self._desWidth, self._desHeight)
+        # rollerBlackArea = ImageTool.convertImgBGR2Gray(rollerBlackArea)
+
         return rollerBlackArea
 
 
 def test():
     style = GasmeterStyle0()
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\12.jpg"
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\10.jpg"
     image = cv2.imread(filename)
     style.setImage(image)
 
     image = style.getRollerBlackArea()
 
-    image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+    # image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     ImageTool.showImagePIL(image)
+    # ImageTool.showImageCv2(image)
+    # image = cv2.equalizeHist(image)
+    # ImageTool.showImageCv2(image)
+    # ImageTool.showImagePIL(image)
 
 
 
