@@ -9,17 +9,19 @@ from collections import namedtuple
 
 import numpy as np
 import tensorflow as tf
+import cv2
 
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
-from com.huitong.gasMeterv1.genDigitPic import GenDigitPicture
+from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
+from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle0 import GasmeterStyle0
+from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
 
 captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenDigitPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
-                      backgroundColor=(20, 20, 20), fontColor=(200, 200, 200))
+gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight)
 
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
 
@@ -78,7 +80,16 @@ def getPredict(hps, mode, gasmeter_filename, save_file_name):
         saver = tf.train.Saver()
         saver.restore(sess, save_file_name)
 
-        images = gen.get_batch_gasmeter_digit_area_from_filename(gasmeter_filename, hps.batch_nums)
+
+
+        # images = gen.get_batch_gasmeter_digit_area_from_filename(gasmeter_filename, hps.batch_nums)
+        image = cv2.imread(gasmeter_filename)
+        gasmeter = GasmeterStyle0(captchaBoxWidth,captchaBoxHeight)
+        gasmeter.setImage(image)
+        image = gasmeter.getRollerBlackArea()
+        images = ImageTool.repeatImage2Tensor(image,hps.batch_nums)
+
+
         feed_dict = {
             xp: images,
             model.is_training_ph: False}
@@ -88,11 +99,11 @@ def getPredict(hps, mode, gasmeter_filename, save_file_name):
     return text
 
 def main(gasmeter_filename):
-    hps = HParams(batch_nums=5,
+    hps = HParams(batch_nums=10,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
-                  deepk=[2, 1.8, 1.5],
+                  deepk=[2, 1.8, 1.8],
                   carriage_block_num=[2, 2, 2])
 
     gps = GParams(
@@ -109,7 +120,7 @@ def main(gasmeter_filename):
 
 if __name__ == "__main__":
     # filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\8.jpg"
-    filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/12.jpg"
+    filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/12.jpg"
     predict = main(filename)
 
     print("predict:%s"%predict)

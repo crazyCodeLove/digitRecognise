@@ -7,6 +7,13 @@
 
 class BaseGasmeterModel(object):
 
+    def setImage(self,image):
+        """
+        设置要处理的图片
+        :param image: 是cv2读进来的图片对象
+        """
+        self.__image = image
+
     def getDescription(self):
         """显示该模型的描述，是哪一种类型的燃气表"""
         pass

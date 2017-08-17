@@ -168,6 +168,18 @@ class ImageTool():
         return cropImg
 
     @staticmethod
+    def repeatImage2Tensor(image, batchsize):
+        """
+        将图片对象转换成一维 tensor，然后重复 batchsize 次，返回。主要用于预测数据
+        :param image: 是cv2读进来的图片对象
+        :param batchsize:
+        """
+        image = np.array(image, dtype=np.float32).flatten()
+        image = image.reshape((-1, image.shape[0]))
+        batch_data = np.repeat(image, batchsize, 0)
+        return batch_data
+
+    @staticmethod
     def removeRightArea(image,startIndex):
         """
         以 startIndex 为界分成左右两半部分，移除图像右边部分

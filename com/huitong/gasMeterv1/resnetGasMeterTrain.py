@@ -16,14 +16,15 @@ import tensorflow as tf
 from com.huitong.gasMeterv1 import ModelUtil
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
-from com.huitong.gasMeterv1.genDigitPic import GenDigitPicture
+from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
 
 captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenDigitPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
-                      backgroundColor=(20, 20, 20), fontColor=(200, 200, 200))
+gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight)
+
+
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
 
 HParams = namedtuple('HParams',
@@ -71,8 +72,8 @@ def startTrain(trainepochnums,
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
     model.create_graph(captchaCharacterLength)
 
-    gasmeterPictureFilenameList = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),["data","img"])
-    gasmeterPictureFilenameList = FileNameUtil.getPathFilenameList(gasmeterPictureFilenameList, r".*\.jpg")
+    # gasmeterPictureFilenameList = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),["data","img"])
+    # gasmeterPictureFilenameList = FileNameUtil.getPathFilenameList(gasmeterPictureFilenameList, r".*\.jpg")
 
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         saver = tf.train.Saver()
@@ -87,13 +88,14 @@ def startTrain(trainepochnums,
 
         base_step = peizhi['train_step']
         end_step = int(base_step + 10000*trainepochnums / hps.batch_nums +1)
-        tpic = random.choice(gasmeterPictureFilenameList)
-        img = cv2.imread(tpic)
+        # tpic = random.choice(gasmeterPictureFilenameList)
+        # img = cv2.imread(tpic)
 
         for itstep in range(base_step,end_step):
             # images,labels = gen.get_next_batch(hps.batch_nums)
 
-            images, labels = gen.get_compose_gasmeter_next_batch(img, batchsize=hps.batch_nums)
+            # images, labels = gen.get_compose_gasmeter_next_batch(img, batchsize=hps.batch_nums)
+            images, labels = gen.get_next_batch(batchsize=hps.batch_nums)
 
             feed_dict = {
                 xp:images,
@@ -128,11 +130,11 @@ def startTrain(trainepochnums,
 
 def train_main():
     global save_file_name,logger
-    hps = HParams(batch_nums=5,
+    hps = HParams(batch_nums=10,
                   num_classes=10,
                   deep_net_fkn=30,
                   img_depth=gen.ImageDepth,
-                  deepk=[2,1.8,1.5],
+                  deepk=[2,1.8,1.8],
                   carriage_block_num=[2,2,2])
 
 
@@ -141,7 +143,7 @@ def train_main():
         saveVariableDirnameList=["data","digitRecognise","temp"],
         saveVariableFilename= "temp.ckpy",
         logDirnameList=["data", "log"],
-        logFilename = "resnetGasmeterv1log2.txt")
+        logFilename = "resnetGasmeterv1log3.txt")
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
 

@@ -8,7 +8,7 @@ from com.huitong.gasMeterv1.framework.gasmeterModel.baseGasmeterModel import Bas
 from com.huitong.gasMeterv1.framework.gasmeterModel.BaseMask import MaskTool
 from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
 
-import cv2
+
 
 class GasmeterStyle0(BaseGasmeterModel):
     """
@@ -27,6 +27,10 @@ class GasmeterStyle0(BaseGasmeterModel):
             self._desWidth = desWidth
 
     def setImage(self,image):
+        """
+        设置要处理的图片
+        :param image: 是cv2读进来的图片对象
+        """
         self.__image = image
 
     def getDescription(self):
@@ -55,6 +59,7 @@ class GasmeterStyle0(BaseGasmeterModel):
 
 
 def test():
+    import cv2
     style = GasmeterStyle0()
 
     filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\8.jpg"
