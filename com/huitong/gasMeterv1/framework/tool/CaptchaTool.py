@@ -17,10 +17,20 @@ try:
 except ImportError:
     from io import BytesIO
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
-DATA_DIR = os.path.join(DATA_DIR, 'fonts')
+def getFounts():
+    path = os.path.dirname(__file__)
+    for i in range(2):
+        path = os.path.dirname(path)
 
-DEFAULT_FONTS = [os.path.join(DATA_DIR, font) for font in os.listdir(DATA_DIR) ]
+    path = os.path.join(path,'data')
+    path = os.path.join(path,'fonts')
+    DEFAULT_FONTS = [os.path.join(path, font) for font in os.listdir(path)]
+    return DEFAULT_FONTS
+
+
+
+
+DEFAULT_FONTS = getFounts()
 DEFAULT_FOUNT_SIZES = [i for i in range(36, 40, 2)]
 
 __all__ = ['ImageCaptcha']
@@ -152,8 +162,7 @@ class ImageCaptcha(_Captcha):
         for im in images:
             w, h = im.size
             mask = im.convert('L').point(table)
-            # image.paste(im, (offset, int((self._height - h) / 2)), mask)
-            image.paste(im, (offset, int((self._height - h) / 2)))
+            image.paste(im, (offset, int((self._height - h) / 2)), mask)
             offset = offset + w + random.randint(0,rand)
 
         if width > self._width:
