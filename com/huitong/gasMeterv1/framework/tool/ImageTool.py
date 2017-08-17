@@ -26,11 +26,14 @@ class ImageTool():
         return ((0,0,0),(70,70,70))
 
     @staticmethod
+    def getNoneBlackColorRange():
+        """获得非黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组"""
+        return ((70,70,70),(255,255,255))
+
+    @staticmethod
     def getRedColorRange():
         """获得黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组"""
         return ((0,0,100),(60,45,255))
-
-
 
 
 
@@ -41,6 +44,8 @@ class ImageTool():
         :param bgrimg:
         """
         return cv2.cvtColor(bgrimg,cv2.COLOR_BGR2GRAY)
+
+
 
     @staticmethod
     def preProcessImage(img, width=None):
@@ -84,7 +89,7 @@ class ImageTool():
         获取感兴趣的颜色范围所在矩形框的四个顶点，如果图片中没有像素在范围内返回 None
         :param image: 通过cv2读进来的图片数据对象
         :param lower: # 颜色下限,数值按[b,g,r]排布
-        :param upper: # 颜色上限
+        :param upper: # 颜色上限,数值按[b,g,r]排布
         """
         # 根据阈值提取在区间范围内的数据，在范围内的数据为 255，其他数据置 0
         mask = cv2.inRange(image, lower, upper)
@@ -165,7 +170,7 @@ class ImageTool():
     @staticmethod
     def removeRightArea(image,startIndex):
         """
-        移除图像右边部分，从 startIndex 开始的
+        以 startIndex 为界分成左右两半部分，移除图像右边部分
         :param image: 是cv2读进来的图片对象
         :param startIndex: 要移除的图像水平轴开始边界
         rows, cols, depth = image.shape
@@ -175,6 +180,89 @@ class ImageTool():
         cropImg = ImageTool.getCropImageByBox(image,box)
         return cropImg
 
+    @staticmethod
+    def removeLeftArea(image,startIndex):
+        """
+        以 startIndex 为界分成左右两半部分，移除图像右边部分
+        :param image: 是cv2读进来的图片对象
+        :param startIndex:
+        rows, cols, depth = image.shape
+        """
+        shape = image.shape
+        box = (startIndex,0,shape[1],shape[0])
+        cropImg = ImageTool.getCropImageByBox(image, box)
+        return cropImg
+
+    @staticmethod
+    def removeUpArea(image,startIndex):
+        """
+        以 startIndex 为界分成上下两半部分，移除图像上边部分
+        :param image: 是cv2读进来的图片对象
+        :param startIndex:
+        rows, cols, depth = image.shape
+        """
+        shape = image.shape
+        box = (0, startIndex, shape[1], shape[0])
+        cropImg = ImageTool.getCropImageByBox(image, box)
+        return cropImg
+
+    @staticmethod
+    def removeDownArea(image,startIndex):
+        """
+        以 startIndex 为界分成上下两半部分，移除图像上边部分
+        :param image: 是cv2读进来的图片对象
+        :param startIndex:
+        rows, cols, depth = image.shape
+        """
+        shape = image.shape
+        box = (0, 0, shape[1], startIndex)
+        cropImg = ImageTool.getCropImageByBox(image, box)
+        return cropImg
+
+    @staticmethod
+    def imageResize(image, width, height):
+        """
+        :param image: 是cv2读进来的图片对象
+        :param width: 目标图像宽度
+        :param height: 目标图像高度
+        cv2.resize(image, (BoxWidth, BoxHeight))
+        """
+        desImage = cv2.resize(image,(width,height))
+        return desImage
+
+
+
+
+    @staticmethod
+    def showImagePIL(image,title = None):
+        """
+        通过 PIL 显示图片
+        :param image: cv2读进来的图片对象
+        :param title: 标题
+        """
+        if title is None:
+            title = str(image.shape)
+        plt.figure()
+        plt.imshow(image)
+        plt.title(title)
+        plt.show()
+
+    @staticmethod
+    def showImageCv2(image,title = None):
+        """
+        通过 cv2 显示图片
+        :param image: cv2读进来的图片对象
+        :param title:  标题
+        """
+        if title is None:
+            title = str(image.shape)
+        cv2.imshow(title,image)
+        k = cv2.waitKey(0)
+
+        if k == 27:
+            cv2.destroyAllWindows()
+
+
 
 
 
@@ -182,7 +270,7 @@ class ImageTool():
 
 
 def testShowInterestAreaBox():
-    imgdirname = ["data", "img", "trainpic"]
+    imgdirname = ["data", "img", "style0"]
     # imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
     imgdirname = FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1", imgdirname)
 
@@ -216,7 +304,7 @@ def testShowInterestAreaData():
 
     for filename in filelist:
 
-        print filename
+        print(filename)
 
         image = cv2.imread(filename)
         image = ImageTool.preProcessImage(image)

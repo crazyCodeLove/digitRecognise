@@ -12,6 +12,7 @@ import numpy as np
 from PIL import Image
 
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
+from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
 
 
 def fun1():
@@ -97,11 +98,16 @@ def fun3():
 
 
 def fun4():
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\91.jpg"
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterHead\9.jpg"
     image = Image.open(filename)
     plt.figure()
     plt.imshow(image)
     plt.show()
+
+def fun5():
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\1.jpg"
+    image = cv2.imread(filename)
+    ImageTool.showImageCv2(image)
 
 
 
@@ -113,7 +119,7 @@ def fun4():
 
 
 def test():
-    fun4()
+    fun5()
 
 if __name__ == "__main__":
     test()

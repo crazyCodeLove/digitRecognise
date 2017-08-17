@@ -474,7 +474,7 @@ class ImageTool():
 
 
 def testShowGasmeterArea():
-    imgdirname = ["data","img","trainpic"]
+    imgdirname = ["data","img","style0"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),imgdirname)
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname,pattern)
@@ -482,7 +482,7 @@ def testShowGasmeterArea():
         ImageTool.showGasmeterArea(cv2.imread(each),filename=each)
 
 def testgetGasmeterAreaData():
-    imgdirname = ["data", "img", "trainpic"]
+    imgdirname = ["data", "img", "style0"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
@@ -502,7 +502,7 @@ def testGasmeterComposite():
     gen = GenDigitPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
                           backgroundColor=(1,1,1),fontColor=(200,200,200))
 
-    imgdirname = ["data", "img", "trainpic"]
+    imgdirname = ["data", "img", "style0"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
 
@@ -552,7 +552,7 @@ def testCaptchaGenerate():
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 def testGet_compose_gasmeter_next_batch():
-    imgdirname = ["data", "img", "trainpic"]
+    imgdirname = ["data", "img", "style0"]
     imgdirname = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__), imgdirname)
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
