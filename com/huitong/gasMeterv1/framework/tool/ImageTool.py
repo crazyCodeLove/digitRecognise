@@ -45,6 +45,15 @@ class ImageTool():
         """
         return cv2.cvtColor(bgrimg,cv2.COLOR_BGR2GRAY)
 
+    @staticmethod
+    def convertImgRGB2Gray(rgbimg):
+        """
+
+        :param rgbimg: 彩色图像，是RGB 图片
+        """
+        rgbimg = np.array(rgbimg)
+        return cv2.cvtColor(rgbimg,cv2.COLOR_RGB2GRAY)
+
 
 
     @staticmethod

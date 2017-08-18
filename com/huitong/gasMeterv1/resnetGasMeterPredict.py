@@ -22,7 +22,8 @@ captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight)
+gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
+                       imageDepth=1)
 
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
 
@@ -94,7 +95,7 @@ def getPredict(hps, mode, gasmeter_filename, save_file_name):
 
         # images = gen.get_batch_gasmeter_digit_area_from_filename(gasmeter_filename, hps.batch_nums)
         image = cv2.imread(gasmeter_filename)
-        gasmeter = GasmeterStyle0(captchaBoxWidth,captchaBoxHeight)
+        gasmeter = GasmeterStyle0(captchaBoxWidth,captchaBoxHeight,desImageDepth=gen.ImageDepth)
         gasmeter.setImage(image)
         image = gasmeter.getRollerBlackArea()
         images = ImageTool.repeatImage2Tensor(image,hps.batch_nums)

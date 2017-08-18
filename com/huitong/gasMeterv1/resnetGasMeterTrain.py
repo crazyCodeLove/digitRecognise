@@ -21,7 +21,8 @@ captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight)
+gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
+                       imageDepth=1)
 
 
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
@@ -65,6 +66,7 @@ def startTrain(trainepochnums,
                mode,
                gps,
                save_file_name):
+    global logger
     if "Windows" in platform.system():
         logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
     xp = tf.placeholder(tf.float32, [None, captchaBoxHeight * captchaBoxWidth * gen.ImageDepth])
@@ -143,7 +145,7 @@ def train_main():
         saveVariableDirnameList=["data","digitRecognise","temp"],
         saveVariableFilename= "temp.ckpy",
         logDirnameList=["data", "log"],
-        logFilename = "resnetGasmeterv1log2.txt")
+        logFilename = "resnetGasmeterv1log5.txt")
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
 
@@ -171,7 +173,10 @@ def train_main():
     while True:
         print("start training")
         mode = 'train'
-        trainNumsBeforeValid = 2
+        if "Windows" in platform.system():
+            trainNumsBeforeValid = 2
+        else:
+            trainNumsBeforeValid = 6
         p = Process(target=startTrain,args=(trainNumsBeforeValid, hps, mode, gps, save_file_name))
         p.start()
         p.join()

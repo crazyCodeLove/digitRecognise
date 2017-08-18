@@ -252,9 +252,16 @@ def move_variable_from_src2des(srcdirname,desdirname):
         desfilename = os.path.join(desdirname,each)
         shutil.copy(orifilename,desfilename)
 
+def setTrainstep():
+    filename = "peizhi.xml"
+    k = "train_step"
+    v = 1001
+
+    val = get_peizhi_val(filename,k)
+    print val
 
 def test():
-    print("good")
+    setTrainstep()
 
 
 

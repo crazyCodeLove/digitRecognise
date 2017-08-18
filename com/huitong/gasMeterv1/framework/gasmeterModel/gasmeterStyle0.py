@@ -15,7 +15,7 @@ class GasmeterStyle0(BaseGasmeterModel):
     会对所有输出图片大小进行规整，默认是 64 * 128
     """
 
-    def __init__(self, desWidth = None, desHeight = None):
+    def __init__(self, desWidth = None, desHeight = None, desImageDepth = 3):
         if desHeight is None:
             self._desHeight = 64
         else:
@@ -26,6 +26,8 @@ class GasmeterStyle0(BaseGasmeterModel):
         else:
             self._desWidth = desWidth
 
+        self._desImageDepth = desImageDepth
+
     def setImage(self,image):
         """
         设置要处理的图片
@@ -35,7 +37,7 @@ class GasmeterStyle0(BaseGasmeterModel):
         # 63014,01190,00114,08410-----无
         # 62014,07690,09114,71410-----pre
         # 00000,00001,00246,00000
-        super().setImage(image)
+        super(GasmeterStyle0,self).setImage(image)
 
 
     def getDescription(self):
@@ -58,7 +60,8 @@ class GasmeterStyle0(BaseGasmeterModel):
             rollerBlackArea = blackImage
 
         rollerBlackArea = ImageTool.imageResize(rollerBlackArea, self._desWidth, self._desHeight)
-        # rollerBlackArea = ImageTool.convertImgBGR2Gray(rollerBlackArea)
+        if self._desImageDepth == 1:
+            rollerBlackArea = ImageTool.convertImgBGR2Gray(rollerBlackArea)
 
         return rollerBlackArea
 

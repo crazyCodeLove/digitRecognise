@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 
 from com.huitong.gasMeterv1.framework.tool.CaptchaTool import ImageCaptcha
+from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
 
 class GenDigitsPicture():
     """
@@ -23,7 +24,7 @@ class GenDigitsPicture():
 
 
     def __init__(self, captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
-                 charset = None):
+                 charset = None, imageDepth=3):
 
         self._picCharacterLength = captchaCharacterLength
         self._picBoxWidth = captchaBoxWidth
@@ -33,6 +34,8 @@ class GenDigitsPicture():
             self._charset = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         else:
             self._charset = charset
+
+        self._imageDepth = imageDepth
 
 
 
@@ -46,7 +49,7 @@ class GenDigitsPicture():
 
     @property
     def ImageDepth(self):
-        return 3
+        return self._imageDepth
 
     @property
     def CharSet(self):
@@ -78,6 +81,13 @@ class GenDigitsPicture():
         captcha = image.generate(captcha_text)
 
         captcha_image = Image.open(captcha)
+
+        if self._imageDepth == 1:
+            # 将彩色图片转换成灰度图图片
+            captcha_image = ImageTool.convertImgRGB2Gray(captcha_image)
+
+
+
         captcha_image = np.array(captcha_image)
         return captcha_text, captcha_image
 
@@ -87,17 +97,16 @@ class GenDigitsPicture():
         """
         if batchsize is None:
             batchsize = 64
-        batch_x = np.zeros([batchsize, self._picBoxHeight * self._picBoxWidth * 3])
+        batch_x = np.zeros([batchsize, self._picBoxHeight * self._picBoxWidth * self._imageDepth])
         CHAR_SET_LEN = len(self._charset) + 1
         batch_y = np.zeros([batchsize, self._picCharacterLength * CHAR_SET_LEN])
 
         # 有时生成图像大小不是(60, 160, 3)
         def wrap_gen_captcha_text_and_image():
-            ''' 获取一张图，判断其是否符合（60，160，3）的规格'''
+            ''' 获取一张图，判断其是否符合（60，160，depth）的规格'''
             while True:
                 text, image = self.get_text_and_image()
-                if image.shape == (self._picBoxHeight, self._picBoxWidth, 3):  # 此部分应该与开头部分图片宽高吻合
-                    return text, image
+                return text, image
 
         for i in range(batchsize):
             text, image = wrap_gen_captcha_text_and_image()

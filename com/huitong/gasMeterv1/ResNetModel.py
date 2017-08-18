@@ -51,7 +51,7 @@ class ResNetModel(object):
 
         # conv_layer1 is 64*64*deep_net_fkn
         outputs = ModelUtil.add_BN_conv_layer(
-            inputx, kernal_width, self.hps.img_depth,
+            inputx, kernal_width, self._boxDepth,
             depth, is_training_ph, scope="reshead",
             activateFunc=activateFunc,stride=[1,1,1,1])
 
