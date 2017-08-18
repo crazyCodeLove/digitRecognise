@@ -192,13 +192,12 @@ class ImageCaptcha(_Captcha):
         if self._backgroundColor:
             background = self._backgroundColor
         else:
-            # background = random_color(0, 60)
             background = random_bkg_color(0,65)
 
         if self._fontColor:
             color = self._fontColor
         else:
-            color = random_color(160, 230, random.randint(220, 255))
+            color = random_font_color(140, 250, random.randint(220, 255))
 
         #####***************************
 
@@ -209,18 +208,18 @@ class ImageCaptcha(_Captcha):
         return im
 
 
-def random_color(start, end, opacity=None):
+def random_font_color(start, end, opacity=None):
     red = random.randint(start, end)
-    green = random.randint(start, end)
-    blue = random.randint(start, end)
+    green = red + random.randint(0, 25)
+    blue = red + random.randint(0, 25)
     if opacity is None:
         return (red, green, blue)
     return (red, green, blue, opacity)
 
 def random_bkg_color(start, end, opacity=None):
     red = random.randint(start,end)
-    green = red + random.randint(0,20)
-    blue = red + random.randint(0,20)
+    green = red + random.randint(0,25)
+    blue = red + random.randint(0,25)
     if opacity is None:
         return (red,green,blue)
     return (red, green, blue, opacity)
