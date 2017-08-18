@@ -10,6 +10,7 @@ from collections import namedtuple
 import numpy as np
 import tensorflow as tf
 import cv2
+import platform
 
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
@@ -59,6 +60,7 @@ def getFilename(filename, baseDirname = None, dirnameList = None):
 def get_predict_text(outputs):
     predict = np.reshape(outputs, [-1, captchaCharacterLength, CHAR_SET_LEN])
     max_idx_p = np.argmax(predict, 2)
+
     predict = max_idx_p[0]
     vector = np.zeros(captchaCharacterLength*CHAR_SET_LEN)
     i = 0
@@ -67,6 +69,14 @@ def get_predict_text(outputs):
         i += 1
 
     return gen.vec2text(vector)
+
+def get_most_common_digit_in_column(data):
+    """
+    找出二维数组中每列出现频次最高的数字
+    :param data: numpy 2D 数组
+    """
+    shape = data.shape
+
 
 
 
@@ -119,8 +129,10 @@ def main(gasmeter_filename):
 
 
 if __name__ == "__main__":
-    # filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\8.jpg"
-    filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/12.jpg"
+    if "Windows" in platform.system():
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\8.jpg"
+    elif "Linux" in platform.system():
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/8.jpg"
     predict = main(filename)
 
     print("predict:%s"%predict)

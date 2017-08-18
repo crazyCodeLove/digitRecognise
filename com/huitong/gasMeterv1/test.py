@@ -119,7 +119,8 @@ def fun6():
     print(path)
 
 
-
+def fun7():
+    print(platform.system())
 
 
 
@@ -127,7 +128,7 @@ def fun6():
 
 
 def test():
-    fun6()
+    fun7()
 
 if __name__ == "__main__":
     test()

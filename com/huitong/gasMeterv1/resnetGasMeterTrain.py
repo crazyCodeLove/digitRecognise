@@ -6,12 +6,11 @@
 """
 import os
 import pickle
-import random
 from collections import namedtuple
 from multiprocessing import Process
 
-import cv2
 import tensorflow as tf
+import platform
 
 from com.huitong.gasMeterv1 import ModelUtil
 from com.huitong.gasMeterv1 import ResNetModel
@@ -66,7 +65,8 @@ def startTrain(trainepochnums,
                mode,
                gps,
                save_file_name):
-    # logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
+    if "Windows" in platform.system():
+        logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
     xp = tf.placeholder(tf.float32, [None, captchaBoxHeight * captchaBoxWidth * gen.ImageDepth])
     yp = tf.placeholder(tf.float32, [None, captchaCharacterLength*CHAR_SET_LEN])
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
@@ -115,10 +115,10 @@ def startTrain(trainepochnums,
                 else:
                     logger.log_message(msg)
 
-            # if itstep % 5000 ==0 and itstep > 0:
-            #     print("before save")
-            #     saver.save(sess=sess, save_path=save_file_name)
-            #     print("after save")
+            if "Windows" in platform.system() and itstep % 1000 ==0 and itstep > 0:
+                print("before save")
+                saver.save(sess=sess, save_path=save_file_name)
+                print("after save")
 
         print("before save")
         saver.save(sess=sess,save_path=save_file_name)
@@ -143,7 +143,7 @@ def train_main():
         saveVariableDirnameList=["data","digitRecognise","temp"],
         saveVariableFilename= "temp.ckpy",
         logDirnameList=["data", "log"],
-        logFilename = "resnetGasmeterv1log3.txt")
+        logFilename = "resnetGasmeterv1log2.txt")
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
 
@@ -171,7 +171,7 @@ def train_main():
     while True:
         print("start training")
         mode = 'train'
-        trainNumsBeforeValid = 6
+        trainNumsBeforeValid = 2
         p = Process(target=startTrain,args=(trainNumsBeforeValid, hps, mode, gps, save_file_name))
         p.start()
         p.join()
