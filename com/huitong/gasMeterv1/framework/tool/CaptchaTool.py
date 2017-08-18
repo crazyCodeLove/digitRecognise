@@ -31,7 +31,7 @@ def getFounts():
 
 
 DEFAULT_FONTS = getFounts()
-DEFAULT_FOUNT_SIZES = [i for i in range(30, 38, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(28, 40, 2)]
 
 __all__ = ['ImageCaptcha']
 
@@ -219,8 +219,8 @@ def random_color(start, end, opacity=None):
 
 def random_bkg_color(start, end, opacity=None):
     red = random.randint(start,end)
-    green = red + random.randint(0,15)
-    blue = red + random.randint(0,15)
+    green = red + random.randint(0,20)
+    blue = red + random.randint(0,20)
     if opacity is None:
         return (red,green,blue)
     return (red, green, blue, opacity)

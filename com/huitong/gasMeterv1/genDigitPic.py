@@ -43,6 +43,13 @@ class GenDigitPicture():
         self._backgroundColor = backgroundColor
         self._fontColor = fontColor
 
+    def setBackgroundColor(self,bkgColor):
+        self._backgroundColor = bkgColor
+
+    def setFontColor(self,fontColor):
+        self._fontColor = fontColor
+
+
     @property
     def ImageHeight(self):
         return self._picBoxHeight
