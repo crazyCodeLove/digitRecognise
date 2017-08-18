@@ -282,9 +282,12 @@ class ImageTool():
 
 
 def testShowInterestAreaBox():
+    import platform
     imgdirname = ["data", "img", "style0"]
-    # imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
-    imgdirname = FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1", imgdirname)
+    if "Windows" in platform.system():
+        imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
+    elif "Linux" in platform.system():
+        imgdirname = FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1", imgdirname)
 
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
@@ -304,10 +307,13 @@ def testShowInterestAreaBox():
 
 
 def testShowInterestAreaData():
+    import platform
     imgdirname = ["data", "img", "style1"]
 
-    # imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
-    imgdirname =  FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1",imgdirname)
+    if "Windows" in platform.system():
+        imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
+    elif "Linux" in platform.system():
+        imgdirname =  FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1",imgdirname)
 
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
@@ -364,6 +370,6 @@ def testShowInterestAreaData():
 
 
 if __name__ == "__main__":
-    # testShowInterestAreaBox()
-    testShowInterestAreaData()
+    testShowInterestAreaBox()
+    # testShowInterestAreaData()
 
