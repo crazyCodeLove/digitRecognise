@@ -39,14 +39,14 @@ def update_peizhi(peizhi_filename, key, value):
     """
     更新配置文件中的配置项
     """
-    with open(peizhi_filename) as rfobj:
+    with open(peizhi_filename,mode='rb') as rfobj:
         peizhi = pickle.load(rfobj)
     peizhi[key] = value
-    with open(peizhi_filename, mode='w') as wfobj:
+    with open(peizhi_filename, mode='wb') as wfobj:
         pickle.dump(peizhi,wfobj)
 
 def get_peizhi_val(peizhifilename,key):
-    with open(peizhifilename) as rfobj:
+    with open(peizhifilename,mode='rb') as rfobj:
         peizhi = pickle.load(rfobj)
     return peizhi[key]
 
