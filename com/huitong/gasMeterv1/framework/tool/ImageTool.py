@@ -356,6 +356,12 @@ def testShowInterestAreaData():
         # plt.show()
 
         title = "box area, %s, digit area,%s" % (FileNameUtil.getFilenameFromFullFilepathname(filename),str(interestImage.shape))
+        grayImage = cv2.cvtColor(interestImage,cv2.COLOR_BGR2GRAY)
+        cv2.imshow("gray", grayImage)
+        k = cv2.waitKey(0)
+        if k == 27:
+            cv2.destroyAllWindows()
+
         interestImage = cv2.cvtColor(interestImage, cv2.COLOR_BGR2RGB)
 
 

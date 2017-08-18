@@ -67,7 +67,7 @@ class GenDigitsPicture():
         return text
 
     def get_text_and_image(self,backgroundColor = None, fontColor = None):
-        """ 生成字符序列和对应的图片数据 """
+        """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)"""
 
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
                              backgroundColor=backgroundColor, fontColor=fontColor)
@@ -156,6 +156,7 @@ class GenDigitsPicture():
 def testGenDigitsPicture():
     import time
     import matplotlib.pyplot as plt
+    import cv2
 
     captchaCharacterLength = 5
     captchaBoxWidth = 128
@@ -171,6 +172,20 @@ def testGenDigitsPicture():
 
         plt.show()
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+
+        # image = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
+        # cv2.imshow("gray",image)
+        # k = cv2.waitKey(0)
+        # if k == 27:
+        #     cv2.destroyAllWindows()
+
+
+
+
+
+
+
+
 
 
 
