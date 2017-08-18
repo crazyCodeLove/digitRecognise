@@ -167,10 +167,15 @@ def testGenDigitsPicture():
         print('begin ' + time.strftime("%Y-%m-%d %H:%M:%S") + str(type(image)))
         plt.figure()
         plt.imshow(image)
-        plt.title(text)
+        plt.title(text + str(image.shape))
 
         plt.show()
         print('end ' + time.strftime("%Y-%m-%d %H:%M:%S"))
+
+
+
+
+
 
 if __name__ == "__main__":
     testGenDigitsPicture()

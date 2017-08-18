@@ -106,7 +106,7 @@ def fun4():
     plt.show()
 
 def fun5():
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\1.jpg"
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\2.jpg"
     image = cv2.imread(filename)
     ImageTool.showImageCv2(image)
 
@@ -119,16 +119,12 @@ def fun6():
     print(path)
 
 
-def fun7():
-    print(platform.system())
-
-
 
 
 
 
 def test():
-    fun7()
+    fun5()
 
 if __name__ == "__main__":
     test()

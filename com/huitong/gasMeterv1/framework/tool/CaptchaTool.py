@@ -31,7 +31,7 @@ def getFounts():
 
 
 DEFAULT_FONTS = getFounts()
-DEFAULT_FOUNT_SIZES = [i for i in range(28, 40, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(28, 38, 2)]
 
 __all__ = ['ImageCaptcha']
 
@@ -132,6 +132,23 @@ class ImageCaptcha(_Captcha):
             number -= 1
         return image
 
+
+    def random_height_stretch(self, image, maxval = None):
+        """对上下方向上进行随机拉伸，然后裁剪到原始大小"""
+        if maxval is None:
+            maxval = 30
+        addHeight = random.randint(1,maxval)
+        midAddHeight = int(addHeight/2)
+        image = image.resize((self._width,self._height + addHeight))
+
+        # box变量是一个四元组(左，上，右，下)。
+        box = (0, midAddHeight, self._width, self._height + midAddHeight)
+        image = image.crop(box)
+        return image
+
+
+
+
     def create_captcha_image(self, chars, color, background):
         """Create the CAPTCHA image itself.
 
@@ -169,17 +186,19 @@ class ImageCaptcha(_Captcha):
         image = image.resize((width, self._height))
 
         average = int(text_width / len(chars))
-        rand = int(0.05 * average)
+        rand = int(0.15 * average)
         offset = int(average * 0.15)
 
         for im in images:
             w, h = im.size
             mask = im.convert('L').point(table)
             image.paste(im, (offset, int((self._height - h) / 2)), mask)
-            offset = offset + w + random.randint(0,rand)
+            offset = offset + w + random.randint(2,2+rand)
 
         if width > self._width:
             image = image.resize((self._width, self._height))
+
+
 
         return image
 
@@ -204,6 +223,7 @@ class ImageCaptcha(_Captcha):
         im = self.create_captcha_image(chars, color, background)
         self.create_noise_dots(im, random_noise_color())
         self.create_noise_curve(im, random_noise_color())
+        im = self.random_height_stretch(im)
         im = im.filter(ImageFilter.SMOOTH)
         return im
 

@@ -43,11 +43,11 @@ class GasmeterStyle0(BaseGasmeterModel):
         return description
 
     def getRollerBlackArea(self):
-        if self.__image is None:
+        if self._image is None:
             raise ValueError("应先通过setImage()函数设置image，然后获取感兴趣数据")
 
         blackMask = MaskTool.getBlackMask()
-        blackImage = blackMask.getInterestImageAreaData(self.__image)
+        blackImage = blackMask.getInterestImageAreaData(self._image)
 
         redMask = MaskTool.getRedMask()
         redBox = redMask.getInterestBox(blackImage)
@@ -75,7 +75,7 @@ def test():
     image = style.getRollerBlackArea()
 
     # image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-    ImageTool.showImagePIL(image)
+    ImageTool.showImagePIL(image,str(image.shape))
     # ImageTool.showImageCv2(image)
     # image = cv2.equalizeHist(image)
     # ImageTool.showImageCv2(image)

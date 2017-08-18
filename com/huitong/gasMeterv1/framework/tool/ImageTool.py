@@ -299,7 +299,7 @@ def testShowInterestAreaBox():
         image = ImageTool.preProcessImage(image)
         boxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image,interestColorLower,interestColorUpper)
 
-        if boxCornerPoint:
+        if boxCornerPoint is not None:
             title = "box area, %s" % FileNameUtil.getFilenameFromFullFilepathname(filename)
             ImageTool.showBoxInImage(image,boxCornerPoint,title)
         else:
@@ -308,7 +308,7 @@ def testShowInterestAreaBox():
 
 def testShowInterestAreaData():
     import platform
-    imgdirname = ["data", "img", "style1"]
+    imgdirname = ["data", "img", "style0"]
 
     if "Windows" in platform.system():
         imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
@@ -325,7 +325,7 @@ def testShowInterestAreaData():
         print(filename)
 
         image = cv2.imread(filename)
-        image = ImageTool.preProcessImage(image)
+        # image = ImageTool.preProcessImage(image)
         blackBackgroundBoxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image, bkgLower, bkgUpper)
 
         if blackBackgroundBoxCornerPoint is None:
@@ -342,19 +342,20 @@ def testShowInterestAreaData():
 
             box = (0,0,redBox[0],bkgBox[3]-bkgBox[1])
             interestImage = ImageTool.getCropImageByBox(bkgimage,box)
+            interestImage = ImageTool.imageResize(interestImage,128,64)
         else:
             interestImage = bkgimage
 
 
-        title = "box area, %s, background" % FileNameUtil.getFilenameFromFullFilepathname(filename)
-        bkgimage = cv2.cvtColor(bkgimage,cv2.COLOR_BGR2RGB)
+        # title = "box area, %s, background" % FileNameUtil.getFilenameFromFullFilepathname(filename)
+        # bkgimage = cv2.cvtColor(bkgimage,cv2.COLOR_BGR2RGB)
+        #
+        # plt.figure()
+        # plt.title(title)
+        # plt.imshow(bkgimage)
+        # plt.show()
 
-        plt.figure()
-        plt.title(title)
-        plt.imshow(bkgimage)
-        plt.show()
-
-        title = "box area, %s, digit area" % FileNameUtil.getFilenameFromFullFilepathname(filename)
+        title = "box area, %s, digit area,%s" % (FileNameUtil.getFilenameFromFullFilepathname(filename),str(interestImage.shape))
         interestImage = cv2.cvtColor(interestImage, cv2.COLOR_BGR2RGB)
 
 
@@ -370,6 +371,6 @@ def testShowInterestAreaData():
 
 
 if __name__ == "__main__":
-    testShowInterestAreaBox()
-    # testShowInterestAreaData()
+    # testShowInterestAreaBox()
+    testShowInterestAreaData()
 
