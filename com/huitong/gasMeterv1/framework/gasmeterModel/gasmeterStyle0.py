@@ -35,7 +35,7 @@ class GasmeterStyle0(BaseGasmeterModel):
         # 63014,01190,00114,08410-----无
         # 62014,07690,09114,71410-----pre
         # 00000,00001,00246,00000
-        self.__image = image
+        super().setImage(image)
 
 
     def getDescription(self):
