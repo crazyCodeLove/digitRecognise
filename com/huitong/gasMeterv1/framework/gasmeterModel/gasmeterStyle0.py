@@ -31,7 +31,12 @@ class GasmeterStyle0(BaseGasmeterModel):
         设置要处理的图片
         :param image: 是cv2读进来的图片对象
         """
+        # image = ImageTool.preProcessImage(image)
+        # 63014,01190,00114,08410-----无
+        # 62014,07690,09114,71410-----pre
+        # 00000,00001,00246,00000
         self.__image = image
+
 
     def getDescription(self):
         description = "背景不是黑色的，数字区域是黑底白字或红底白字，只需要提取出黑底白字滚轮区域的数字,红色区域在黑色区域右边。类型是 style0"
