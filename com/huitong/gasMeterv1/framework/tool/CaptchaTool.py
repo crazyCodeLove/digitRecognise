@@ -31,7 +31,7 @@ def getFounts():
 
 
 DEFAULT_FONTS = getFounts()
-DEFAULT_FOUNT_SIZES = [i for i in range(28, 38, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(30, 38, 2)]
 
 __all__ = ['ImageCaptcha']
 
@@ -122,7 +122,7 @@ class ImageCaptcha(_Captcha):
         return image
 
     @staticmethod
-    def create_noise_dots(image, color, width=2, number=5):
+    def create_noise_dots(image, color, width=2, number=10):
         draw = Draw(image)
         w, h = image.size
         while number:
