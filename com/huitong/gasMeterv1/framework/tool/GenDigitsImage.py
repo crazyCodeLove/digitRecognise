@@ -170,7 +170,7 @@ def testGenDigitsPicture():
     captchaCharacterLength = 5
     captchaBoxWidth = 128
     captchaBoxHeight = 64
-    gen = GenDigitsPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight)
+    gen = GenDigitsPicture(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,imageDepth=1)
     while (1):
         text, image = gen.get_text_and_image()
 

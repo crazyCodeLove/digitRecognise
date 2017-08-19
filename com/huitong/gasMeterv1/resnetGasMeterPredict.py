@@ -131,9 +131,9 @@ def main(gasmeter_filename):
 
 if __name__ == "__main__":
     if "Windows" in platform.system():
-        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\12.jpg"
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\8.jpg"
     elif "Linux" in platform.system():
-        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/8.jpg"
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/10.jpg"
     predict = main(filename)
 
     print("predict:%s"%predict)

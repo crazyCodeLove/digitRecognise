@@ -68,10 +68,14 @@ class GasmeterStyle0(BaseGasmeterModel):
 
 def test():
     import cv2
-    style = GasmeterStyle0()
+    import platform
+    style = GasmeterStyle0(desImageDepth=1)
 
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\10.jpg"
-    # filename = r'/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/8.jpg'
+    if "Linux" in platform.system():
+        filename = r'/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/10.jpg'
+    elif "Windows" in platform.system():
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\10.jpg"
+
     image = cv2.imread(filename)
     style.setImage(image)
 
