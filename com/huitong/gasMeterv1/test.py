@@ -99,14 +99,14 @@ def fun3():
 
 
 def fun4():
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterHead\9.jpg"
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\1.jpg"
     image = Image.open(filename)
     plt.figure()
     plt.imshow(image)
     plt.show()
 
 def fun5():
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\2.jpg"
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\17.jpg"
     image = cv2.imread(filename)
     ImageTool.showImageCv2(image)
 
@@ -118,13 +118,30 @@ def fun6():
     path = os.path.dirname(path)
     print(path)
 
+def fun7():
+    baseDir = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1"
+    imgdirname = ["data", "img","gasmeterHead","style1"]
+    dirname = FileNameUtil.getDirname(baseDir,imgdirname)
+    filelist = FileNameUtil.getPathFilenameList(dirname,".*\.jpg")
 
+    interestLoweer = (0,0,100)
+    interestUpper = (60,45,255)
+
+    interestLoweer = (40, 35, 80)
+    interestUpper = (105, 105, 230)
+
+    for each in filelist:
+        image = cv2.imread(each)
+
+        cornerpoint = ImageTool.getInterestBoxCornerPointByColor(image,interestLoweer,interestUpper)
+        title = os.path.basename(each)
+        ImageTool.showBoxInImageByBoxCornerPoint(image, cornerpoint, title)
 
 
 
 
 def test():
-    fun5()
+    fun7()
 
 if __name__ == "__main__":
     test()

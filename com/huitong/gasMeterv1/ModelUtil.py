@@ -258,7 +258,8 @@ def setTrainstep():
     v = 1001
 
     val = get_peizhi_val(filename,k)
-    print val
+    print(val)
+
 
 def test():
     setTrainstep()

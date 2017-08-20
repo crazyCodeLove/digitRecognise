@@ -14,6 +14,10 @@ class BaseGasmeterModel(object):
         """
         self._image = image
 
+    @property
+    def GetImage(self):
+        return self._image
+
     def getDescription(self):
         """显示该模型的描述，是哪一种类型的燃气表"""
         pass

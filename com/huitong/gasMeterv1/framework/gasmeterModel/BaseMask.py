@@ -60,16 +60,16 @@ class BaseMask(object):
 class MaskTool(object):
 
     @staticmethod
-    def getBlackMask():
+    def getBlackMaskBGR():
         """获得黑色区域的 Mask"""
-        blkLower,blkUpper = ImageTool.getBlackColorRange()
+        blkLower,blkUpper = ImageTool.getBlackColorRangeBGR()
         blackMask = BaseMask(blkLower,blkUpper)
         return blackMask
 
     @staticmethod
-    def getRedMask():
+    def getRedMaskBGR():
         """获得红色区域的 Mask"""
-        redLower, redUpper = ImageTool.getRedColorRange()
+        redLower, redUpper = ImageTool.getRedColorRangeBGR()
         redMask = BaseMask(redLower,redUpper)
         return redMask
 

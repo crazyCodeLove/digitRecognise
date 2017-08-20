@@ -33,10 +33,7 @@ class GasmeterStyle0(BaseGasmeterModel):
         设置要处理的图片
         :param image: 是cv2读进来的图片对象
         """
-        # image = ImageTool.preProcessImage(image)
-        # 63014,01190,00114,08410-----无
-        # 62014,07690,09114,71410-----pre
-        # 00000,00001,00246,00000
+        image = ImageTool.preProcessImage(image)
         super(GasmeterStyle0,self).setImage(image)
 
 
@@ -48,10 +45,10 @@ class GasmeterStyle0(BaseGasmeterModel):
         if self._image is None:
             raise ValueError("应先通过setImage()函数设置image，然后获取感兴趣数据")
 
-        blackMask = MaskTool.getBlackMask()
+        blackMask = MaskTool.getBlackMaskBGR()
         blackImage = blackMask.getInterestImageAreaData(self._image)
 
-        redMask = MaskTool.getRedMask()
+        redMask = MaskTool.getRedMaskBGR()
         redBox = redMask.getInterestBox(blackImage)
 
         if redBox is not None:
@@ -69,6 +66,7 @@ class GasmeterStyle0(BaseGasmeterModel):
 def test():
     import cv2
     import platform
+    import os
     style = GasmeterStyle0(desImageDepth=1)
 
     if "Linux" in platform.system():
@@ -77,12 +75,13 @@ def test():
         filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\10.jpg"
 
     image = cv2.imread(filename)
+    title = os.path.basename(filename)
     style.setImage(image)
 
     image = style.getRollerBlackArea()
 
     # image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-    ImageTool.showImagePIL(image,str(image.shape))
+    ImageTool.showImagePIL(image,str(image.shape) + title)
     # ImageTool.showImageCv2(image)
     # image = cv2.equalizeHist(image)
     # ImageTool.showImageCv2(image)

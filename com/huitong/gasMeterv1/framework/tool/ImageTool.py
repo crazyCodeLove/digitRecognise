@@ -19,19 +19,21 @@ class ImageTool():
     """
 
     @staticmethod
-    def getBlackColorRange():
+    def getBlackColorRangeBGR():
         """
         获得黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组
         """
         return ((0,0,0),(70,70,70))
 
     @staticmethod
-    def getNoneBlackColorRange():
-        """获得非黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组"""
-        return ((70,70,70),(255,255,255))
+    def getGrayColorRangeHSV():
+        return ((0,0,46),(180,43,220))
+
+
+
 
     @staticmethod
-    def getRedColorRange():
+    def getRedColorRangeBGR():
         """获得黑色 BGR 颜色范围，返回(lower, upper)元组，lower、upper 是 BGR 表示的元组"""
         return ((0,0,100),(60,45,255))
 
@@ -53,6 +55,15 @@ class ImageTool():
         """
         rgbimg = np.array(rgbimg)
         return cv2.cvtColor(rgbimg,cv2.COLOR_RGB2GRAY)
+
+    @staticmethod
+    def convertImgGray2BGR(grayImg):
+        """
+        将灰度图像转化为 cv2 的 BGR 图像对象，
+        :param grayImg: 灰度图像
+        """
+        bgrImg = cv2.cvtColor(grayImg,cv2.COLOR_GRAY2BGR)
+        return bgrImg
 
 
 
@@ -76,7 +87,7 @@ class ImageTool():
         return img
 
     @staticmethod
-    def showBoxInImage(image,boxCornerPoint,title=None):
+    def showBoxInImageByBoxCornerPoint(image, boxCornerPoint, title=None):
         """
         在图片上根据矩形框的四个顶点坐标显示矩形框
         :param image: 通过cv2 读进来的图像对象
@@ -91,6 +102,17 @@ class ImageTool():
         k = cv2.waitKey(0)  # 无限期等待输入
         if k == 27:  # 如果输入ESC退出
             cv2.destroyAllWindows()
+
+    @staticmethod
+    def showBoxInImageByBox(image,box,title=None):
+        """
+
+        :param image: 通过cv2 读进来的图像对象
+        :param box: 矩形框的 left, upper, right, and lower pixel coordinate tuple
+        :param title:
+        """
+        boxCorner = ImageTool.getBoxCornerPointFromBox(box)
+        ImageTool.showBoxInImageByBoxCornerPoint(image,boxCorner,title)
 
     @staticmethod
     def getInterestBoxCornerPointByColor(image, lower, upper):
@@ -136,6 +158,16 @@ class ImageTool():
         y1 = min(Ys)
         y2 = max(Ys)
         return (x1, y1, x2, y2)
+
+    @staticmethod
+    def getBoxCornerPointFromBox(box):
+        # cornerPoint = np.array(((box[0],box[1]),(box[2],box[1]),(box[2],box[4]),(box[0],box[3])))
+        t = [[box[0],box[1]],
+            [box[2],box[1]],
+            [box[2],box[3]],
+            [box[0],box[3]]]
+        cornerPoint = np.array(t)
+        return cornerPoint
 
     @staticmethod
     def getBoxWidth(box):
@@ -251,6 +283,14 @@ class ImageTool():
         desImage = cv2.resize(image,(width,height))
         return desImage
 
+    @staticmethod
+    def getOTSUGrayImage(image):
+        """
+        对灰度图像进行 大津算法
+        :param image: 灰度图像
+        """
+        return cv2.threshold(image, 0, 255, cv2.THRESH_OTSU)  # 只支持灰度图像的STSU
+
 
 
 
@@ -283,6 +323,38 @@ class ImageTool():
         if k == 27:
             cv2.destroyAllWindows()
 
+    @staticmethod
+    def showHistBGR(image,title = None):
+        """
+        显示 cv2 读进来的彩色图像直方图
+        :param image: cv2读进来的图片对象
+        """
+        if title is None:
+            title = image.shape
+        color = ('b', 'g', 'r')
+        for i, col in enumerate(color):
+            histr = cv2.calcHist([image], [i], None, [256], [0, 256])
+            plt.plot(histr, color=col)
+            plt.xlim([0, 256])
+        plt.title(title)
+        plt.show()
+
+    @staticmethod
+    def showHistGray(image,title=None):
+        """
+        显示 cv2 读进来的灰度图像直方图
+        :param image: cv2读进来的图片对象
+        :param title:
+        """
+        if title is None:
+            title = image.shape
+        plt.hist(image.ravel(), 255, [0, 256])
+        plt.title(title)
+        plt.show()
+
+
+
+
 
 
 
@@ -292,7 +364,7 @@ class ImageTool():
 
 def testShowInterestAreaBox():
     import platform
-    imgdirname = ["data", "img", "style0"]
+    imgdirname = ["data", "img", "style1"]
     if "Windows" in platform.system():
         imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1", imgdirname)
     elif "Linux" in platform.system():
@@ -309,13 +381,16 @@ def testShowInterestAreaBox():
         boxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image,interestColorLower,interestColorUpper)
 
         if boxCornerPoint is not None:
+            box = ImageTool.getBoxFromBoxCorner(boxCornerPoint)
+            boxCornerPoint = ImageTool.getBoxCornerPointFromBox(box)
             title = "box area, %s" % FileNameUtil.getFilenameFromFullFilepathname(filename)
-            ImageTool.showBoxInImage(image,boxCornerPoint,title)
+            ImageTool.showBoxInImageByBoxCornerPoint(image, boxCornerPoint, title)
         else:
             print("no color in range" + str(interestColorLower) + str(interestColorUpper))
 
 
-def testShowInterestAreaData():
+
+def testShowInterestAreaDataStyle0():
     import platform
     imgdirname = ["data", "img", "style0"]
 
@@ -326,15 +401,15 @@ def testShowInterestAreaData():
 
     pattern = r'.*\.jpg$'
     filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
-    bkgLower,bkgUpper = ImageTool.getBlackColorRange()
-    redLower,redUpper = ImageTool.getRedColorRange()
+    bkgLower,bkgUpper = ImageTool.getBlackColorRangeBGR()
+    redLower,redUpper = ImageTool.getRedColorRangeBGR()
 
     for filename in filelist:
 
         print(filename)
 
         image = cv2.imread(filename)
-        # image = ImageTool.preProcessImage(image)
+        image = ImageTool.preProcessImage(image)
         blackBackgroundBoxCornerPoint = ImageTool.getInterestBoxCornerPointByColor(image, bkgLower, bkgUpper)
 
         if blackBackgroundBoxCornerPoint is None:
@@ -367,7 +442,7 @@ def testShowInterestAreaData():
         title = "box area, %s, digit area,%s" % (FileNameUtil.getFilenameFromFullFilepathname(filename),str(interestImage.shape))
         grayImage = cv2.cvtColor(interestImage,cv2.COLOR_BGR2GRAY)
         plt.figure()
-        plt.title("gray")
+        plt.title(title)
         plt.imshow(grayImage)
         plt.show()
 
@@ -376,13 +451,90 @@ def testShowInterestAreaData():
         # if k == 27:
         #     cv2.destroyAllWindows()
 
-        interestImage = cv2.cvtColor(interestImage, cv2.COLOR_BGR2RGB)
+        # interestImage = cv2.cvtColor(interestImage, cv2.COLOR_BGR2RGB)
+        #
+        #
+        # plt.figure()
+        # plt.title(title)
+        # plt.imshow(interestImage)
+        # plt.show()
+
+def testShowInterestAreaDataStyle1():
+    import platform
+    imgdirname = ["data", "img", "style1"]
+
+    if "Windows" in platform.system():
+        imgdirname = FileNameUtil.getDirname(r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1",
+                                             imgdirname)
+    elif "Linux" in platform.system():
+        imgdirname = FileNameUtil.getDirname(r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1", imgdirname)
+
+    pattern = r'.*\.jpg$'
+    filelist = FileNameUtil.getPathFilenameList(imgdirname, pattern)
+
+    redLower, redUpper = ImageTool.getRedColorRangeBGR()
+
+    blackLower,blackUpper= ImageTool.getBlackColorRangeBGR()
+
+    for filename in filelist:
+
+        print(filename)
+
+        image = cv2.imread(filename)
+        image = ImageTool.preProcessImage(image)
+
+        cornerPoint = ImageTool.getInterestBoxCornerPointByColor(image,blackLower,blackUpper)
+        if cornerPoint is None:
+            raise ValueError("none black data")
+
+        interestImage = ImageTool.getCropImageByBoxCornerPoint(image,cornerPoint)
+
+        shape = interestImage.shape
+        mid =int(shape[0]/2)
+        quarter = int(shape[0]/4)
+        upbox = (0,0,shape[1],mid)
+        upImage = ImageTool.getCropImageByBox(interestImage,upbox)
+
+        title = "box area, %s, digit area,%s" % (
+        FileNameUtil.getFilenameFromFullFilepathname(filename), str(upImage.shape))
+        upImageGray = cv2.cvtColor(upImage, cv2.COLOR_BGR2GRAY)
+
+        # equalizeImage = cv2.equalizeHist(upImageGray)  # 灰度图像直方图均衡化
+        # retval,otsuImage = cv2.threshold(equalizeImage,0,255,cv2.THRESH_OTSU) #只支持灰度图像的STSU
+
+        shape = upImageGray.shape
+        box = (70,quarter,170,shape[0])
+        splitLineImage = ImageTool.getCropImageByBox(upImageGray,box)
+        # equalizeImage = cv2.equalizeHist(splitLineImage)
+        retval, otsuImage = cv2.threshold(splitLineImage, 0, 255, cv2.THRESH_OTSU)
 
 
-        plt.figure()
-        plt.title(title)
-        plt.imshow(interestImage)
-        plt.show()
+
+
+
+
+        ImageTool.showImagePIL(upImageGray,title)
+        # ImageTool.showHistGray(upImageGray,title)
+        # ImageTool.showImagePIL(equalizeImage,title)
+        # ImageTool.showHistGray(equalizeImage,title)
+        # ImageTool.showImagePIL(otsuImage,title)
+
+
+        # ImageTool.showImagePIL(splitLineImage,title)
+        # ImageTool.showImagePIL(otsuImage, title)
+        #
+        otsuImage = cv2.cvtColor(otsuImage,cv2.COLOR_GRAY2BGR)
+        lower = (250,250,250)
+        upper = (255,255,255)
+        tcorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage,lower,upper)
+        ImageTool.showBoxInImageByBoxCornerPoint(otsuImage, tcorner, title)
+
+
+
+
+
+
+
 
 
 
@@ -391,6 +543,7 @@ def testShowInterestAreaData():
 
 
 if __name__ == "__main__":
-    # testShowInterestAreaBox()
-    testShowInterestAreaData()
+    testShowInterestAreaBox()
+    # testShowInterestAreaDataStyle0()
+    # testShowInterestAreaDataStyle1()
 
