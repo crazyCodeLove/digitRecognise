@@ -108,7 +108,7 @@ def getPredict(hps, mode, save_file_name):
             title = "text:%s, predict:%s"%(oriText,predictText)
 
             ImageTool.showImagePIL(image, title)
-            print("predict:%s"%predictText)
+            print(title)
 
 def main():
     hps = HParams(batch_nums=10,
