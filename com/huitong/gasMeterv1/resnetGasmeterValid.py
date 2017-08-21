@@ -93,27 +93,22 @@ def getPredict(hps, mode, save_file_name):
         saver = tf.train.Saver()
         saver.restore(sess, save_file_name)
 
+        while True:
+            oriText,image = gen.get_text_and_image()
+            images = ImageTool.repeatImage2Tensor(image,hps.batch_nums)
 
 
-        # images = gen.get_batch_gasmeter_digit_area_from_filename(gasmeter_filename, hps.batch_nums)
-        oriText,image = gen.get_text_and_image()
+            feed_dict = {
+                xp: images,
+                model.is_training_ph: False}
 
+            outputs = sess.run([model.outputs], feed_dict=feed_dict)
+            predictText = get_predict_text(outputs)
 
+            title = "text:%s, predict:%s"%(oriText,predictText)
 
-        images = ImageTool.repeatImage2Tensor(image,hps.batch_nums)
-
-
-        feed_dict = {
-            xp: images,
-            model.is_training_ph: False}
-
-        outputs = sess.run([model.outputs], feed_dict=feed_dict)
-        predictText = get_predict_text(outputs)
-
-        title = "text:%s, predict:%s"%(oriText,predictText)
-
-        ImageTool.showImagePIL(image, title)
-        print("predict:%s"%predictText)
+            ImageTool.showImagePIL(image, title)
+            print("predict:%s"%predictText)
 
 def main():
     hps = HParams(batch_nums=10,
@@ -132,8 +127,7 @@ def main():
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
     mode = "predict"
-    while True:
-        getPredict(hps, mode, save_file_name)
+    getPredict(hps, mode, save_file_name)
 
 
 if __name__ == "__main__":
