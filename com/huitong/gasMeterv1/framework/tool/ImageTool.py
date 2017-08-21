@@ -288,6 +288,7 @@ class ImageTool():
         """
         对灰度图像进行 大津算法
         :param image: 灰度图像
+        返回值：-> retval, dst
         """
         return cv2.threshold(image, 0, 255, cv2.THRESH_OTSU)  # 只支持灰度图像的STSU
 

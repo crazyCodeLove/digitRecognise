@@ -12,7 +12,10 @@ class GasmeterStyle1(BaseGasmeterModel):
     """
     self._image: cv2 读进来的黑底白字的表头图像对象，是彩色图像
     self._grayImage: cv2 读进来的黑底白字的表头图像对象，对应的黑白图像
-    self._rollerBox:
+    self._rollerBox: 黑底白字滚动轮区域在 self._image 中的四边对应元组
+    self._rollerImage: 黑底白字滚动轮区域图像，cv2 对象，BGR
+
+
 
     """
 
@@ -32,15 +35,17 @@ class GasmeterStyle1(BaseGasmeterModel):
 
 
     def getRollerBlackArea(self):
-        self.getRollerBox()
-        rollerImage = ImageTool.getCropImageByBox(self._image,self._rollerBox)
+        rollerBox = self.getRollerBox()
+        rollerImage = ImageTool.getCropImageByBox(self._image,rollerBox)
 
+        rollerImage = ImageTool.imageResize(rollerImage,self._desWidth,self._desHeight)
 
         if self._desImageDepth == 1:
-            return ImageTool.convertImgBGR2Gray(self._image)
+            rollerImage = ImageTool.convertImgBGR2Gray(rollerImage)
+        self._rollerImage = rollerImage
 
 
-        return self._image
+        return self._rollerImage
 
     def getRollerBox(self):
         """
@@ -80,7 +85,7 @@ class GasmeterStyle1(BaseGasmeterModel):
         right = int(rollerBox[2]*5/8) + 20
         rollerBox = (rollerBox[0], rollerBox[1], right, rollerBox[3])
 
-        ImageTool.showBoxInImageByBox(self._image,rollerBox)
+        # ImageTool.showBoxInImageByBox(self._image,rollerBox)
         self._rollerBox = rollerBox
 
         return rollerBox
@@ -124,24 +129,27 @@ def test():
     import cv2
     import os
     if "Windows" in platform.system():
-        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\3.jpg"
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\1.jpg"
     elif "Linux" in platform.system():
         filename = ""
 
-    style1 = GasmeterStyle1(desImageDepth=3)
+    style1 = GasmeterStyle1(desImageDepth=1)
     image = cv2.imread(filename)
     style1.setImage(image)
 
 
 
-    image = style1.getRollerBlackArea()
-    image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-    title = str(image.shape) + os.path.basename(filename)
+    rollerBlackImage = style1.getRollerBlackArea()
+    # rollerBlackImage = cv2.cvtColor(rollerBlackImage,cv2.COLOR_BGR2RGB)
+    title = str(rollerBlackImage.shape) + os.path.basename(filename)
+    # rollerBlackImage = ImageTool.convertImgBGR2Gray(rollerBlackImage)
 
-    # plt.figure()
-    # plt.imshow(image)
-    # plt.title(title)
-    # plt.show()
+    # ret,rollerBlackImage = ImageTool.getOTSUGrayImage(rollerBlackImage)
+
+    plt.figure()
+    plt.imshow(rollerBlackImage)
+    plt.title(title)
+    plt.show()
 
 
 if __name__ == "__main__":

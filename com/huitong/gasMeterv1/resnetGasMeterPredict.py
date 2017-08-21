@@ -16,6 +16,7 @@ from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
 from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle0 import GasmeterStyle0
+from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle1 import GasmeterStyle1
 from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
 
 captchaCharacterLength = 5
@@ -95,9 +96,13 @@ def getPredict(hps, mode, gasmeter_filename, save_file_name):
 
         # images = gen.get_batch_gasmeter_digit_area_from_filename(gasmeter_filename, hps.batch_nums)
         image = cv2.imread(gasmeter_filename)
-        gasmeter = GasmeterStyle0(captchaBoxWidth,captchaBoxHeight,desImageDepth=gen.ImageDepth)
+        # gasmeter = GasmeterStyle0(captchaBoxWidth,captchaBoxHeight,desImageDepth=gen.ImageDepth)
+        gasmeter = GasmeterStyle1(captchaBoxWidth,captchaBoxHeight,desImageDepth=gen.ImageDepth)
         gasmeter.setImage(image)
         image = gasmeter.getRollerBlackArea()
+
+        ImageTool.showImagePIL(image)
+
         images = ImageTool.repeatImage2Tensor(image,hps.batch_nums)
 
 
@@ -131,7 +136,7 @@ def main(gasmeter_filename):
 
 if __name__ == "__main__":
     if "Windows" in platform.system():
-        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style0\12.jpg"
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\1.jpg"
     elif "Linux" in platform.system():
         filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style0/10.jpg"
     predict = main(filename)
