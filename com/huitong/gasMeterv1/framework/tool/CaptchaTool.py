@@ -31,7 +31,7 @@ def getFounts():
 
 
 DEFAULT_FONTS = getFounts()
-DEFAULT_FOUNT_SIZES = [i for i in range(30, 38, 2)]
+DEFAULT_FOUNT_SIZES = [i for i in range(29, 38, 2)]
 
 __all__ = ['ImageCaptcha']
 
