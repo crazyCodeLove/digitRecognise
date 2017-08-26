@@ -77,7 +77,7 @@ class GasmeterStyle1(BaseGasmeterModel):
         trollerBoxCorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage, lower, upper)
         trollerBox = ImageTool.getBoxFromBoxCorner(trollerBoxCorner)
 
-        rollerBox = (trollerBox[0],rollerBoxUp - 2,trollerBox[2],rollerBoxDown + 8)
+        rollerBox = (trollerBox[0],rollerBoxUp + 1,trollerBox[2],rollerBoxDown -1)
         getWidth = rollerBox[2]-rollerBox[0]
         if rollerBoxWidthMax < getWidth:
             rollerBox = (rollerBox[0],rollerBox[1],rollerBox[0] + rollerBoxWidthMax,rollerBox[3])
@@ -98,10 +98,10 @@ class GasmeterStyle1(BaseGasmeterModel):
 
 
     def getBarCodeArea(self):
-        super().getBarCodeArea()
+        super(GasmeterStyle1,self).getBarCodeArea()
 
     def getLCDArea(self):
-        super().getLCDArea()
+        super(GasmeterStyle1,self).getLCDArea()
 
     def setImage(self, image):
         """
@@ -109,12 +109,16 @@ class GasmeterStyle1(BaseGasmeterModel):
         :param image: 是cv2读进来的图片对象
         提取表头黑色背景区域图片保存到 self._image 域中，方便以后提取条形码、液晶屏、黑底白字滚轮区域数字
         """
+        if image is None:
+            raise ValueError("image is None")
+
         image = ImageTool.preProcessImage(image)
 
         # ImageTool.showImagePIL(image)
         super(GasmeterStyle1, self).setImage(image)
         blackMask = MaskTool.getBlackMaskBGR()
         self._image = blackMask.getInterestImageAreaData(self._image)
+
         self._grayImage = ImageTool.convertImgBGR2Gray(self._image)
 
 
@@ -133,7 +137,7 @@ def test():
     if "Windows" in platform.system():
         filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\2.jpg"
     elif "Linux" in platform.system():
-        filename = ""
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style1/5.jpg"
 
     style1 = GasmeterStyle1(desImageDepth=1)
     image = cv2.imread(filename)

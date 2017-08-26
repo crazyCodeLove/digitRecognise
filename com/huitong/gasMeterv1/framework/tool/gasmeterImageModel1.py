@@ -72,7 +72,7 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
         if "Windows" in platform.system():
             dirname = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller"
         elif "Linux" in platform.system():
-            dirname = r""
+            dirname = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/gasmeterRoller"
         filenameList = FileNameUtil.getPathFilenameList(dirname)
         return random.choice(filenameList)
 

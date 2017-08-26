@@ -147,7 +147,7 @@ def train_main():
         saveVariableDirnameList=["data","digitRecognise","temp"],
         saveVariableFilename= "temp.ckpy",
         logDirnameList=["data", "log"],
-        logFilename = "resnetGasmeterv1log5.txt")
+        logFilename = "resnetGasmeterv1log6.txt")
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
 
