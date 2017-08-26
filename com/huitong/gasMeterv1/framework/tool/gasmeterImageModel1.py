@@ -14,7 +14,7 @@ import numpy as np
 
 
 
-class ImageGasMeterModel1(GenDigitsPicture):
+class GenImageGasMeterModel1(GenDigitsPicture):
 
     def get_text_and_image(self):
         """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)-> text,image"""
@@ -59,7 +59,7 @@ def test():
     captchaCharacterLength = 5
     captchaBoxWidth = 128
     captchaBoxHeight = 64
-    gen = ImageGasMeterModel1(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,imageDepth=1)
+    gen = GenImageGasMeterModel1(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
 
     while (1):
         text, image = gen.get_text_and_image()
