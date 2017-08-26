@@ -122,7 +122,7 @@ class ImageCaptcha(_Captcha):
         return image
 
     @staticmethod
-    def create_noise_dots(image, color, width=2, number=10):
+    def create_noise_dots(image, color, width=2, number=5):
         draw = Draw(image)
         w, h = image.size
         while number:
@@ -211,48 +211,49 @@ class ImageCaptcha(_Captcha):
         if self._backgroundColor:
             background = self._backgroundColor
         else:
-            background = random_bkg_color(0,65)
+            background = ImageCaptcha.random_bkg_color(0,65)
 
         if self._fontColor:
             color = self._fontColor
         else:
-            color = random_font_color(140, 250, random.randint(220, 255))
+            color = ImageCaptcha.random_font_color(140, 250, random.randint(220, 255))
 
         #####***************************
 
         im = self.create_captcha_image(chars, color, background)
-        self.create_noise_dots(im, random_noise_color())
-        self.create_noise_curve(im, random_noise_color())
+        self.create_noise_dots(im, ImageCaptcha.random_noise_color())
+        self.create_noise_curve(im, ImageCaptcha.random_noise_color())
         im = self.random_height_stretch(im)
         im = im.filter(ImageFilter.SMOOTH)
         return im
 
+    @staticmethod
+    def random_font_color(start, end, opacity=None):
+        red = random.randint(start, end)
+        green = red + random.randint(0, 25)
+        blue = red + random.randint(0, 25)
+        if opacity is None:
+            return (red, green, blue)
+        return (red, green, blue, opacity)
 
-def random_font_color(start, end, opacity=None):
-    red = random.randint(start, end)
-    green = red + random.randint(0, 25)
-    blue = red + random.randint(0, 25)
-    if opacity is None:
-        return (red, green, blue)
-    return (red, green, blue, opacity)
+    @staticmethod
+    def random_bkg_color(start, end, opacity=None):
+        red = random.randint(start, end)
+        green = red + random.randint(0, 25)
+        blue = red + random.randint(0, 25)
+        if opacity is None:
+            return (red, green, blue)
+        return (red, green, blue, opacity)
 
-def random_bkg_color(start, end, opacity=None):
-    red = random.randint(start,end)
-    green = red + random.randint(0,25)
-    blue = red + random.randint(0,25)
-    if opacity is None:
-        return (red,green,blue)
-    return (red, green, blue, opacity)
+    @staticmethod
+    def random_noise_color():
+        start = 10
+        end = 250
+        red = random.randint(start, end)
+        green = random.randint(start, end)
+        blue = random.randint(start, end)
+        opacity = random.randint(start, end)
 
-def random_noise_color():
-    start = 10
-    end = 250
-    red = random.randint(start, end)
-    green = random.randint(start, end)
-    blue = random.randint(start, end)
-    opacity = random.randint(start,end)
-
-    return (red,green,blue,opacity)
-
+        return (red, green, blue, opacity)
 
 

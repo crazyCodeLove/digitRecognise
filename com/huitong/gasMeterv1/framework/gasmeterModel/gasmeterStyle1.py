@@ -110,6 +110,8 @@ class GasmeterStyle1(BaseGasmeterModel):
         提取表头黑色背景区域图片保存到 self._image 域中，方便以后提取条形码、液晶屏、黑底白字滚轮区域数字
         """
         image = ImageTool.preProcessImage(image)
+
+        ImageTool.showImagePIL(image)
         super(GasmeterStyle1, self).setImage(image)
         blackMask = MaskTool.getBlackMaskBGR()
         self._image = blackMask.getInterestImageAreaData(self._image)
@@ -129,7 +131,7 @@ def test():
     import cv2
     import os
     if "Windows" in platform.system():
-        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\1.jpg"
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\2.jpg"
     elif "Linux" in platform.system():
         filename = ""
 

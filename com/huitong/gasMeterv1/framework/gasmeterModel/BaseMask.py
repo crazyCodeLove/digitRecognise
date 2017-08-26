@@ -51,6 +51,7 @@ class BaseMask(object):
         if boxCornerPoint is None:
             return None
         image = ImageTool.getCropImageByBoxCornerPoint(bkgImage, boxCornerPoint)
+
         return image
 
 

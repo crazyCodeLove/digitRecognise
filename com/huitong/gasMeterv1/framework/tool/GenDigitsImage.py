@@ -70,7 +70,7 @@ class GenDigitsPicture():
         return text
 
     def get_text_and_image(self,backgroundColor = None, fontColor = None):
-        """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)"""
+        """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)-> text,image"""
 
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
                              backgroundColor=backgroundColor, fontColor=fontColor)
@@ -85,8 +85,6 @@ class GenDigitsPicture():
         if self._imageDepth == 1:
             # 将彩色图片转换成灰度图图片
             captcha_image = ImageTool.convertImgRGB2Gray(captcha_image)
-
-
 
         captcha_image = np.array(captcha_image)
         return captcha_text, captcha_image

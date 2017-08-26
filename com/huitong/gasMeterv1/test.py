@@ -137,11 +137,23 @@ def fun7():
         title = os.path.basename(each)
         ImageTool.showBoxInImageByBoxCornerPoint(image, cornerpoint, title)
 
+def fun8():
+    from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
+    characterLength = 1
+    width = 50
+    height = 100
+    bkgColor = (20,20,20)
+    fontColor = (200,200,200)
 
+
+
+    gen = GenDigitsPicture(characterLength, width, height)
+    text,image = gen.get_text_and_image(backgroundColor=bkgColor,fontColor=fontColor)
+    ImageTool.showImagePIL(image,text)
 
 
 def test():
-    fun7()
+    fun8()
 
 if __name__ == "__main__":
     test()
