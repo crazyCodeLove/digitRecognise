@@ -12,6 +12,7 @@ from PIL import Image
 
 import numpy as np
 import random
+import platform
 
 
 
@@ -68,7 +69,10 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
 
     @staticmethod
     def getRandomFilename():
-        dirname = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller"
+        if "Windows" in platform.system():
+            dirname = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller"
+        elif "Linux" in platform.system():
+            dirname = r""
         filenameList = FileNameUtil.getPathFilenameList(dirname)
         return random.choice(filenameList)
 
