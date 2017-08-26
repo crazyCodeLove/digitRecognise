@@ -69,11 +69,11 @@ class GenDigitsPicture():
             text.append(c)
         return text
 
-    def get_text_and_image(self,backgroundColor = None, fontColor = None):
+    def get_text_and_image(self,backgroundColor = None, fontColor = None, fontSizes = None):
         """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)-> text,image"""
 
         image = ImageCaptcha(width=self._picBoxWidth, height=self._picBoxHeight,
-                             backgroundColor=backgroundColor, fontColor=fontColor)
+                             backgroundColor=backgroundColor, fontColor=fontColor, font_sizes=fontSizes)
 
         captcha_text = self._random_text()
         captcha_text = ''.join(captcha_text)
@@ -89,7 +89,7 @@ class GenDigitsPicture():
         captcha_image = np.array(captcha_image)
         return captcha_text, captcha_image
 
-    def get_next_batch(self, batchsize = None):
+    def get_next_batch(self, batchsize = None, fontSizes = None):
         """
         生成一个训练 batch
         """
@@ -103,7 +103,7 @@ class GenDigitsPicture():
         def wrap_gen_captcha_text_and_image():
             ''' 获取一张图，判断其是否符合（60，160，depth）的规格'''
             while True:
-                text, image = self.get_text_and_image()
+                text, image = self.get_text_and_image(fontSizes=fontSizes)
                 return text, image
 
         for i in range(batchsize):

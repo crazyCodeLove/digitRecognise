@@ -111,7 +111,7 @@ class GasmeterStyle1(BaseGasmeterModel):
         """
         image = ImageTool.preProcessImage(image)
 
-        ImageTool.showImagePIL(image)
+        # ImageTool.showImagePIL(image)
         super(GasmeterStyle1, self).setImage(image)
         blackMask = MaskTool.getBlackMaskBGR()
         self._image = blackMask.getInterestImageAreaData(self._image)

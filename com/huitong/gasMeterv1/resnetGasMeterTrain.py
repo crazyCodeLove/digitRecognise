@@ -16,14 +16,14 @@ from com.huitong.gasMeterv1 import ModelUtil
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
-from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterModel1
+from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m1
 
 captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenImageGasMeterModel1(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
-                       imageDepth=1)
+gen = GenImageGasMeterStyle1m1(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
+                               imageDepth=1)
 
 
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
