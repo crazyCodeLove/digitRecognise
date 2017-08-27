@@ -24,7 +24,7 @@ captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenImageGasMeterStyle1m3(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
+gen = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
                                imageDepth=1)
 
 
