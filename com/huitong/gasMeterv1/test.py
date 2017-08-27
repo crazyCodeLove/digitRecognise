@@ -156,7 +156,7 @@ def fun8():
 
 
 def fun9():
-    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\000012.jpg"
+    filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\000041.jpg"
     image = Image.open(filename)
     image = image.resize((128,64),PIL.Image.CUBIC)
     ImageTool.showImagePIL(image,"des")
