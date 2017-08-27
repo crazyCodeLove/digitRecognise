@@ -79,11 +79,11 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
 
 
 
-    def get_text_and_image(self,backgroundColor = None, fontColor = None, fontSizes = (27,)):
+    def get_text_and_image(self,backgroundColor = None, fontColor = None, fontSizes = (28,)):
         """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)-> text,image"""
         charBoxWidth = 15
-        charBoxHeight = 25
-        blackBkgColor = ImageCaptcha.random_bkg_color(0,65)
+        charBoxHeight = 30
+        blackBkgColor = ImageCaptcha.random_bkg_color(0,90)
         fontColor = ImageCaptcha.random_font_color(180,250)
         grayBkgColor = ImageCaptcha.random_bkg_color(130,220)
 
@@ -100,14 +100,10 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
         dy = 17
         i=0
 
-        def getRandomAdd():
-            return random.randint(1,8)
-
         for c in captcha_text:
             desX = dxs[i]
             charImage = image.generate(c)
             charImage = Image.open(charImage)
-            charImage = charImage.resize((charBoxWidth,charBoxHeight + getRandomAdd()),Image.CUBIC)
             captcha_image.paste(charImage,(desX,dy))
             i +=1
 

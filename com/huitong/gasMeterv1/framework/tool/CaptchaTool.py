@@ -122,7 +122,7 @@ class ImageCaptcha(_Captcha):
         return image
 
     @staticmethod
-    def create_noise_dots(image, color, width=2, number=2):
+    def create_noise_dots(image, color, width=2, number=1):
         draw = Draw(image)
         w, h = image.size
         while number:
