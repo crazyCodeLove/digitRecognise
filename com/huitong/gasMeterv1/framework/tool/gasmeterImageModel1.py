@@ -59,8 +59,6 @@ class GenImageGasMeterStyle1m1(GenDigitsPicture):
 
 
 
-
-
 class GenImageGasMeterStyle1m2(GenDigitsPicture):
     """
     GenImageGasMeterStyle1m2:GenImageGasMeterStyle1 model2
@@ -116,6 +114,29 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
         captcha_image = np.array(captcha_image)
         return captcha_text, captcha_image
 
+
+class GenImageGasMeterStyle1m3(GenDigitsPicture):
+    """使用有标记的真实图片进行训练"""
+
+    def get_text_and_image(self, backgroundColor=None, fontColor=None, fontSizes=(28,)):
+        filename = GenImageGasMeterStyle1m2.getRandomFilename()
+        captcha_image = Image.open(filename)
+        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight), Image.CUBIC)
+        t = FileNameUtil.getFilenameFromFullFilepathname(filename)
+        captcha_text = t[:5]
+
+        if self._imageDepth == 1:
+            # 将彩色图片转换成灰度图图片
+            captcha_image = ImageTool.convertImgRGB2Gray(captcha_image)
+
+        captcha_image = np.array(captcha_image)
+        return captcha_text, captcha_image
+
+
+
+
+
+
 def test():
     import time
     import matplotlib.pyplot as plt
@@ -123,7 +144,7 @@ def test():
     captchaCharacterLength = 5
     captchaBoxWidth = 128
     captchaBoxHeight = 64
-    gen = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen = GenImageGasMeterStyle1m3(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
 
     while (1):
         text, image = gen.get_text_and_image()

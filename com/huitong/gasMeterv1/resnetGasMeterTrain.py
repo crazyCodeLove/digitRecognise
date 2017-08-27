@@ -18,12 +18,13 @@ from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
 from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m1
 from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m2
+from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m3
 
 captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-gen = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
+gen = GenImageGasMeterStyle1m3(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
                                imageDepth=1)
 
 

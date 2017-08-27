@@ -162,9 +162,16 @@ def fun9():
     ImageTool.showImagePIL(image,"des")
 
 
+def fun10():
+    a = "123456.jpg"
+    b = a[:5]
+    print(b)
+
+
 def test():
     # fun8()
-    fun9()
+    # fun9()
+    fun10()
 
 if __name__ == "__main__":
     test()
