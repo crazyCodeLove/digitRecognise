@@ -280,7 +280,7 @@ class ImageTool():
         :param height: 目标图像高度
         cv2.resize(image, (BoxWidth, BoxHeight))
         """
-        desImage = cv2.resize(image,(width,height))
+        desImage = cv2.resize(image,(width,height),interpolation=cv2.INTER_CUBIC)
         return desImage
 
     @staticmethod

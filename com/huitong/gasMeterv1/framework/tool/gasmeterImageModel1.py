@@ -94,8 +94,11 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
         captcha_text = ''.join(captcha_text)
 
         filename = GenImageGasMeterStyle1m2.getRandomFilename()
+
+        # print(filename)
+
         captcha_image = Image.open(filename)
-        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight),Image.CUBIC)
+        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight),Image.BICUBIC)
         dxs = [7,32,58,83,107]
         dy = 17
         i=0
@@ -122,8 +125,11 @@ class GenImageGasMeterStyle1m3(GenDigitsPicture):
 
     def get_text_and_image(self, backgroundColor=None, fontColor=None, fontSizes=(28,)):
         filename = GenImageGasMeterStyle1m2.getRandomFilename()
+
+        # print(filename)
+
         captcha_image = Image.open(filename)
-        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight), Image.CUBIC)
+        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight), Image.BICUBIC)
         t = FileNameUtil.getFilenameFromFullFilepathname(filename)
         captcha_text = t[:5]
 
@@ -146,7 +152,7 @@ def test():
     captchaCharacterLength = 5
     captchaBoxWidth = 128
     captchaBoxHeight = 64
-    gen = GenImageGasMeterStyle1m1(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen = GenImageGasMeterStyle1m3(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
 
     while (1):
         text, image = gen.get_text_and_image()
