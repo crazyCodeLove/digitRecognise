@@ -11,6 +11,7 @@ from multiprocessing import Process
 
 import tensorflow as tf
 import platform
+import random
 
 from com.huitong.gasMeterv1 import ModelUtil
 from com.huitong.gasMeterv1 import ResNetModel
@@ -26,6 +27,7 @@ captchaBoxHeight = 64
 
 gen = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight,
                                imageDepth=1)
+
 
 
 CHAR_SET_LEN = len(gen.CharSet) + 1   # 字符集中字符数量
@@ -68,7 +70,8 @@ def startTrain(trainepochnums,
                hps,
                mode,
                gps,
-               save_file_name):
+               save_file_name,
+               gen):
     global logger
     if "Windows" in platform.system():
         logger = ModelUtil.MyLog(getFilename(gps.logFilename, dirnameList=gps.logDirnameList))
@@ -77,8 +80,11 @@ def startTrain(trainepochnums,
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
     model.create_graph(captchaCharacterLength)
 
-    # gasmeterPictureFilenameList = FileNameUtil.getDirname(FileNameUtil.getBasedirname(__file__),["data","img"])
-    # gasmeterPictureFilenameList = FileNameUtil.getPathFilenameList(gasmeterPictureFilenameList, r".*\.jpg")
+    gen1 = GenImageGasMeterStyle1m1(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen2 = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen3 = GenImageGasMeterStyle1m3(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+
+    gens = [gen1,gen2,gen3]
 
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         saver = tf.train.Saver()
@@ -100,6 +106,7 @@ def startTrain(trainepochnums,
             # images,labels = gen.get_next_batch(hps.batch_nums)
 
             # images, labels = gen.get_compose_gasmeter_next_batch(img, batchsize=hps.batch_nums)
+            gen = random.choice(gens)
             images, labels = gen.get_next_batch(batchsize=hps.batch_nums)
 
             feed_dict = {
@@ -134,7 +141,7 @@ def startTrain(trainepochnums,
 
 
 def train_main():
-    global save_file_name,logger
+    global save_file_name,logger,gen
     hps = HParams(batch_nums=10,
                   num_classes=10,
                   deep_net_fkn=30,
@@ -180,7 +187,7 @@ def train_main():
             trainNumsBeforeValid = 2
         else:
             trainNumsBeforeValid = 6
-        p = Process(target=startTrain,args=(trainNumsBeforeValid, hps, mode, gps, save_file_name))
+        p = Process(target=startTrain,args=(trainNumsBeforeValid, hps, mode, gps, save_file_name,gen))
         p.start()
         p.join()
         print("training end")

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import os
-import PIL
+import random
 
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
@@ -158,14 +158,15 @@ def fun8():
 def fun9():
     filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\000041.jpg"
     image = Image.open(filename)
-    image = image.resize((128,64),PIL.Image.CUBIC)
+    image = image.resize((128,64),Image.CUBIC)
     ImageTool.showImagePIL(image,"des")
 
 
 def fun10():
-    a = "123456.jpg"
-    b = a[:5]
-    print(b)
+    a = [1,2,3,4,5,6,7,8,9]
+    for i in range(5):
+        b = random.choice(a)
+        print(b)
 
 
 def test():

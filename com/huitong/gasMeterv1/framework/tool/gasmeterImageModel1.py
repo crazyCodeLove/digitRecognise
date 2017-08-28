@@ -21,9 +21,11 @@ import platform
 class GenImageGasMeterStyle1m1(GenDigitsPicture):
     """
     GenImageGasMeterStyle1m1:GenImageGasMeterStyle1 model1
+    使用模拟的方法生成训练图片，黑底白字
+
     """
 
-    def get_text_and_image(self):
+    def get_text_and_image(self, backgroundColor = None, fontColor = None, fontSizes = None):
         """ 生成字符序列和对应的图片数据 图片颜色通道是(R,G,B)-> text,image"""
         charBoxWidth = 20
         charBoxHeight = 50
@@ -144,7 +146,7 @@ def test():
     captchaCharacterLength = 5
     captchaBoxWidth = 128
     captchaBoxHeight = 64
-    gen = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen = GenImageGasMeterStyle1m1(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
 
     while (1):
         text, image = gen.get_text_and_image()
