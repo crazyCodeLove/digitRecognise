@@ -12,12 +12,14 @@ import numpy as np
 import tensorflow as tf
 import cv2
 import platform
+import random
 
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
 from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m1
 from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m2
+from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m3
 from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle0 import GasmeterStyle0
 from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle1 import GasmeterStyle1
 from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
@@ -85,17 +87,24 @@ def get_most_common_digit_in_column(data):
 
 
 
-def getPredict(hps, mode, save_file_name):
+def getPredict(hps, mode, save_file_name,gen):
     xp = tf.placeholder(tf.float32, [None, captchaBoxHeight * captchaBoxWidth * gen.ImageDepth])
     yp = tf.placeholder(tf.float32, [None, captchaCharacterLength * CHAR_SET_LEN])
     model = ResNetModel.ResNetModel(hps, xp, yp, mode, captchaBoxHeight, captchaBoxWidth, gen.ImageDepth)
     model.create_graph(captchaCharacterLength)
+
+    gen1 = GenImageGasMeterStyle1m1(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen2 = GenImageGasMeterStyle1m2(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+    gen3 = GenImageGasMeterStyle1m3(captchaCharacterLength, captchaBoxWidth, captchaBoxHeight, imageDepth=1)
+
+    gens = [gen1, gen2, gen3]
 
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         saver = tf.train.Saver()
         saver.restore(sess, save_file_name)
 
         while True:
+            gen = random.choice(gens)
             oriText,image = gen.get_text_and_image()
             images = ImageTool.repeatImage2Tensor(image,hps.batch_nums)
 
@@ -129,7 +138,7 @@ def main():
 
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
     mode = "predict"
-    getPredict(hps, mode, save_file_name)
+    getPredict(hps, mode, save_file_name,gen)
 
 
 if __name__ == "__main__":
