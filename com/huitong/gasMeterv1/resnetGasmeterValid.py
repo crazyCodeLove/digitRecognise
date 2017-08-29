@@ -77,13 +77,6 @@ def get_predict_text(outputs):
 
     return gen.vec2text(vector)
 
-def get_most_common_digit_in_column(data):
-    """
-    找出二维数组中每列出现频次最高的数字
-    :param data: numpy 2D 数组
-    """
-    shape = data.shape
-
 
 
 

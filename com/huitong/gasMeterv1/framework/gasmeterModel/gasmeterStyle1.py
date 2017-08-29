@@ -114,7 +114,8 @@ class GasmeterStyle1(BaseGasmeterModel):
 
         image = ImageTool.preProcessImage(image)
 
-        # ImageTool.showImagePIL(image)
+        ImageTool.showImagePIL(image)
+
         super(GasmeterStyle1, self).setImage(image)
         blackMask = MaskTool.getBlackMaskBGR()
         self._image = blackMask.getInterestImageAreaData(self._image)
@@ -137,10 +138,13 @@ def test():
     if "Windows" in platform.system():
         filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\2.jpg"
     elif "Linux" in platform.system():
-        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style1/5.jpg"
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style1/000.jpg"
 
     style1 = GasmeterStyle1(desImageDepth=1)
     image = cv2.imread(filename)
+
+    ImageTool.showImagePIL(image)
+
     style1.setImage(image)
 
 

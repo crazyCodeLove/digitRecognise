@@ -98,7 +98,7 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
         # print(filename)
 
         captcha_image = Image.open(filename)
-        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight),Image.BICUBIC)
+        captcha_image = ImageTool.imageResizePIL(captcha_image,self._picBoxWidth, self._picBoxHeight)
         dxs = [7,32,58,83,107]
         dy = 17
         i=0
@@ -129,7 +129,8 @@ class GenImageGasMeterStyle1m3(GenDigitsPicture):
         # print(filename)
 
         captcha_image = Image.open(filename)
-        captcha_image = captcha_image.resize((self._picBoxWidth, self._picBoxHeight), Image.BICUBIC)
+        captcha_image = ImageTool.imageResizePIL(captcha_image, self._picBoxWidth, self._picBoxHeight)
+
         t = FileNameUtil.getFilenameFromFullFilepathname(filename)
         captcha_text = t[:5]
 

@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
+from PIL import Image
 
 
 class ImageTool():
@@ -76,14 +77,14 @@ class ImageTool():
         """
         if width is None:
             width = 800
-        img = cv2.resize(img, (width, width), interpolation=cv2.INTER_LINEAR)
+        img = cv2.resize(img, (width, width), interpolation=cv2.INTER_CUBIC)
 
         boxhw = int(width * 0.8)
         starthw = int((width - boxhw) / 2)
         # cropImg = image[y1:y1+hight, x1:x1+width]图片裁剪
         img = img[starthw:starthw + boxhw, starthw:starthw + boxhw]
 
-        img = cv2.resize(img, (width, width), interpolation=cv2.INTER_LINEAR)
+        img = cv2.resize(img, (width, width), interpolation=cv2.INTER_CUBIC)
         return img
 
     @staticmethod
@@ -280,8 +281,36 @@ class ImageTool():
         :param height: 目标图像高度
         cv2.resize(image, (BoxWidth, BoxHeight))
         """
-        desImage = cv2.resize(image,(width,height),interpolation=cv2.INTER_CUBIC)
-        return desImage
+        image = cv2.cvtColor(np.array(image),cv2.COLOR_BGR2RGB)
+
+        image = Image.fromarray(np.array(image))
+        image = ImageTool.imageResizePIL(image,width,height)
+        image = cv2.cvtColor(np.array(image),cv2.COLOR_RGB2BGR)
+        return image
+
+    @staticmethod
+    def imageResizeCV2(image,width,height):
+        """
+        :param image: 是cv2读进来的图片对象
+        :param width: 目标图像宽度
+        :param height: 目标图像高度
+        cv2.resize(image, (BoxWidth, BoxHeight))
+        """
+        image = cv2.resize(image,(width,height),interpolation=cv2.INTER_CUBIC)
+        return image
+
+    @staticmethod
+    def imageResizePIL(image,width,height):
+        """
+
+        :param image: PIL.Image 读进来的图片对象
+        :param width: 目标图像宽度
+        :param height: 目标图像高度
+        :return:
+        """
+        image = image.resize((width, height), Image.BICUBIC)
+        return image
+
 
     @staticmethod
     def getOTSUGrayImage(image):
