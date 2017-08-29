@@ -140,7 +140,7 @@ if __name__ == "__main__":
     if "Windows" in platform.system():
         filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\000091.jpg"
     elif "Linux" in platform.system():
-        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/gasmeterRoller/000051.jpg"
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/gasmeterRoller/000091.jpg"
     predict = main(filename)
 
     print("predict:%s"%predict)
