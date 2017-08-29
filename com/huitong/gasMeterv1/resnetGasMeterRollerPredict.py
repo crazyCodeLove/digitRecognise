@@ -136,6 +136,7 @@ def main(gasmeter_filename):
     return getPredict(hps, mode, gasmeter_filename, save_file_name)
 
 
+
 if __name__ == "__main__":
     if "Windows" in platform.system():
         filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\000091.jpg"
