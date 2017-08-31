@@ -17,9 +17,9 @@ import random
 from com.huitong.gasMeterv1 import ResNetModel
 from com.huitong.gasMeterv1.framework.tool.filenameUtil import FileNameUtil
 from com.huitong.gasMeterv1.framework.tool.GenDigitsImage import GenDigitsPicture
-from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m1
-from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m2
-from com.huitong.gasMeterv1.framework.tool.gasmeterImageModel1 import GenImageGasMeterStyle1m3
+from com.huitong.gasMeterv1.framework.tool.genGasmeterImageModel1 import GenImageGasMeterStyle1m1
+from com.huitong.gasMeterv1.framework.tool.genGasmeterImageModel1 import GenImageGasMeterStyle1m2
+from com.huitong.gasMeterv1.framework.tool.genGasmeterImageModel1 import GenImageGasMeterStyle1m3
 from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle0 import GasmeterStyle0
 from com.huitong.gasMeterv1.framework.gasmeterModel.gasmeterStyle1 import GasmeterStyle1
 from com.huitong.gasMeterv1.framework.tool.ImageTool import ImageTool
