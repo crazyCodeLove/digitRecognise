@@ -131,6 +131,7 @@ def main(gasmeter_filename):
         logDirnameList=[""],
         logFilename="")
 
+
     save_file_name = getFilename(gps.saveVariableFilename, dirnameList=gps.saveVariableDirnameList)
     mode = "predict"
     return getPredict(hps, mode, gasmeter_filename, save_file_name)
