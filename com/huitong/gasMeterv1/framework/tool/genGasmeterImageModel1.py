@@ -103,11 +103,14 @@ class GenImageGasMeterStyle1m2(GenDigitsPicture):
         dy = 17
         i=0
 
+        def randDy():
+            return 4 - random.randint(1,8)
+
         for c in captcha_text:
             desX = dxs[i]
             charImage = image.generate(c)
             charImage = Image.open(charImage)
-            captcha_image.paste(charImage,(desX,dy))
+            captcha_image.paste(charImage,(desX,dy + randDy()))
             i +=1
 
 
