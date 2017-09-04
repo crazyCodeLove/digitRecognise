@@ -13,6 +13,7 @@ class GasmeterStyle1(BaseGasmeterModel):
     self._image: cv2 读进来的黑底白字的表头图像对象，是彩色图像
     self._grayImage: cv2 读进来的黑底白字的表头图像对象，对应的黑白图像
     self._rollerBox: 黑底白字滚动轮区域在 self._image 中的四边对应元组
+    self._lcdBox：LCD液晶屏区域在黑底白字表头下半部分的位置
     self._rollerImage: 黑底白字滚动轮区域图像，cv2 对象，BGR
 
 
@@ -50,7 +51,6 @@ class GasmeterStyle1(BaseGasmeterModel):
     def getRollerBox(self):
         """
         获得黑底白字滚轮区域box，并将该 box 赋值给 self._rollerBox
-        :return:
         """
         rollerBoxWidthMax = 425
 
@@ -90,6 +90,37 @@ class GasmeterStyle1(BaseGasmeterModel):
 
         return rollerBox
 
+    def getLCDBox(self):
+        """
+        :return:
+        """
+        shape = self._image.shape
+        mid = int(shape[0] / 2)
+        splitImageBox = (0,mid,shape[1],shape[0])
+        splitImageGray = ImageTool.getCropImageByBox(self._grayImage, splitImageBox)
+        ImageTool.showImagePIL(splitImageGray)
+
+        splitImage = ImageTool.getCropImageByBox(self._image,splitImageBox)
+
+        retval, otsuImage = ImageTool.getOTSUGrayImage(splitImageGray)
+        otsuImage = ImageTool.convertImgGray2BGR(otsuImage)
+
+        lower = (250, 250, 250)
+        upper = (255, 255, 255)
+        lcdBoxCorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage, lower, upper)
+        lcdBox = ImageTool.getBoxFromBoxCorner(lcdBoxCorner)
+        self._lcdBox = lcdBox
+
+        ImageTool.showBoxInImageByBoxCornerPoint(splitImage,lcdBoxCorner,"lcd")
+
+
+
+
+
+
+
+
+
 
 
 
@@ -101,7 +132,9 @@ class GasmeterStyle1(BaseGasmeterModel):
         super(GasmeterStyle1,self).getBarCodeArea()
 
     def getLCDArea(self):
-        super(GasmeterStyle1,self).getLCDArea()
+        lcdBox = self.getLCDBox()
+
+
 
     def setImage(self, image):
         """
@@ -114,7 +147,7 @@ class GasmeterStyle1(BaseGasmeterModel):
 
         image = ImageTool.preProcessImage(image)
 
-        ImageTool.showImagePIL(image)
+        # ImageTool.showImagePIL(image)
 
         super(GasmeterStyle1, self).setImage(image)
         blackMask = MaskTool.getBlackMaskBGR()
@@ -128,9 +161,7 @@ class GasmeterStyle1(BaseGasmeterModel):
                "黑底白字滚轮数字所在区域右边有红底白字。类型是style1"
         return desc
 
-
-
-def test():
+def testRollerBlock():
     import matplotlib.pyplot as plt
     import platform
     import cv2
@@ -147,8 +178,6 @@ def test():
 
     style1.setImage(image)
 
-
-
     rollerBlackImage = style1.getRollerBlackArea()
     # rollerBlackImage = cv2.cvtColor(rollerBlackImage,cv2.COLOR_BGR2RGB)
     title = str(rollerBlackImage.shape) + os.path.basename(filename)
@@ -160,6 +189,28 @@ def test():
     plt.imshow(rollerBlackImage)
     plt.title(title)
     plt.show()
+
+def testLCDBlock():
+    import matplotlib.pyplot as plt
+    import platform
+    import cv2
+    if "Windows" in platform.system():
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\11.jpg"
+    elif "Linux" in platform.system():
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style1/000.jpg"
+
+    style1 = GasmeterStyle1(desImageDepth=1)
+    image = cv2.imread(filename)
+
+    style1.setImage(image)
+    style1.getLCDArea()
+
+
+
+def test():
+    # testRollerBlock()
+    testLCDBlock()
+
 
 
 if __name__ == "__main__":
