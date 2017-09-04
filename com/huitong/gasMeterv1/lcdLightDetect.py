@@ -24,6 +24,7 @@ class LCDLightDetect(object):
         retval, otsuImage = ImageTool.getOTSUGrayImage(splitImageGray)
         otsuImage = ImageTool.convertImgGray2BGR(otsuImage)
 
+
         lower = (250, 250, 250)
         upper = (255, 255, 255)
         lcdBoxCorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage, lower, upper)
