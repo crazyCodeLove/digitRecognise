@@ -100,7 +100,7 @@ class GasmeterStyle1(BaseGasmeterModel):
         splitImageGray = ImageTool.getCropImageByBox(self._grayImage, splitImageBox)
         ImageTool.showImagePIL(splitImageGray)
 
-        # splitImage = ImageTool.getCropImageByBox(self._image,splitImageBox)
+        splitImage = ImageTool.getCropImageByBox(self._image,splitImageBox)
 
         retval, otsuImage = ImageTool.getOTSUGrayImage(splitImageGray)
         otsuImage = ImageTool.convertImgGray2BGR(otsuImage)
@@ -111,7 +111,7 @@ class GasmeterStyle1(BaseGasmeterModel):
         lcdBox = ImageTool.getBoxFromBoxCorner(lcdBoxCorner)
         self._lcdBox = lcdBox
 
-        # ImageTool.showBoxInImageByBoxCornerPoint(splitImage,lcdBoxCorner,"lcd")
+        ImageTool.showBoxInImageByBoxCornerPoint(splitImage,lcdBoxCorner,"lcd")
 
 
 
@@ -133,8 +133,6 @@ class GasmeterStyle1(BaseGasmeterModel):
 
     def getLCDArea(self):
         lcdBox = self.getLCDBox()
-
-
 
 
 
