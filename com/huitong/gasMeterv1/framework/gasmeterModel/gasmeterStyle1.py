@@ -92,7 +92,6 @@ class GasmeterStyle1(BaseGasmeterModel):
 
     def getLCDBox(self):
         """
-        :return:
         """
         shape = self._image.shape
         mid = int(shape[0] / 2)
