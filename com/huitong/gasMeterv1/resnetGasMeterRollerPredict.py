@@ -43,7 +43,6 @@ peizhi_dict = {'lrn_rate':1e-2,
                'test_step':0,
                'max_test_acc':0}
 
-
 def getFilename(filename, baseDirname = None, dirnameList = None):
     """
     根据基目录、子目录名列表、文件名获取文件全路径名。
