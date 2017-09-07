@@ -46,7 +46,8 @@ class LCDLightDetect(object):
         splitImageGray = ImageTool.getCropImageByBox(grayImage, splitImageBox)
         splitImage = ImageTool.getCropImageByBox(image, splitImageBox)
 
-        ImageTool.showImagePIL(splitImageGray)
+        # 显示剪切的 lcd 屏所在的下半屏灰度图
+        ImageTool.showImagePIL(splitImageGray, "splitImageGray")
 
         retval, otsuImage = ImageTool.getOTSUGrayImage(splitImageGray)
         otsuImage = ImageTool.convertImgGray2BGR(otsuImage)
@@ -55,8 +56,37 @@ class LCDLightDetect(object):
         upper = (255, 255, 255)
         lcdBoxCorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage, lower, upper)
         lcdBox = LCDLightDetect.getMinBox(lcdBoxCorner)
+        # ImageTool.showBoxInImageByBox(splitImage, lcdBox)
+
         lcdImage = ImageTool.getCropImageByBox(splitImage,lcdBox)
         return lcdImage
+
+    @staticmethod
+    def lcdLighted(lcdImage):
+        """
+        检测lcd 区域图片是否点亮，如果亮返回True，如果不亮返回False
+        :param lcdImage: cv2 读进来的图片对象
+        """
+        lower = (0, 0, 0)
+        upper = (50, 50, 50)
+
+        blackBoxCorner = ImageTool.getInterestBoxCornerPointByColor(lcdImage,lower,upper)
+        # 如果获得的 lcd 区域有黑色区域，说明没有点亮。
+        if blackBoxCorner is not None:
+            return False
+
+
+        lcdImageGray = ImageTool.convertImgBGR2Gray(lcdImage)
+
+
+        retval, otsuImage = ImageTool.getOTSUGrayImage(lcdImageGray)
+        otsuImage = ImageTool.convertImgGray2BGR(otsuImage)
+
+
+        notLcdBoxCorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage, lower, upper)
+        ImageTool.showImagePIL(lcdImage, "lcdimage")
+
+        return notLcdBoxCorner is None
 
 
 
@@ -67,17 +97,7 @@ class LCDLightDetect(object):
         如果 LCD 区域有不亮的返回 False, 否则返回 True
         """
         lcdImage = LCDLightDetect.getLCDAreaData(image)
-        lcdImageGray = ImageTool.convertImgBGR2Gray(lcdImage)
-
-        retval, otsuImage = ImageTool.getOTSUGrayImage(lcdImageGray)
-        otsuImage = ImageTool.convertImgGray2BGR(otsuImage)
-
-        lower = (0, 0, 0)
-        upper = (50, 50, 50)
-        notLcdBoxCorner = ImageTool.getInterestBoxCornerPointByColor(otsuImage, lower, upper)
-        ImageTool.showImagePIL(lcdImage)
-
-        return notLcdBoxCorner is None
+        return LCDLightDetect.lcdLighted(lcdImage)
 
 
 
