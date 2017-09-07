@@ -24,7 +24,6 @@ captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
-
 gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
                        imageDepth=1)
 
