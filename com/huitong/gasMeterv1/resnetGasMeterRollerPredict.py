@@ -79,8 +79,6 @@ def get_most_common_digit_in_column(data):
     """
     shape = data.shape
 
-
-
 def getPredict(hps, mode, gasmeter_filename, save_file_name):
     xp = tf.placeholder(tf.float32, [None, captchaBoxHeight * captchaBoxWidth * gen.ImageDepth])
     yp = tf.placeholder(tf.float32, [None, captchaCharacterLength * CHAR_SET_LEN])
