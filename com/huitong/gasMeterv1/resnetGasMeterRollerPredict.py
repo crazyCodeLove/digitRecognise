@@ -24,6 +24,7 @@ captchaCharacterLength = 5
 captchaBoxWidth = 128
 captchaBoxHeight = 64
 
+
 gen = GenDigitsPicture(captchaCharacterLength,captchaBoxWidth,captchaBoxHeight,
                        imageDepth=1)
 
@@ -140,7 +141,7 @@ def main(gasmeter_filename):
 
 if __name__ == "__main__":
     if "Windows" in platform.system():
-        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\415671.jpg"
+        filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\gasmeterRoller\000015.jpg"
     elif "Linux" in platform.system():
         filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/gasmeterRoller/415671.jpg"
     predict = main(filename)
