@@ -114,7 +114,7 @@ def test():
     if "Windows" in platform.system():
         filename = r"D:\chengxu\python\project\digitRecognise\com\huitong\gasMeterv1\data\img\style1\2.jpg"
     elif "Linux" in platform.system():
-        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style1/000.jpg"
+        filename = r"/home/allen/work/digitRecognise/com/huitong/gasMeterv1/data/img/style1/1.jpg"
     testLCDLightDetect(filename)
 
 
